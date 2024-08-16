@@ -23,7 +23,10 @@ const formSchema = z.object({
       "Invalid email address"
     )
     .trim(),
-  otp : z.string().length(6, "OTP must be 6 digits long").regex(/^[0-9]+$/, "OTP must contain only numbers"),
+  otp: z
+    .string()
+    .length(6, "OTP must be 6 digits long")
+    .regex(/^[0-9]+$/, "OTP must contain only numbers"),
 });
 
 function ProfileForm() {
@@ -34,7 +37,7 @@ function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      otp : ""
+      otp: "",
     },
   });
 
@@ -44,8 +47,14 @@ function ProfileForm() {
 
   return (
     <main className="w-full relative">
-      <h2 className="text-black font-medium text-center mb-4">Trouble logging in?</h2>
-      <p className="text-xs text-center  text-[#737373] -mt-2 pb-2">Enter your email, phone, or username and we'll send you a link to get back into your account.</p>
+      <h2 className="text-black font-medium text-center mb-4">
+        Trouble logging in?
+      </h2>
+      <p className="text-xs text-center  text-[#737373] -mt-2 pb-2">
+        Enter your email, phone, or username and we&apos;ll send you a link to
+        get back into your account.
+      </p>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -57,7 +66,11 @@ function ProfileForm() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Email Or Username" {...field} className="w-full" />
+                  <Input
+                    placeholder="Email Or Username"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,13 +95,11 @@ function ProfileForm() {
       </Form>
 
       <div className="text-center text-sm text-[#737373] mt-4">
-      Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/account/sign-up" className="text-[#0095F6]">
           Sign Up
         </Link>
       </div>
-
-      
     </main>
   );
 }

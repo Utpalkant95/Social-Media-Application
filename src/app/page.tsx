@@ -1,9 +1,16 @@
-import React from 'react'
+"use client";
+import React, { useEffect } from "react";
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+  useEffect(() => {
+    const hasRefreshed = sessionStorage.getItem("hasRefreshed");
 
-export default page
+    if (!hasRefreshed) {
+      sessionStorage.setItem("hasRefreshed", "true");
+      window.location.reload();
+    }
+  }, []);
+  return <div>page</div>;
+};
+
+export default page;
