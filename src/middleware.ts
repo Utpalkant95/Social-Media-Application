@@ -4,6 +4,8 @@ import { jwtVerify } from 'jose';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  
+  // Skip middleware for certain paths
   if (
     pathname.startsWith('/_next/') || 
     pathname.startsWith('/favicon.ico') || 
@@ -13,47 +15,46 @@ export async function middleware(request: NextRequest) {
   }
 
   // Allow access to sign-in and sign-up pages regardless of token status
-  if (pathname.startsWith('/account/sign-in') || pathname.startsWith('/account/sign-up')) {
-    return NextResponse.next(); // Allow access to these routes
+  if (pathname.startsWith('/account/sign-in') || pathname.startsWith('/account/sign-up') || pathname.startsWith("/api/api-doc") || pathname.startsWith("/account/password/reset")) {
+    const response = NextResponse.next();
+    response.headers.set("x-current-path", pathname);
+    return response; // Allow access to these routes
   }
 
   // Check for token in cookies
   const token = request.cookies.get('accessToken')?.value;
   if (!token) {
-    return NextResponse.redirect(new URL('/account/sign-in', request.url)); // Redirect if no token
+    const response = NextResponse.redirect(new URL('/account/sign-in', request.url)); // Redirect if no token
+    response.headers.set("x-current-path", pathname);
+    return response;
   }
-
-  console.log(token);
-  
 
   try {
     // Verify the token using jose
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
 
-    console.log(payload);
-
-    //  // If the user is authenticated, prevent access to sign-in and sign-up pages
-    //  if (pathname.startsWith('/account/sign-in') || pathname.startsWith('/account/sign-up')) {
-    //     return NextResponse.redirect(new URL('/dashboard', request.url)); // Redirect to dashboard if already authenticated
-    //   }
-    
-
     // If user is not verified, redirect to /not-verified page
     if (!payload.isVerified) {
-      return NextResponse.redirect(new URL('/account/sign-in', request.url)); //TODO : make not-verified page
+      const response = NextResponse.redirect(new URL('/account/sign-in', request.url)); //TODO : make not-verified page
+      response.headers.set("x-current-path", pathname);
+      return response;
     }
 
-    // Allow the user to proceed to the requested route if they are verified
-    return NextResponse.next();
+    // If the user is authenticated, continue with the request
+    const response = NextResponse.next();
+    response.headers.set("x-current-path", pathname);
+    return response;
 
   } catch (error) {
     console.error('JWT verification error:', error);
-    return NextResponse.redirect(new URL('/account/sign-in', request.url)); // Redirect if token is invalid
+    const response = NextResponse.redirect(new URL('/account/sign-in', request.url)); // Redirect if token is invalid
+    response.headers.set("x-current-path", pathname);
+    return response;
   }
 }
 
-// Match all routes except static files, API routes, and account-related routes
+// Match all routes
 export const config = {
   matcher: ['/:path*'],
 };

@@ -38,7 +38,7 @@ function ProfileForm() {
       </Form>
 
       <div className="text-center text-sm text-[#737373] mt-4">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/account/sign-up" className="text-[#0095F6]">
           Sign Up
         </Link>

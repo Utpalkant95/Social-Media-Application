@@ -7,7 +7,7 @@ import { DialogSheet, PopOver, SlideSheet } from "@/components";
 import logo from "../../../public/snapify-favicon-white.svg";
 
 const Sidebar = () => {
-  const [activeId, setActiveId] = useState<number | null>(null);
+  const [activeId, setActiveId] = useState<number | null>(1);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isDailog, setIsDailog] = useState<boolean>(false);
   const [isPopOver, setIsPopOver] = useState<boolean>(false);
