@@ -6,3 +6,4 @@ export * from "./Resizeable";
 export * from "./SlideSheet";
 export * from "./Dialog";
 export * from "./PopOver";
+export * from "./Tabs";

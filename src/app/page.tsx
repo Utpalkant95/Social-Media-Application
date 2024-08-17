@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 
-const page = () => {
+const Page = () => {
   useEffect(() => {
     const hasRefreshed = sessionStorage.getItem("hasRefreshed");
 
@@ -13,4 +13,4 @@ const page = () => {
   return <div>page</div>;
 };
 
-export default page;
+export default Page;

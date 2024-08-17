@@ -22,10 +22,7 @@ const Sidebar = () => {
       setIsPopOver(true);
       setDrawerContent(
         <div>
-          {/* Customize this content based on the item clicked */}
           <h2>{item.name} PopUp Content</h2>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veniam nisi amet laudantium aliquid? Unde ratione numquam similique, praesentium ipsa eius voluptatibus ex repellat nihil suscipit rem doloremque? Perspiciatis, vel minus? Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente veniam optio </p>
-          {/* Add more complex content or forms as needed */}
         </div>
       );
     }
@@ -87,6 +84,7 @@ const Sidebar = () => {
           <ul className="flex flex-col gap-y-2">
             {navItems.map((item: INavItems) => {
               const isActive = activeId === item.id;
+              const dynamicPath = item.name === 'profile' ? `/${username}` : item.path && item.path;
               return (
                 <li
                   key={item.id}
@@ -98,7 +96,7 @@ const Sidebar = () => {
                   onClick={() => handleItemClick(item)}
                 >
                   <Link
-                    href={item.drawer ? "#" : item.path}
+                    href={item.drawer ? '#' : dynamicPath}
                     className="flex items-center gap-x-3"
                   >
                     {/* Conditionally render the icons */}

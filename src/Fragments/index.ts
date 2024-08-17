@@ -1,1 +1,1 @@
-export {default as LoginFrag} from "./LoginFrag";
+export {default as ProfileFrag} from "./ProfileFrag";
