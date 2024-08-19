@@ -90,7 +90,7 @@ const ProfileFrag = ({children} : {children : ReactNode}) => {
      </div>
      {/* post saved tagged section */}
      <div className="post section">
-     <Tab defaultValue="posts" tabItems={tabItems} className="w-full border-t" TabsListClassName="bg-white" TabsTriggerClassName="data-[state=active]:border-t border-black rounded-none shadow-none text-xs py-2"/>
+     <Tab defaultValue="posts" tabItems={tabItems} className="w-full border-t" TabsListClassName="bg-white" TabsTriggerClassName="data-[state=active]:border-t border-black rounded-none shadow-none text-xs py-2 "/>
      </div>
     </div>
   )

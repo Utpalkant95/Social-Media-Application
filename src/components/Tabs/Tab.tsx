@@ -23,11 +23,12 @@ function Tab({
   TabsListClassName,
   TabsTriggerClassName,
 }: TabProps) {
-  const gridCols = tabItems.length;
+  const gridCols = `grid-cols-3`;
+  console.log(gridCols)
   return (
     <Tabs defaultValue={defaultValue} className={className}>
       <TabsList
-        className={`grid w-full grid-cols-${gridCols} ${TabsListClassName}`}
+        className={`grid w-full grid-cols-3 ${TabsListClassName}`}
       >
         {tabItems.map((tabItem) => (
           <TabsTrigger

@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import bcryptjs from "bcryptjs";
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 
 /**
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
         success: false,
         message: "User Is Already Exist. Please Login",
       });
-    }
+    } 
 
     const hashedPassword = await bcryptjs.hash(password, 10);
 
@@ -95,11 +95,11 @@ export async function POST(request: Request) {
         success: false,
         message: "Something went wrong. Please try again",
       });
-    }else{
+    } else {
       return Response.json({
         success: true,
         message: "User Created Successfully",
-      })
+      });
     }
   } catch (error) {
     console.log("error while registering user", error);

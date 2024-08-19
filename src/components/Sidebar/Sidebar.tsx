@@ -1,18 +1,20 @@
 "use client";
+import { useSidebarCompFactory } from "@/hooks";
 import { INavItems, navItems, navItems2 } from "@/Constants/SideBarMenus";
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { DialogSheet, PopOver, SlideSheet } from "@/components";
 import logo from "../../../public/snapify-favicon-white.svg";
 
 const Sidebar = () => {
-  const [activeId, setActiveId] = useState<number | null>(1);
+  const [activeId, setActiveId] = useState<number>();
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isDailog, setIsDailog] = useState<boolean>(false);
   const [isPopOver, setIsPopOver] = useState<boolean>(false);
-  const [drawerContent, setDrawerContent] = useState<React.ReactNode>(null);
-  const anchorRef = useRef<HTMLButtonElement>(null); 
+  const [drawerContent, setDrawerContent] = useState<ReactNode>();
+  const anchorRef = useRef<HTMLButtonElement>(null);
+  const Component = useSidebarCompFactory({ key: activeId });
   const username = "utpal";
 
   const handleItemClick = (item: INavItems) => {
@@ -20,34 +22,18 @@ const Sidebar = () => {
 
     if (item.popUp) {
       setIsPopOver(true);
-      setDrawerContent(
-        <div>
-          <h2>{item.name} PopUp Content</h2>
-        </div>
-      );
+      setDrawerContent(<Component />);
     }
 
     if (item.dialog) {
       // If the item requires a dialog, open the dialog and set the appropriate content
       setIsDailog(true);
-      setDrawerContent(
-        <div>
-          {/* Customize this content based on the item clicked */}
-          <h2>{item.name} Dialog Content</h2>
-          {/* Add more complex content or forms as needed */}
-        </div>
-      );
+      setDrawerContent(Component);
     }
     if (item.drawer) {
       // If the item requires a drawer, open the drawer and set the appropriate content
       setIsDrawerOpen(true);
-      setDrawerContent(
-        <div>
-          {/* Customize this content based on the item clicked */}
-          <h2>{item.name} Drawer Content</h2>
-          {/* Add more complex content or forms as needed */}
-        </div>
-      );
+      setDrawerContent(Component);
     } else {
       setIsDrawerOpen(false);
     }
@@ -84,7 +70,10 @@ const Sidebar = () => {
           <ul className="flex flex-col gap-y-2">
             {navItems.map((item: INavItems) => {
               const isActive = activeId === item.id;
-              const dynamicPath = item.name === 'profile' ? `/${username}` : item.path && item.path;
+              const dynamicPath =
+                item.name === "profile"
+                  ? `/${username}`
+                  : item.path && item.path;
               return (
                 <li
                   key={item.id}
@@ -96,7 +85,7 @@ const Sidebar = () => {
                   onClick={() => handleItemClick(item)}
                 >
                   <Link
-                    href={item.drawer ? '#' : dynamicPath}
+                    href={item.drawer ? "#" : dynamicPath}
                     className="flex items-center gap-x-3"
                   >
                     {/* Conditionally render the icons */}
@@ -186,7 +175,7 @@ const Sidebar = () => {
         </nav>
       </aside>
 
-{/* for notification and search  */}
+      {/* for notification and search  */}
       <SlideSheet
         isOpen={isDrawerOpen}
         onClose={() => {
@@ -198,7 +187,7 @@ const Sidebar = () => {
         {drawerContent}
       </SlideSheet>
 
-{/* for Create post section */}
+      {/* for Create post section */}
       <DialogSheet
         isOpen={isDailog}
         onClose={() => {
@@ -210,11 +199,15 @@ const Sidebar = () => {
         {drawerContent}
       </DialogSheet>
 
-{/* For more section */}
-      <PopOver onOpenChange={setIsPopOver}  open={isPopOver}  anchorRef={anchorRef}>     
+      {/* For more section */}
+      <PopOver
+        onOpenChange={setIsPopOver}
+        open={isPopOver}
+        anchorRef={anchorRef}
+      >
         {/* {drawerContent}  */}
-        <p>hello</p> 
-      </PopOver> 
+        <p>hello</p>
+      </PopOver>
     </>
   );
 };
