@@ -1,4 +1,3 @@
-
 interface SlideSheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,7 +16,8 @@ const SlideSheet = ({ isOpen, onClose, children }: SlideSheetProps) => {
       ></div>
 
       {/* Drawer */}
-      <div className={`fixed top-0 left-0 h-full w-64  bg-white z-50 transform transition-transform ${
+      <div
+        className={`fixed top-0 left-0 h-full w-1/4 shadow-xl border-r rounded-lg  bg-white z-50 transform transition-transform ${
           isOpen ? "translate-x-14" : "-translate-x-full"
         }`}
       >

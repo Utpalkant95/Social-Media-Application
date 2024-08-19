@@ -1,8 +1,10 @@
-
+import { ProfileFrag } from "@/Fragments"
 const Page = ({params} : {params: {username: string}}) => {
     const {username} = params
   return (
-    <div>User Name {username} </div>
+    <ProfileFrag>
+      {username}
+    </ProfileFrag>
   )
 }
 
