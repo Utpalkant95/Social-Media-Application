@@ -33,10 +33,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <main className="grid grid-cols-[max-content_1fr]">
-              <div>
+              <div className="">
                 {showSidebar && <Sidebar />}
               </div>
-            <div>{children}</div>
+            <div className="overflow-y-scroll h-screen">{children}</div>
           </main>
         </Providers>
       </body>

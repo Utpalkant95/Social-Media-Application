@@ -1,4 +1,4 @@
-import { NotificationAtom, SearchAtom } from "@/Atom";
+import { NotificationAtom, SearchAtom, SidebarMore } from "@/Atom";
 import { CreatePostFrag } from "@/Fragments";
 
 const useSidebarCompFactory = ({ key }: { key: number | undefined }): () => React.JSX.Element => {
@@ -9,8 +9,10 @@ const useSidebarCompFactory = ({ key }: { key: number | undefined }): () => Reac
             return NotificationAtom;
         case 6:
             return CreatePostFrag;
+        case 999:
+            return SidebarMore
         default:
-          return   CreatePostFrag;
+          return   SidebarMore;
     }
 };
 

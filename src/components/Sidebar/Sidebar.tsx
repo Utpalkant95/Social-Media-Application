@@ -205,8 +205,7 @@ const Sidebar = () => {
         open={isPopOver}
         anchorRef={anchorRef}
       >
-        {/* {drawerContent}  */}
-        <p>hello</p>
+        {drawerContent} 
       </PopOver>
     </>
   );
