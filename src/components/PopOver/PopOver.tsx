@@ -1,5 +1,4 @@
-import { Popover, PopoverContent, PopoverAnchor } from "@radix-ui/react-popover";
-import { IoIosCloseCircleOutline } from "react-icons/io";
+import { Popover, PopoverAnchor, PopoverContent } from "../ui/popover";
 
 interface PopOverProps {
   open: boolean;
@@ -18,8 +17,8 @@ const PopOver = ({ open, onOpenChange, anchorRef, children }: PopOverProps) => {
       </PopoverAnchor>
 
       {/* Popover Content */}
-      <PopoverContent side="top" align="end" className="ml-4 bg-white rounded shadow-lg" sideOffset={70} >
-        <div className="relative">
+      <PopoverContent side="top" align="end" className="ml-4 pl-4 pr-0 bg-white w-full rounded shadow-lg" sideOffset={70} >
+        <div className="relative w-full">
           {/* Close Button */}
           {children}
         </div>
