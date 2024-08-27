@@ -7,7 +7,7 @@ import { signInFormNodes } from "@/Constants/FormNodes";
 import { InputField } from "@/components";
 
 function ProfileForm() {
-  const { form, onSubmit, isLoading } = useSignIn();
+  const { form, onSubmit, isLoading, data } = useSignIn();
   return (
     <main className="w-full">
       <Form {...form}>
@@ -43,6 +43,7 @@ function ProfileForm() {
           Sign Up
         </Link>
       </div>
+      {JSON.stringify(data)}
     </main>
   );
 }

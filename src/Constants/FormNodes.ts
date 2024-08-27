@@ -38,4 +38,22 @@ export const signUpFormNodes: {
     },
   ];
   
+
+  export const verifyFormNodes: {
+    name: string;
+    placeholder: string;
+  }[] = [
+    {
+      name: "username",
+      placeholder: "username",
+    },
+   {
+    name : "emailOtp",
+    placeholder : "Email Otp"
+   },
+   {
+    name : "phoneOtp",
+    placeholder : "Phone Otp"
+   }
+  ];
   

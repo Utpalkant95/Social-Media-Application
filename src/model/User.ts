@@ -7,7 +7,17 @@ export interface User extends Document {
   phone: string;
   password: string;
   isVerified: boolean;
+  emailVerified: boolean;
+  phoneVerified: boolean;
   isFirstTimeLogin: boolean;
+  phoneOtp: number;
+  emailOtp: number;
+  profileImage: string;
+  posts: string[];
+  followers: string[];
+  following: string[];
+  saved: string[];
+  tagged: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,7 +39,10 @@ const userSchema: Schema<User> = new Schema({
     required: [true, "Email is required"],
     unique: true,
     trim: true,
-    match : [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "Please fill a valid email address",
+    ],
   },
   phone: {
     type: String,
@@ -37,13 +50,37 @@ const userSchema: Schema<User> = new Schema({
     unique: true,
     trim: true,
   },
-  password: { type: String, required: [true, "Password is required"], minlength: 8, trim: true },
+  password: {
+    type: String,
+    required: [true, "Password is required"],
+    minlength: 8,
+    trim: true,
+  },
+  phoneOtp: {
+    type: Number,
+    required: [true, "Phone OTP is required"],
+    trim: true,
+  },
+  emailOtp: {
+    type: Number,
+    required: [true, "Email OTP is required"],
+    trim: true,
+  },
   isVerified: { type: Boolean, default: false, required: true },
+  emailVerified: { type: Boolean, default: false, required: true },
+  phoneVerified: { type: Boolean, default: false, required: true },
   isFirstTimeLogin: { type: Boolean, default: true, required: true },
+  profileImage: { type: String },
+  posts: { type: [String] },
+  followers: { type: [String] },
+  following: { type: [String] },
+  saved: { type: [String] },
+  tagged: { type: [String] },
   createdAt: { type: Date, default: Date.now, required: true },
   updatedAt: { type: Date, default: Date.now, required: true },
 });
 
-const UserModel = (mongoose.models.User as mongoose.Model<User>) ||  mongoose.model<User>("User", userSchema);
+const UserModel =
+  mongoose.models.User || mongoose.model<User>("User", userSchema);
 
 export default UserModel;
