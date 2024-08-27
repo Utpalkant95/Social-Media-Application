@@ -85,7 +85,7 @@ export async function POST(request: Request) {
           message: "User already exists",
         }),
         {
-          status: 400,
+          status: 409,
         }
       )
     }
