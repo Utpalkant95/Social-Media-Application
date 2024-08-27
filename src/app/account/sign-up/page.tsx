@@ -7,7 +7,7 @@ import { useSignUp } from "@/hooks";
 import { signUpFormNodes } from "@/Constants/FormNodes";
 
 function ProfileForm() {
-  const { form, onSubmit, isPending, status} = useSignUp();
+  const { form, onSubmit, isLoading, status} = useSignUp();
   return (
     <main>
       <h2 className="text-[#737373] font-medium text-center mb-4">
@@ -35,8 +35,8 @@ function ProfileForm() {
             Policy.
           </p>
 
-          <Button type="submit" className="w-full bg-[#4CB5F9] text-white" disabled={status === "pending"}>
-            {isPending ? "Loading..." : "Sign up"}
+          <Button type="submit" className="w-full bg-[#4CB5F9] text-white" disabled={isLoading}>
+            {isLoading ? "Loading..." : "Sign up"}
           </Button>
         </form>
       </Form>

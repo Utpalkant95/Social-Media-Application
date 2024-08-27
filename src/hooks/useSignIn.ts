@@ -42,7 +42,7 @@ const useSignIn = () => {
   const {
     mutate,
     data: signInData,
-    isPending,
+    isLoading,
     error,
     isSuccess,
     status,
@@ -83,7 +83,7 @@ const useSignIn = () => {
     console.log(values);
   };
 
-  return { form, onSubmit, signInData, isPending, error, isSuccess, status };
+  return { form, onSubmit, signInData, isLoading, error, isSuccess, status };
 };
 
 export default useSignIn;

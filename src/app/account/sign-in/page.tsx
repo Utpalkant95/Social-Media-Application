@@ -7,7 +7,7 @@ import { signInFormNodes } from "@/Constants/FormNodes";
 import { InputField } from "@/components";
 
 function ProfileForm() {
-  const { form, onSubmit, status } = useSignIn();
+  const { form, onSubmit, isLoading } = useSignIn();
   return (
     <main className="w-full">
       <Form {...form}>
@@ -30,9 +30,9 @@ function ProfileForm() {
           <Button
             type="submit"
             className="w-full bg-[#0095F6] text-white "
-            disabled={status === "pending"}
+            disabled={isLoading}
           >
-            {status === "pending" ? "Loading..." : "Submit"}
+            {isLoading? "Loading..." : "Submit"}
           </Button>
         </form>
       </Form>

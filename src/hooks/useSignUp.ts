@@ -58,7 +58,7 @@ const useSignUp = () => {
   const {
     mutate,
     data: signUpData,
-    isPending,
+    isLoading,
     error,
     isSuccess,
     status,
@@ -87,7 +87,7 @@ const useSignUp = () => {
     mutate(values);
   };
 
-  return { form, onSubmit, signUpData, isPending, error, isSuccess, status };
+  return { form, onSubmit, signUpData, isLoading, error, isSuccess, status };
 };
 
 export default useSignUp;
