@@ -7,16 +7,17 @@ interface InputFieldProps {
   placeholder: string;
   type?: string;
   control: Control<any>;
+  maxLength ?: number
 }
 
-const InputField: React.FC<InputFieldProps> = ({ name, placeholder, type = "text", control }) => (
+const InputField: React.FC<InputFieldProps> = ({ name, placeholder, type = "text", control, maxLength }) => (
   <FormField
     control={control}
     name={name}
     render={({ field }) => (
       <FormItem>
         <FormControl>
-          <Input placeholder={placeholder} {...field} type={type} className="w-full" />
+          <Input placeholder={placeholder} {...field} type={type} className="w-full" maxLength={maxLength}/>
         </FormControl>
         <FormMessage />
       </FormItem>
