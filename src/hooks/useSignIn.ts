@@ -5,6 +5,7 @@ import { z } from "zod";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
+import { signInUser } from "@/ApiServices/AuthServices";
 interface CustomError {
   message: string;
   response?: {
@@ -30,25 +31,17 @@ const formSchema = z.object({
 
 const useSignIn = () => {
   const router = useRouter();
-  const signInFun = async (data: any): Promise<unknown> => {
-    const response = await axios.post(
-      "http://localhost:3000/api/sign-in",
-      data
-    );
-    const user = await response.data;
-    return user;
-  };
 
   const {
     mutate,
-    data: signInData,
+    data,
     isLoading,
     error,
     isSuccess,
     status,
   } = useMutation({
     mutationKey: ["signUp"],
-    mutationFn: (data: any) => signInFun(data),
+    mutationFn: signInUser,
     onSuccess: (signInData: any) => {
       enqueueSnackbar(signInData && signInData.message, {
         variant: "success",
@@ -70,6 +63,9 @@ const useSignIn = () => {
     },
   });
 
+  console.log("signInData", data);
+  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -80,10 +76,13 @@ const useSignIn = () => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     mutate(values);
-    console.log(values);
   };
 
-  return { form, onSubmit, signInData, isLoading, error, isSuccess, status };
+  console.log("signInData", data);
+
+  return { form, onSubmit, data, isLoading, error, isSuccess, status };
 };
+
+
 
 export default useSignIn;
