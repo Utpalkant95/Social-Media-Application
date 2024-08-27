@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Allow access to sign-in and sign-up pages regardless of token status
-  if (pathname.startsWith('/account/sign-in') || pathname.startsWith('/account/sign-up') || pathname.startsWith("/api/api-doc") || pathname.startsWith("/account/password/reset")) {
+  if (pathname.startsWith('/account/sign-in') || pathname.startsWith('/account/sign-up') || pathname.startsWith("/api/api-doc") || pathname.startsWith("/account/password/reset") || pathname.startsWith('/account/verify')) {
     const response = NextResponse.next();
     response.headers.set("x-current-path", pathname);
     return response; // Allow access to these routes

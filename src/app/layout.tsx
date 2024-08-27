@@ -23,7 +23,7 @@ export default function RootLayout({
   
 
   // List of paths where the sidebar should not be shown
-  const noSidebarPaths = ["/account/sign-in", "/account/sign-up", "/account/password/reset", "/api/api-doc"];
+  const noSidebarPaths = ["/account/sign-in", "/account/sign-up", "/account/password/reset", "/account/verify", "/api/api-doc"];
 
   // Check if the current pathname is in the list of no-sidebar paths
   const showSidebar = !noSidebarPaths.includes(currentPath);

@@ -1,20 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
+import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
-import { signInUser } from "@/ApiServices/AuthServices";
-import { AxiosError } from "axios";
+import { useVerifyForm } from "@/forms";
+import { verifySchema } from "@/schemas/verifySchema";
+import { verifyUser } from "@/ApiServices/AuthServices";
 import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
-import { signInSchema } from "@/schemas/signInSchema";
-import { useSignInForm } from "@/forms";
 
-const useSignIn = () => {
+const useVerify = () => {
   const router = useRouter();
-  const form = useSignInForm();
+  const form = useVerifyForm();
 
   const { mutate, isLoading } = useMutation({
     mutationKey: ["signUp"],
-    mutationFn: signInUser,
+    mutationFn: verifyUser,
     onSuccess: (signInData: IRESSignUpUser) => {
       enqueueSnackbar(signInData && signInData.message, {
         variant: "success",
@@ -30,11 +30,12 @@ const useSignIn = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signInSchema>) => {
+
+  const onSubmit = (values: z.infer<typeof verifySchema>) => {
     mutate(values);
   };
 
   return { form, onSubmit, isLoading };
 };
 
-export default useSignIn;
+export default useVerify;

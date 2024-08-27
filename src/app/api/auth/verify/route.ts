@@ -39,7 +39,7 @@ export async function POST(req: Request, res: Response) {
       );
     }
 
-    if (user.phoneOtp !== phoneOtp) {
+    if (user.phoneOtp != phoneOtp) {
       return Response.json(
         {
           success: false,
@@ -51,7 +51,7 @@ export async function POST(req: Request, res: Response) {
       );
     }
 
-    if (user.emailOtp !== emailOtp) {
+    if (user.emailOtp != emailOtp) {
       return Response.json(
         {
           success: false,
@@ -71,6 +71,7 @@ export async function POST(req: Request, res: Response) {
       {
         success: true,
         message: "Verified Successfully",
+        route : "/account/sign-in"
       },
       {
         status: 200,

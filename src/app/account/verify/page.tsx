@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { verifyFormNodes } from "@/Constants/FormNodes";
 import { InputField } from "@/components";
-import useVerify from "@/hooks/useVerify";
+import { useVerify } from "@/hooks";
 
 function Page() {
-  const {form,onSubmit} = useVerify();
+  const {form,onSubmit, isLoading} = useVerify();
   return (
     <main className="w-full">
       <Form {...form}>
@@ -20,14 +20,15 @@ function Page() {
               name={node.name}
               placeholder={node.placeholder}
               control={form.control}
-              maxLength={6}
+              maxLength={node.maxLenght}
             />
           ))}
           <Button
             type="submit"
             className="w-full bg-[#0095F6] text-white "
+            disabled={isLoading}
           >
-            {/* {status === "pending" ? "Loading..." : "Submit"} */}
+            {isLoading ? "Loading..." : "Submit"}
           </Button>
         </form>
       </Form>

@@ -42,18 +42,21 @@ export const signUpFormNodes: {
   export const verifyFormNodes: {
     name: string;
     placeholder: string;
+    maxLenght ?: number
   }[] = [
     {
-      name: "username",
+      name: "userName",
       placeholder: "username",
     },
    {
     name : "emailOtp",
-    placeholder : "Email Otp"
+    placeholder : "Email Otp",
+    maxLenght : 6
    },
    {
     name : "phoneOtp",
-    placeholder : "Phone Otp"
+    placeholder : "Phone Otp",
+    maxLenght : 6
    }
   ];
   

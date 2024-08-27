@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 import React from "react";
 
 const Page = () => {
@@ -19,7 +20,7 @@ const Page = () => {
       <div className="grid grid-cols-3">
         {mediaItems.map((item, index) => (
           <div key={index} className="relative w-full h-48">
-            <img
+            <Image
               src={item}
               alt={`Gallery Item ${index}`}
               className="w-full h-full object-cover"

@@ -19,17 +19,15 @@ const useSignUp = () => {
       enqueueSnackbar(data && data.message, {
         variant: "success",
       })
+      router.push(data.route)
     },
     onError: (error: AxiosError<IRESSignUpUser>) => {
-      enqueueSnackbar(error.response?.data.message, {
+      enqueueSnackbar(error.response?.data.message || error.response?.statusText, {
         variant: "error",
       })
-      console.log("error", error);
+      router.push(error.response?.data.route as string)
     }
   });
-
-
-  console.log("data", data);
   
   const onSubmit = (values: z.infer<typeof signUpSchema>) => {
     mutate(values);
