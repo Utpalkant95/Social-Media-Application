@@ -1,9 +1,10 @@
 "use client";
+
 import { getSignleUserData } from "@/ApiServices/UserServices";
 import { ProfileFrag } from "@/Fragments";
 import { decodeToken } from "@/helpers/userInfo";
 import { User } from "@/model/User";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 const Page = ({ params }: { params: { username: string } }) => {
   const { username } = params;
   const user = decodeToken();
