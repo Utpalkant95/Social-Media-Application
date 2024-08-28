@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
-import axios from "axios";
 import { UTApi } from "uploadthing/server";
 import UserModel, { User } from "@/model/User";
 
@@ -21,8 +20,6 @@ export const POST = async (req: NextRequest) => {
     });
   }
 
-
-
   if (fileBlob) {
     // Convert Blob to FileEsque object
     const file = new File([fileBlob], (body.file as File).name, {
@@ -30,7 +27,7 @@ export const POST = async (req: NextRequest) => {
     });
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    
+
     // Ensure upload directory exists
     if (!fs.existsSync(UPLOAD_DIR)) {
       fs.mkdirSync(UPLOAD_DIR);
@@ -42,7 +39,7 @@ export const POST = async (req: NextRequest) => {
     // Upload the file using uploadthing API
     const response = await utapi.uploadFiles([file]);
 
-    // update user prole 
+    // update user prole
     // user?.set({ prof: response[0].data?.url });
     // await user?.save();
     user.profileImage = response[0].data?.url as string;
