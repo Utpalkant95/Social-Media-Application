@@ -3,10 +3,12 @@ import path from "path";
 import fs from "fs";
 import { UTApi } from "uploadthing/server";
 import UserModel, { User } from "@/model/User";
+import dbConnect from "@/lib/dbConnect";
 
 const UPLOAD_DIR = path.resolve("public/uploads");
 
 export const POST = async (req: NextRequest) => {
+  await dbConnect();
   const formData = await req.formData();
   const body = Object.fromEntries(formData);
   const fileBlob = (body.file as Blob) || null;
