@@ -10,29 +10,37 @@ import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
 import { User } from "@/model/User";
 
-const ProfileFrag = ({ children, user, ownViewer }: { children: ReactNode, user : User, ownViewer : boolean }) => {
-  const fileInputRef = useRef(null);
+const ProfileFrag = ({
+  children,
+  user,
+  ownViewer,
+}: {
+  children: ReactNode;
+  user: User;
+  ownViewer: boolean;
+}) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleButtonClick = () => {
-    // if (fileInputRef.current ) {
-    //   fileInputRef.current.click();
-    // }
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
   const tabItems = [
     {
       label: "POSTS",
       value: "posts",
-      content: <ProfilePostAtom />,
+      content: <ProfilePostAtom user={user}/>,
     },
     {
       label: "SAVED",
       value: "saved",
-      content: <ProfileSavedAtom />,
+      content: <ProfileSavedAtom user={user}/>,
     },
     {
       label: "TAGGED",
       value: "tagged",
-      content: <ProfileTagedAtom />,
+      content: <ProfileTagedAtom user={user}/>,
     },
   ];
 
@@ -54,18 +62,30 @@ const ProfileFrag = ({ children, user, ownViewer }: { children: ReactNode, user 
       {/* User name profile section */}
       <div className="profile section  py-10 flex flex-col gap-y-10">
         {/* Profile Section */}
-        <div className="flex items-center gap-x-24" >
+        <div className="flex items-center gap-x-24">
           {/* photo section */}
           <div onClick={handleButtonClick}>
             <div className="relative cursor-pointer">
-              <div className="bg-black/60 absolute w-[150px] h-[150px] overflow-hidden rounded-full"></div>
+              <div
+                className={`bg-black/60 absolute w-[150px] h-[150px] overflow-hidden rounded-full ${
+                  user?.profileImage ? "hidden" : ""
+                }`}
+              ></div>
               <Image
-                src="https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
+                src={
+                  user?.profileImage ||
+                  "https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
+                }
                 alt="profile"
                 width={150}
                 height={150}
+                className="w-[150px] h-[150px] object-cover rounded-full overflow-hidden"
               />
-              <div className="absolute  left-[55px] bottom-[55px]">
+              <div
+                className={`absolute  left-[55px] bottom-[55px] ${
+                  user?.profileImage ? "hidden" : ""
+                } `}
+              >
                 <FaCamera className="text-white" size={40} />
               </div>
             </div>

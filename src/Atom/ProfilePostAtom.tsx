@@ -1,6 +1,10 @@
+import { User } from '@/model/User'
 import React from 'react'
 
-const ProfilePostAtom = () => {
+
+const ProfilePostAtom = ({user} : {user : User}) => {
+  const Post = user.posts
+  console.log("post", Post);
   return (
     <div>ProfilePostAtom</div>
   )
