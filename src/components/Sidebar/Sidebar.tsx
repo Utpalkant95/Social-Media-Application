@@ -15,7 +15,7 @@ const Sidebar = () => {
   const [drawerContent, setDrawerContent] = useState<ReactNode>();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const Component = useSidebarCompFactory({ key: activeId });
-  const username = "utpal";
+  const username = "utpal95";
 
   const handleItemClick = (item: INavItems) => {
     setActiveId(item.id);
@@ -205,7 +205,7 @@ const Sidebar = () => {
         open={isPopOver}
         anchorRef={anchorRef}
       >
-        {drawerContent} 
+        {drawerContent}
       </PopOver>
     </>
   );

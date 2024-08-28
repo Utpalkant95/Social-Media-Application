@@ -154,6 +154,8 @@ export const StepTwo = ({
 
   function onSubmit(values: z.infer<typeof stepTwoSchema>) {
     console.log(values);
+    console.log("file", file);
+
     next();
   }
 
@@ -170,7 +172,9 @@ export const StepTwo = ({
             <Image
               src={URL.createObjectURL(file)} // Convert the file to a URL
               alt="Selected File"
-              className="h-full"
+              className="h-full w-full object-cover"
+              width={500}
+              height={700}
             />
           )}
         </div>
@@ -333,11 +337,8 @@ export const StepTwo = ({
   );
 };
 
-
 const PostCreateForm = () => {
-  return (
-    <div>PostCreateForm</div>
-  )
-}
+  return <div>PostCreateForm</div>;
+};
 
-export default PostCreateForm
+export default PostCreateForm;
