@@ -50,6 +50,7 @@ export async function POST(request: Request) {
       {
         success: false,
         message: validation.error.errors[0].message,
+        route : "/account/sign-in"
       },
       {
         status: 400,
@@ -64,6 +65,7 @@ export async function POST(request: Request) {
       {
         success: false,
         message: "User Not Found",
+        route : "/account/sign-in"
       },
       {
         status: 400,
@@ -102,6 +104,7 @@ export async function POST(request: Request) {
       {
         success: true,
         message: "Login Successfully",
+        route : "/",
         refreshToken,
         accessToken
       },

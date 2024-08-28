@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import Image from "next/image";
+
 import {
   Accordion,
   AccordionItem,
@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 const stepOneSchema = z.object({
   file: z.instanceof(File).optional(),
@@ -166,7 +167,7 @@ export const StepTwo = ({
       <div className="flex">
         <div className="w-[60%] h-full">
           {file && (
-            <img
+            <Image
               src={URL.createObjectURL(file)} // Convert the file to a URL
               alt="Selected File"
               className="h-full"

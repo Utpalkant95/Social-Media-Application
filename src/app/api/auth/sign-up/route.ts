@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       return Response.json({
         success : false,
         message : validation.error.errors[0].message,
-        data : validation
+        route : "/account/sign-up"
       }, {
         status : 400
       })
@@ -83,6 +83,7 @@ export async function POST(request: Request) {
         JSON.stringify({
           success: false,
           message: "User already exists",
+          route : "/account/sign-in"
         }),
         {
           status: 409,
@@ -128,6 +129,7 @@ export async function POST(request: Request) {
         JSON.stringify({
           success: false,
           message: "Something went wrong. Please try again.",
+          route : "/account/sign-up"
         }),
         { status: 500 }
       );
@@ -136,13 +138,9 @@ export async function POST(request: Request) {
     // // send verification email
     // const emailResponse = await sendVerificationEmail({
     //   email : email,
-    //   emailOtp : emailOtp,
     //   firstName : fullName,
-    //   phoneOtp : phoneOtp
+    //   otp : String(emailOtp) 
     // })
-
-    // console.log("emailResponse", emailResponse);
-    
 
     // if (!emailResponse) {
     //   return new Response(
@@ -176,6 +174,7 @@ export async function POST(request: Request) {
       JSON.stringify({
         success: true,
         message: "User created successfully",
+        route : "/account/verify"
       }),
       { status: 200 }
     );
@@ -186,6 +185,7 @@ export async function POST(request: Request) {
       JSON.stringify({
         success: false,
         message: "Error in registering user",
+        route : "/account/sign-up"
       }),
       { status: 500 }
     );
