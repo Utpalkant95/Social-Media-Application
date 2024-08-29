@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const updateUserProfileImage = async (data: FormData) => {
   const res = await axios.post(
-    "http://localhost:3000/api/user/update-user-profile-image",
+    "http://localhost:3000/api/user/update-profile-image",
     data
   );
   return res.data;
@@ -10,7 +10,7 @@ export const updateUserProfileImage = async (data: FormData) => {
 
 export const getSignleUserData = async (userName: string) => {
   const res = await axios.get(
-    `http://localhost:3000/api/user/user-by-id?userName=${userName}`
+    `http://localhost:3000/api/user/user-by-userName?userName=${userName}`
   );
   return res.data;
 };

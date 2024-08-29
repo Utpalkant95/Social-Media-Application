@@ -1,5 +1,4 @@
 "use client";
-
 import { getSignleUserData } from "@/ApiServices/UserServices";
 import { ProfileFrag } from "@/Fragments";
 import { decodeToken } from "@/helpers/userInfo";
@@ -8,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 const Page = ({ params }: { params: { username: string } }) => {
   const { username } = params;
   const user = decodeToken();
-  console.log(user?.userId);
 
  const {data} = useQuery({
    queryKey: ["user"],

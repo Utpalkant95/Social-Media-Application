@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       {
         success: false,
         message: validation.error.errors[0].message,
-        route : "/account/sign-in"
+        route: "/account/sign-in",
       },
       {
         status: 400,
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       {
         success: false,
         message: "User Not Found",
-        route : "/account/sign-in"
+        route: "/account/sign-in",
       },
       {
         status: 400,
@@ -93,28 +93,26 @@ export async function POST(request: Request) {
   try {
     existingUserByEmail.isVerified = true;
     await existingUserByEmail.save();
-    const {accessToken, refreshToken } = generateTokens(
-      existingUserByEmail._id as string,
-      existingUserByEmail.email,
-      existingUserByEmail.userName,
-      existingUserByEmail.isVerified
-    );
+    const { accessToken } = generateTokens({
+      email: existingUserByEmail.email,
+      userId: existingUserByEmail._id.toString(),
+      username: existingUserByEmail.userName,
+      isVerified: existingUserByEmail.isVerified,
+    });
 
     return Response.json(
       {
         success: true,
         message: "Login Successfully",
-        route : "/",
-        refreshToken,
-        accessToken
+        route: "/",
+        accessToken,
       },
       {
         status: 200,
         headers: {
-          "Set-Cookie": [
-            `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}; Secure; SameSite=Strict`,
-            `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600; Secure; SameSite=Strict`,
-          ].join(", "), // Multiple Set-Cookie headers
+          "Set-Cookie": `accessToken=${accessToken};  Path=/; Max-Age=${
+            7 * 24 * 60 * 60
+          }; Secure; SameSite=Strict`,
         },
       }
     );

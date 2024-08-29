@@ -12,7 +12,7 @@ const CreatePostFrag = () => {
 };
 
 const MySteps = () => {
-  const { next, prev,isLast } = useSteps();
+  const { next, prev} = useSteps();
   const [file, setFile] = useState<any>();
 
   return (
