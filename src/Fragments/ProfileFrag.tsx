@@ -57,6 +57,9 @@ const ProfileFrag = ({
 
   console.log("isLoading", isLoading);
 
+  console.log("user", user);
+  
+
   return (
     <div className="px-44">
       {/* User name profile section */}

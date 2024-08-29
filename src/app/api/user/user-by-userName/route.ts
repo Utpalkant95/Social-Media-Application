@@ -18,15 +18,15 @@ export async function GET(req: Request) {
     }
 
     // Check the cache first
-    const cacheKey = `user:${userName}`;
-    const cachedUser = await redisClient.get(cacheKey);
+    // const cacheKey = `user:${userName}`;
+    // const cachedUser = await redisClient.get(cacheKey);
 
-    if (cachedUser) {
-      return new Response(
-        JSON.stringify({ success: true, data: JSON.parse(cachedUser) }),
-        { status: 200 }
-      );
-    }
+    // if (cachedUser) {
+    //   return new Response(
+    //     JSON.stringify({ success: true, data: JSON.parse(cachedUser) }),
+    //     { status: 200 }
+    //   );
+    // }
 
     // Find the user by username
     const userByUserName = await UserModel.findOne({ userName });
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
     }
 
     // Cache the user
-    await redisClient.set(cacheKey, JSON.stringify(userByUserName));
+    // await redisClient.set(cacheKey, JSON.stringify(userByUserName));
 
     return new Response(
       JSON.stringify({ success: true, data: userByUserName }),
