@@ -1,9 +1,16 @@
 import jwt from "jsonwebtoken";
-const generateTokens = (userId: string, email: string, username: string, isVerified : boolean) => {
+
+interface IgenerateTokens {
+  userId: string;
+  email: string;
+  username: string;
+  isVerified: boolean;
+}
+const generateTokens = ({email, isVerified, userId, username} : IgenerateTokens) => {
     const accessToken = jwt.sign(
       { userId, email, username, isVerified },
       process.env.JWT_SECRET!,
-      { expiresIn: "1h" }
+      { expiresIn: "7d" }
     );
   
     const refreshToken = jwt.sign(
