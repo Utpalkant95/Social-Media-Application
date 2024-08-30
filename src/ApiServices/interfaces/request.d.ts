@@ -16,3 +16,16 @@ export interface IVerifyUser {
     emailOtp : string
     phoneOtp : string
 }
+
+
+export interface ICreatePost {
+    file : File;
+    description : string;
+    location : string;
+    altText : string;
+    hideLikeViewCount : boolean;
+    hideComment : boolean;
+    likeCount : number;
+    commentCount : number;
+    shareCount : number;
+}

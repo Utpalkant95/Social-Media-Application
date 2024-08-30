@@ -27,6 +27,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { ICreatePost } from "@/ApiServices/interfaces/request";
 
 const stepOneSchema = z.object({
   file: z.instanceof(File).optional(),
@@ -126,10 +127,12 @@ export const StepTwo = ({
   next,
   prev,
   file,
+  mutate,
 }: {
   next: () => void;
   prev: () => void;
   file: File | null;
+  mutate: (data: ICreatePost) => void;
 }) => {
   const [text, setText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -144,17 +147,38 @@ export const StepTwo = ({
       hideComment: false,
     },
   });
-  console.log("text", text);
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
-    console.log("emoji object", emojiData); // This should log the correct emoji object
     setText((prevText) => prevText + emojiData.emoji);
     setShowEmojiPicker(false);
   };
 
   function onSubmit(values: z.infer<typeof stepTwoSchema>) {
-    console.log(values);
-    console.log("file", file);
+    // Create a new FormData object
+    const formData = new FormData();
+
+    // Append all values from the form to the FormData object
+    for (const [key, value] of Object.entries(values)) {
+      // Convert non-string and non-Blob values to strings
+      if (typeof value === "boolean") {
+        formData.append(key, value.toString()); // Convert boolean to string
+      } else if (typeof value === "string" || value instanceof Blob) {
+        formData.append(key, value); // Directly append string or Blob values
+      } else {
+        // Handle other types as needed
+        formData.append(key, String(value)); // Convert other types to string
+      }
+    }
+
+    // Append the file to the FormData object, if file exists
+    if (file) {
+      formData.append("file", file);
+    }
+
+    // Send the formData directly
+    mutate(formData);
+
+    console.log("submissionObj", formData);
 
     next();
   }
