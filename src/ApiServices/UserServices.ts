@@ -14,3 +14,11 @@ export const getSignleUserData = async (userName: string) => {
   );
   return res.data;
 };
+
+
+export const getSearchedUsers = async (searchKey: string) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/search-user?searchKey=${searchKey}`
+  );
+  return res.data;
+}

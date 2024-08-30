@@ -1,12 +1,22 @@
 import { Input } from "@/components/ui/input";
-import React from "react";
-import {RecentSearchItemAtom} from "@/Atom";
+import React, { useState } from "react";
+import { RecentSearchItemAtom } from "@/Atom";
 import { TbXboxXFilled } from "react-icons/tb";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getSearchedUsers } from "@/ApiServices/UserServices";
 
 const SearchAtom = () => {
-  const [searchKey, setSearchKey] = React.useState<string>("");
+
+  const [searchKey, setSearchKey] = useState<string>("");
+
   console.log("searchKey", searchKey);
   
+
+
+  // const {data, mutate} = useMutation({
+  //   mutationKey : ["searchUser"],
+  //   mutationFn : getSearchedUsers,
+  // })
   return (
     <div className="">
       <div className="p-6">
@@ -24,7 +34,8 @@ const SearchAtom = () => {
               Clear all
             </span>
           </div>
-            <RecentSearchItemAtom />
+          <RecentSearchItemAtom />
+          {/* {JSON.stringify(data)} */}
         </div>
       </div>
     </div>
