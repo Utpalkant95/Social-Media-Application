@@ -12,7 +12,7 @@ const useSidebarCompFactory = ({ key }: { key: number | undefined }): () => Reac
         case 999:
             return SidebarMore
         default:
-          return   SidebarMore;
+          return   CreatePostFrag;
     }
 };
 

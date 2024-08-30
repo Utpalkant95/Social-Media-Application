@@ -13,10 +13,12 @@ import { User } from "@/model/User";
 const ProfileFrag = ({
   children,
   user,
+  userName,
   ownViewer,
 }: {
   children: ReactNode;
   user: User;
+  userName : string;
   ownViewer: boolean;
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -30,7 +32,7 @@ const ProfileFrag = ({
     {
       label: "POSTS",
       value: "posts",
-      content: <ProfilePostAtom user={user}/>,
+      content: <ProfilePostAtom userName= {userName}/>,
     },
     {
       label: "SAVED",
