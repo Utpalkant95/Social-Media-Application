@@ -18,6 +18,9 @@ export interface User extends Document {
   following: string[];
   saved: string[];
   tagged: string[];
+  friends :  string[];
+  sentFriendRequests :  string[];
+  recievedFriendRequests :  string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -76,6 +79,9 @@ const userSchema: Schema<User> = new Schema({
   following: { type: [String] },
   saved: { type: [String] },
   tagged: { type: [String] },
+  friends : { type: [String] },
+  sentFriendRequests : { type: [String] },
+  recievedFriendRequests : { type: [String] },
   createdAt: { type: Date, default: Date.now, required: true },
   updatedAt: { type: Date, default: Date.now, required: true },
 });
