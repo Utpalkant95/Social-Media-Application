@@ -1,3 +1,4 @@
+import { User } from "@/model/User";
 import axios from "axios";
 
 export const updateUserProfileImage = async (data: FormData) => {
@@ -14,3 +15,19 @@ export const getSignleUserData = async (userName: string) => {
   );
   return res.data;
 };
+
+
+export const getSearchedUsers = async (searchKey: string) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/search-user?searchKey=${searchKey}`
+  );
+  return res.data.data as User[];
+}
+
+
+export const seachUser = async (searchKey: string) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/search-user?searchKey=${searchKey}`
+  );
+  return res.data;
+}

@@ -1,11 +1,12 @@
 "use client";
+import { Loader } from "@/components";
 import Image from "next/image";
 
 const Page = () => {
-  (() => {
-    window.location.reload
-    console.log("iffie called")
-  })(); //TODO: remove this
+  // (() => {
+  //   window.location.reload
+  //   console.log("iffie called")
+  // })(); //TODO: remove this
 
   return (
     <div className="flex w-full h-screen px-24 py-4 gap-x-10">
