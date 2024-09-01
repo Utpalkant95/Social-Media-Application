@@ -21,7 +21,6 @@ export default function RootLayout({
   const currentPath = headersList.get("x-current-path") || "/api/api-doc";
   console.log("current", currentPath);
   
-
   // List of paths where the sidebar should not be shown
   const noSidebarPaths = ["/account/sign-in", "/account/sign-up", "/account/password/reset", "/account/verify", "/api/api-doc"];
 
