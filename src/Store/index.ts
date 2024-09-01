@@ -12,21 +12,16 @@ import {
 } from 'redux-persist';
 
 import storage from 'redux-persist/lib/storage';
-import userReducer from './userSlice';
-//  import the filterSLice
-import filterReducer from './filterSlice';
-import checkout from './checkoutSlice';
+import searchedUserSlice from './searchedUserSlice';
 
 const reducers = combineReducers({
-  user: userReducer,
-  filter: filterReducer,
-  checkout : checkout
+  searchedUserSlice
 });
 
 const persistConfig = {
   key: 'root',
   storage: storage,
-  whitelist: [ "user"],
+  whitelist: [ "searchedUserSlice"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

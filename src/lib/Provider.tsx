@@ -6,6 +6,8 @@ import {
 } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { SnackbarProvider } from "notistack";
+import { Provider } from "react-redux";
+import { store } from "@/Store";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -33,7 +35,9 @@ export default function Providers({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider>{children}</SnackbarProvider>
+      <SnackbarProvider>
+        <Provider store={store}>{children}</Provider>
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }

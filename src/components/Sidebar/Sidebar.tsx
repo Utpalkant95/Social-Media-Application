@@ -25,7 +25,7 @@ const Sidebar = () => {
 
   const drawerContent = useMemo<ReactNode>(() => {
     const Component = useSidebarCompFactory({ key: activeId });
-    return Component ? <Component /> : null; // Execute the function to get the JSX element
+    return Component ? <Component setIsDrawerOpen={setIsDrawerOpen}/> : null; // Execute the function to get the JSX element
   }, [activeId]);
 
   const handleItemClick = useCallback(
