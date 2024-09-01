@@ -9,23 +9,37 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const url = new URL(request.url);
     const userName = url.searchParams.get("searchKey");
 
-    const users = await UserModel.find({
-        $or: [
-          { userName: { $regex: userName, $options: "i" } },
-          { fullName: { $regex: userName, $options: "i" } }
-        ]
+    if (!userName) {
+      return NextResponse.json({
+        success: true,
+        data: [],
       });
-  
-     return NextResponse.json({
-       success: true,
-       data: users
-     })
+    }
 
+    const users = await UserModel.find({
+      $or: [
+        { userName: { $regex: userName, $options: "i" } },
+        { fullName: { $regex: userName, $options: "i" } },
+      ],
+    })
+      .select("fullName userName profileImage followers")
+      .lean();
+
+    // Map over the users to add the followersCount field
+    const usersWithFollowersCount = users.map((user) => ({
+      ...user,
+      followersCount: user.followers.length,
+    }));
+
+    return NextResponse.json({
+      success: true,
+      data: usersWithFollowersCount,
+    });
   } catch (error) {
     console.error("Error searching users:", error);
     return NextResponse.json({
       success: false,
       message: "Something went wrong",
-    })
+    });
   }
 }
