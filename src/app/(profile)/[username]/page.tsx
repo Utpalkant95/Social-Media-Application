@@ -9,7 +9,7 @@ const Page = ({ params }: { params: { username: string } }) => {
   const user = decodeToken();
 
  const {data} = useQuery({
-   queryKey: ["user"],
+   queryKey: ["user", username],
    queryFn: () => getSignleUserData(username),
  })
 
@@ -19,7 +19,7 @@ const Page = ({ params }: { params: { username: string } }) => {
   
   // fetch user details
 
-  return <ProfileFrag user = {userData} userName = {username} ownViewer = {ownViewer}>{username}</ProfileFrag>;
+  return <ProfileFrag user = {userData} userName = {username} ownViewer = {ownViewer}></ProfileFrag>;
 };
 
 export default Page;
