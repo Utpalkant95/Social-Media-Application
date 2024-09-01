@@ -9,3 +9,10 @@ export interface IRESSignUpUser {
 export interface IAllPost extends Post{
     _id : string
 }
+
+export interface ISearchedUser {
+    fullName : string;
+    userName : string;
+    profileImage : string;
+    followersCount : string;
+}

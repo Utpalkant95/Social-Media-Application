@@ -1,9 +1,10 @@
+import { ISearchedUser } from "@/ApiServices/interfaces/response";
 import { User } from "@/model/User";
 import Image from "next/image";
 import Link from "next/link";
 import { IoMdClose } from "react-icons/io";
 import { LuDot } from "react-icons/lu";
-const RecentSearchItemAtom = ({ user, crossHide }: { user: User, crossHide : boolean }) => {
+const RecentSearchItemAtom = ({ user, crossHide }: { user: ISearchedUser, crossHide : boolean }) => {
   return (
     <Link href={`/${user.userName}`}>
       <div className="flex items-center justify-between hover:bg-zinc-200 py-2 px-6">
@@ -20,7 +21,7 @@ const RecentSearchItemAtom = ({ user, crossHide }: { user: User, crossHide : boo
           <div>
             <p className="font-medium text-sm">{user.userName}</p>
             <p className="text-sm font-light flex items-center">
-              {user.fullName} <LuDot /> {user.followers.length} followers
+              {user.fullName} <LuDot /> {user.followersCount} followers
             </p>
           </div>
         </div>

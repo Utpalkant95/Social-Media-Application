@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getSearchedUsers } from "@/ApiServices/UserServices";
 import { debounce } from "lodash";
 import { Loader } from "@/components";
-import { User } from "@/model/User";
+import { ISearchedUser } from "@/ApiServices/interfaces/response";
 
 const SearchAtom = () => {
   const [searchKey, setSearchKey] = useState<string>("");
@@ -21,8 +21,8 @@ const SearchAtom = () => {
     debounce((query: string) => {
       console.log("Debounced Search Query:", query);
       mutate(query);
-    }, 1000), // Adjust this delay as needed
-    [] // Dependencies should be empty to keep it stable
+    }, 1000), 
+    [] 
   );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,29 +45,35 @@ const SearchAtom = () => {
           {isLoading ? (
             <Loader className="w-4 h-4" />
           ) : (
-            <TbXboxXFilled className="text-[#C7C7C7] cursor-pointer" />
+            <TbXboxXFilled
+              className="text-[#C7C7C7] cursor-pointer"
+              onClick={() => {
+                setSearchKey("");
+                mutate(searchKey);
+              }}
+            />
           )}
         </div>
       </div>
       <div className="border-t overflow-y-scroll">
         {data && data.length > 0 && (
           <>
-            {data?.map((user: User) => {
+            {data?.map((user: ISearchedUser) => {
               return <RecentSearchItemAtom user={user} crossHide={false} />;
             })}
           </>
         )}
-        {/* <div className="">
-          <div className="flex items-center justify-between p-6">
-            <h2 className="font-medium text-base">Recent</h2>
-            <span className="text-sm cursor-pointer text-blue-500 hover:text-black">
-              Clear all
-            </span>
+        {data && data.length === 0 && (
+          <div className="">
+            <div className="flex items-center justify-between p-6">
+              <h2 className="font-medium text-base">Recent</h2>
+              <span className="text-sm cursor-pointer text-blue-500 hover:text-black">
+                Clear all
+              </span>
+            </div>
+            {/* Recent Search */}
           </div>
-          {data?.map((user: User) => {
-            return <RecentSearchItemAtom user={user} crossHide={false} />;
-          })}
-        </div> */}
+        )}
       </div>
     </div>
   );

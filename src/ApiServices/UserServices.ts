@@ -1,5 +1,6 @@
 import { User } from "@/model/User";
 import axios from "axios";
+import { ISearchedUser } from "./interfaces/response";
 
 export const updateUserProfileImage = async (data: FormData) => {
   const res = await axios.post(
@@ -21,7 +22,7 @@ export const getSearchedUsers = async (searchKey: string) => {
   const res = await axios.get(
     `http://localhost:3000/api/search-user?searchKey=${searchKey}`
   );
-  return res.data.data as User[];
+  return res.data.data as ISearchedUser[];
 }
 
 
