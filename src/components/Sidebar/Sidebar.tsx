@@ -3,41 +3,50 @@ import { useSidebarCompFactory } from "@/hooks";
 import { INavItems, navItems, navItems2 } from "@/Constants/SideBarMenus";
 import Link from "next/link";
 import Image from "next/image";
-import { ReactNode, useRef, useState } from "react";
+import {
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import { DialogSheet, PopOver, SlideSheet } from "@/components";
 import logo from "../../../public/snapify-favicon-white.svg";
 
 const Sidebar = () => {
-  const [activeId, setActiveId] = useState<number>();
+  const [activeId, setActiveId] = useState<number>(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isDailog, setIsDailog] = useState<boolean>(false);
   const [isPopOver, setIsPopOver] = useState<boolean>(false);
-  const [drawerContent, setDrawerContent] = useState<ReactNode>();
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const Component = useSidebarCompFactory({ key: activeId });
   const username = "utpal95";
+  console.log("Sidebar component rendering");
 
-  const handleItemClick = (item: INavItems) => {
-    setActiveId(item.id);
+  const drawerContent = useMemo<ReactNode>(() => {
+    const Component = useSidebarCompFactory({ key: activeId });
+    return Component ? <Component /> : null; // Execute the function to get the JSX element
+  }, [activeId]);
 
-    if (item.popUp) {
-      setIsPopOver(true);
-      setDrawerContent(<Component />);
-    }
+  const handleItemClick = useCallback(
+    (item: INavItems) => {
+      setActiveId((prevId) => {
+        if (prevId !== item.id) {
+          return item.id;
+        }
+        return prevId;
+      });
 
-    if (item.dialog) {
-      // If the item requires a dialog, open the dialog and set the appropriate content
-      setIsDailog(true);
-      setDrawerContent(Component);
-    }
-    if (item.drawer) {
-      // If the item requires a drawer, open the drawer and set the appropriate content
-      setIsDrawerOpen(true);
-      setDrawerContent(Component);
-    } else {
-      setIsDrawerOpen(false);
-    }
-  };
+      if (item.popUp && !isPopOver) setIsPopOver(true);
+      if (item.dialog && !isDailog) setIsDailog(true);
+      if (item.drawer && !isDrawerOpen) {
+        setIsDrawerOpen(true);
+      } else if (!item.drawer && isDrawerOpen) {
+        setIsDrawerOpen(false);
+      }
+    },
+    [isPopOver, isDailog, isDrawerOpen]
+  );
 
   return (
     <>
@@ -66,7 +75,7 @@ const Sidebar = () => {
           />
         </header>
 
-        <nav className="">
+        <nav>
           <ul className="flex flex-col gap-y-2">
             {navItems.map((item: INavItems) => {
               const isActive = activeId === item.id;
@@ -77,18 +86,17 @@ const Sidebar = () => {
               return (
                 <li
                   key={item.id}
-                  className={`group py-2 rounded-md px-2 transform transition-all duration-300 ease-in-out  ${
+                  className={`group py-2 rounded-md px-2 transform transition-all duration-300 ease-in-out ${
                     isDrawerOpen
                       ? "hover:bg-zinc-200"
                       : "hover:bg-zinc-200 border-none"
-                  }    ${isActive ? "border" : ""}`}
+                  } ${isActive ? "border" : ""}`}
                   onClick={() => handleItemClick(item)}
                 >
                   <Link
                     href={item.drawer ? "#" : dynamicPath}
                     className="flex items-center gap-x-3"
                   >
-                    {/* Conditionally render the icons */}
                     {isActive
                       ? item.DV_ICON && (
                           <item.DV_ICON
@@ -102,7 +110,6 @@ const Sidebar = () => {
                             className="transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
                           />
                         )}
-
                     {item.img && (
                       <div
                         className={`${
@@ -116,10 +123,10 @@ const Sidebar = () => {
                             item.img ||
                             "https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
                           }
-                          alt="profle"
+                          alt="profile"
                           width={28}
                           height={28}
-                          className={`rounded-full overflow-hidden transform group-hover:scale-110 transition-transform duration-300 ease-in-out`}
+                          className="rounded-full overflow-hidden transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
                         />
                       </div>
                     )}
@@ -137,14 +144,13 @@ const Sidebar = () => {
           </ul>
         </nav>
 
-        {/* ADD MORE SECTION */}
         <nav className="flex flex-col gap-y-2 pb-4">
           {navItems2.map((item: INavItems) => {
             const isActive = activeId === item.id;
             return (
               <div
                 key={item.id}
-                className={`group hover:bg-zinc-200 py-2 rounded-md px-2 transform transition-all duration-300 ease-in-out`}
+                className="group hover:bg-zinc-200 py-2 rounded-md px-2 transform transition-all duration-300 ease-in-out"
                 onClick={() => handleItemClick(item)}
               >
                 <Link href={item.path} className="flex items-center gap-x-3">
@@ -162,9 +168,9 @@ const Sidebar = () => {
                         />
                       )}
                   <span
-                    className={`capitalize text-base  ${
+                    className={`capitalize text-base ${
                       isDrawerOpen ? "hidden" : ""
-                    } ${isActive ? "font-bold" : "font-light "}`}
+                    } ${isActive ? "font-bold" : "font-light"}`}
                   >
                     {item.name}
                   </span>
@@ -175,31 +181,26 @@ const Sidebar = () => {
         </nav>
       </aside>
 
-      {/* for notification and search  */}
       <SlideSheet
         isOpen={isDrawerOpen}
         onClose={() => {
           setIsDrawerOpen(false);
           setActiveId(1);
-          setDrawerContent(null);
         }}
       >
         {drawerContent}
       </SlideSheet>
 
-      {/* for Create post section */}
       <DialogSheet
         isOpen={isDailog}
         onClose={() => {
           setIsDailog(false);
-          setDrawerContent(null);
           setActiveId(1);
         }}
       >
         {drawerContent}
       </DialogSheet>
 
-      {/* For more section */}
       <PopOver
         onOpenChange={setIsPopOver}
         open={isPopOver}
