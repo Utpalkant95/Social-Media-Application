@@ -1,16 +1,11 @@
 "use client";
-import React, { useEffect } from "react";
 import Image from "next/image";
 
 const Page = () => {
-  useEffect(() => {
-    const hasRefreshed = sessionStorage.getItem("hasRefreshed");
-
-    if (!hasRefreshed) {
-      sessionStorage.setItem("hasRefreshed", "true");
-      window.location.reload();
-    }
-  }, []);
+  (() => {
+    window.location.reload
+    console.log("iffie called")
+  })(); //TODO: remove this
 
   return (
     <div className="flex w-full h-screen px-24 py-4 gap-x-10">
