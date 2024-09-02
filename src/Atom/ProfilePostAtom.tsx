@@ -13,7 +13,7 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
   const Component = useSidebarCompFactory({ key: 6 });
 
   const { data, isLoading } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", userName],
     queryFn: () => getAllPosts(userName),
   });
 

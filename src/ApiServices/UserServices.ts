@@ -1,4 +1,3 @@
-import { User } from "@/model/User";
 import axios from "axios";
 import { ISearchedUser } from "./interfaces/response";
 

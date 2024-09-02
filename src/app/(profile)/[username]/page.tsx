@@ -19,7 +19,7 @@ const Page = ({ params }: { params: { username: string } }) => {
   
   // fetch user details
 
-  return <ProfileFrag user = {userData} userName = {username} ownViewer = {ownViewer}></ProfileFrag>;
+  return <ProfileFrag user = {userData} userName = {username} ownViewer = {ownViewer} />
 };
 
 export default Page;
