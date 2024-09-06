@@ -17,6 +17,7 @@ import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
 import { useSocket } from "@/lib/SocketProvider";
+import Link from "next/link";
 
 const ProfileFrag = ({
   user,
@@ -95,10 +96,6 @@ const ProfileFrag = ({
     senderId: ActualUser?.userId as string,
     receiverId: user?._id as string,
   };
-
-  console.log("sendRequestData", sendRequestData);
-  
-
 
   return (
     <>
@@ -202,10 +199,14 @@ const ProfileFrag = ({
                   <p>{user?.posts.length} posts</p>
                 </div>
                 <div>
+                  <Link href={`/${user?.userName}/followers`}>
                   <p>{user?.followers.length} followers</p>
+                  </Link>
                 </div>
                 <div>
+                  <Link  href={`/${user?.userName}/following`}>
                   <p>{user?.following.length} following</p>
+                  </Link>
                 </div>
               </div>
               {/* third */}

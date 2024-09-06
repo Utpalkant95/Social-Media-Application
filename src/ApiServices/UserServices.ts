@@ -31,3 +31,23 @@ export const seachUser = async (searchKey: string) => {
   );
   return res.data;
 }
+
+export const getFollowers = async (userName: string) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/user/followers?userName=${userName}`
+  );
+  return res.data.data as {
+    userName: string;
+    fullName: string;
+  }[];
+}
+
+export const getFollowings = async (userName: string) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/user/followings?userName=${userName}`
+  );
+  return res.data.data as {
+    userName: string;
+    fullName: string;
+  }[];
+}
