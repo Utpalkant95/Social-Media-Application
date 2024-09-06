@@ -8,6 +8,8 @@ import { ReactNode } from "react";
 import { SnackbarProvider } from "notistack";
 import { Provider } from "react-redux";
 import { store } from "@/Store";
+import SocketProvider from "./SocketProvider";
+import { decodeToken } from "@/helpers/userInfo";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -32,12 +34,15 @@ function getQueryClient() {
 
 export default function Providers({ children }: { children: ReactNode }) {
   const queryClient = getQueryClient();
+  const user = decodeToken();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SnackbarProvider>
-        <Provider store={store}>{children}</Provider>
-      </SnackbarProvider>
-    </QueryClientProvider>
+    <SocketProvider userId={user?.userId as string}>
+      <QueryClientProvider client={queryClient}>
+        <SnackbarProvider>
+          <Provider store={store}>{children}</Provider>
+        </SnackbarProvider>
+      </QueryClientProvider>
+    </SocketProvider>
   );
 }

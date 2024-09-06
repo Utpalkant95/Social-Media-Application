@@ -17,10 +17,12 @@ const Sidebar = () => {
   const user = decodeToken();
   const username = user?.username;
 
+  // Call the hook at the top level
+  const SidebarComponent = useSidebarCompFactory({ key: activeId });
+
   const drawerContent = useMemo<ReactNode>(() => {
-    const Component = useSidebarCompFactory({ key: activeId });
-    return Component ? <Component setIsDrawerOpen={setIsDrawerOpen} /> : null; // Execute the function to get the JSX element
-  }, [activeId]);
+    return SidebarComponent ? <SidebarComponent setIsDrawerOpen={setIsDrawerOpen} /> : null;
+  }, [SidebarComponent]);
 
   const handleItemClick = useCallback(
     (item: INavItems) => {
@@ -49,7 +51,7 @@ const Sidebar = () => {
           isDrawerOpen ? "max-w-fit" : "w-56"
         }`}
       >
-        {/* ADD LOGO SECTION */}
+        {/* LOGO SECTION */}
         <header
           className={`flex items-center  h-20  ${
             isDrawerOpen ? "justify-center" : "px-3"

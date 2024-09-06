@@ -16,6 +16,7 @@ import { ISendFriendRequest } from "@/ApiServices/interfaces/request";
 import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
+import { useSocket } from "@/lib/SocketProvider";
 
 const ProfileFrag = ({
   user,
@@ -29,6 +30,7 @@ const ProfileFrag = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const ActualUser = decodeToken();
+  const {sendFollow} =useSocket()
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -79,6 +81,7 @@ const ProfileFrag = ({
       enqueueSnackbar(data && data.message, {
         variant: "success",
       });
+      sendFollow(ActualUser?.userId as string, user?._id as string)
     },
     onError: (error: AxiosError<IRESSignUpUser>) => {
       console.log("error", error);
@@ -93,7 +96,9 @@ const ProfileFrag = ({
     receiverId: user?._id as string,
   };
 
-  console.log("sendRequestOnj", sendRequestOnj);
+  console.log("sendRequestData", sendRequestData);
+  
+
 
   return (
     <>

@@ -23,7 +23,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
       );
     }
 
-    if (!receiver.friends.includes(senderId)) {
+    if (!receiver.followers.includes(senderId)) {
       return NextResponse.json(
         {
           success: false,
@@ -35,12 +35,12 @@ export async function POST(request: NextRequest, response: NextResponse) {
       );
     }
 
-    receiver.friends = receiver.friends.filter((id) => id !== senderId);
-    receiver.recievedFriendRequests = receiver.recievedFriendRequests.filter(
+    receiver.followers = receiver.followers.filter((id) => id !== senderId);
+    receiver.recievedFollowRequests = receiver.recievedFollowRequests.filter(
       (id) => id !== senderId
     );
-    sender.friends = sender.friends.filter((id) => id !== receiverId);
-    sender.sentFriendRequests = sender.sentFriendRequests.filter(
+    sender.followers = sender.followers.filter((id) => id !== receiverId);
+    sender.sentFollowRequests = sender.sentFollowRequests.filter(
       (id) => id !== receiverId
     );
 

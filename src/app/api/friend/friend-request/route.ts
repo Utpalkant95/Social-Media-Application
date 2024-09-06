@@ -2,6 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import NotificationModel from "@/model/Notifications";
 import UserModel, { User } from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
+import {useSocket} from "@/lib/SocketProvider"
 
 // Helper function for error responses
 const createErrorResponse = (message: string, status: number) => {
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
       await sender.save();
       await receiver.save();
 
-      await NotificationModel.create({
+      await new NotificationModel({
         userId: receiverId,
         senderId: senderId,
         message: `${sender.userName} has sent you a follow request`,
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest) {
     await sender.save();
     await receiver.save();
 
-    await NotificationModel.create({
+    await new NotificationModel({
       userId: receiverId,
       senderId: senderId,
       message: `${sender.userName} is now following you`,
