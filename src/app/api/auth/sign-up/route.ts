@@ -69,7 +69,7 @@ export async function POST(request: Request) {
         message : validation.error.errors[0].message,
         route : "/account/sign-up"
       }, {
-        status : 400
+        status : 499
       })
     }
 
