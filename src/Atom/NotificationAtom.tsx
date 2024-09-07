@@ -10,7 +10,7 @@ const NotificationAtom = () => {
     <div className="px-2 py-2">
       {notifications.map((notification) => {
         return (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4" key={notification.id}>
             <Avatar className="w-12 h-12 border-2 border-primary">
               <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
               <AvatarFallback>AC</AvatarFallback>

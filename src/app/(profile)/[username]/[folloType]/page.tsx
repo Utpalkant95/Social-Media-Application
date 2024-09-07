@@ -56,13 +56,13 @@ export default function Page({
           {isLoading && (
             <div className="grid grid-rows-3 gap-x-1 gap-y-4">
               {Array.from({ length: 8 }).map((_, index) => (
-                <Skeleton className=" py-3 md:px-6 md:py-4 h-16" />
+                <Skeleton className=" py-3 md:px-6 md:py-4 h-16" key={index}/>
               ))}
             </div>
           )}
           {data?.map((user) => {
             return (
-              <div className="container mx-auto">
+              <div className="container mx-auto" key={user.userName}>
                 <div className="grid gap-6">
                   <div className="bg-background rounded-lg p-4 md:p-6">
                     <div className="flex items-center justify-between">

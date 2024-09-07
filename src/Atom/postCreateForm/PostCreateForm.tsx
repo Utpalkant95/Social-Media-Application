@@ -132,7 +132,7 @@ export const StepTwo = ({
   next: () => void;
   prev: () => void;
   file: File | null;
-  mutate: (data: ICreatePost) => void;
+  mutate: (data: FormData) => void;
 }) => {
   const [text, setText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -162,7 +162,7 @@ export const StepTwo = ({
       // Convert non-string and non-Blob values to strings
       if (typeof value === "boolean") {
         formData.append(key, value.toString()); // Convert boolean to string
-      } else if (typeof value === "string" || value instanceof Blob) {
+      } else if (typeof value === "string" || value as any instanceof Blob) {
         formData.append(key, value); // Directly append string or Blob values
       } else {
         // Handle other types as needed
