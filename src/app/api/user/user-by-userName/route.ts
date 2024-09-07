@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-import redisClient from "@/lib/redisClient";
 
 export async function GET(req: Request) {
   await dbConnect();

@@ -13,7 +13,7 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
   const Component = useSidebarCompFactory({ key: 6 });
 
   const { data, isLoading } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", userName],
     queryFn: () => getAllPosts(userName),
   });
 
@@ -32,7 +32,7 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
       <div className="grid grid-cols-3 gap-x-1 gap-y-1">
         {data?.map((post) => {
           return (
-            <div className="h-96 relative cursor-pointer">
+            <div className="h-96 relative cursor-pointer" key={post.id}>
               <Image
                 src={post.file}
                 alt={post.altText}

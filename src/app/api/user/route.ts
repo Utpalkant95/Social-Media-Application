@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-import redisClient from "@/lib/redisClient";
 
 /**
  * @swagger
@@ -74,23 +73,6 @@ import redisClient from "@/lib/redisClient";
 export async function GET() {
   await dbConnect();
   try {
-    // Check the cache first
-    const cacheKey = "users";
-    const cachedUsers = await redisClient.get(cacheKey);
-
-    if (cachedUsers) {
-      return new Response(
-        JSON.stringify({
-          success: true,
-          message: "Users fetched from cache",
-          data: JSON.parse(cachedUsers),
-        }),
-        {
-          status: 200,
-        }
-      );
-    }
-
     // If not in cache, fetch from database
     const users = await UserModel.find({});
 
@@ -102,12 +84,6 @@ export async function GET() {
         }
       );
     }
-
-    // Cache the result for future requests
-    await redisClient.set(cacheKey, JSON.stringify(users), {
-      EX: 3600, // Set the expiration time in seconds
-    }); // Cache for 1 hour
-
     return new Response(
       JSON.stringify({
         success: true,

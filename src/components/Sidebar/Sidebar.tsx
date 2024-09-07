@@ -3,16 +3,10 @@ import { useSidebarCompFactory } from "@/hooks";
 import { INavItems, navItems, navItems2 } from "@/Constants/SideBarMenus";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
+import { ReactNode, useRef, useState, useMemo, useCallback } from "react";
 import { DialogSheet, PopOver, SlideSheet } from "@/components";
 import logo from "../../../public/snapify-favicon-white.svg";
+import { decodeToken } from "@/helpers/userInfo";
 
 const Sidebar = () => {
   const [activeId, setActiveId] = useState<number>(0);
@@ -20,13 +14,15 @@ const Sidebar = () => {
   const [isDailog, setIsDailog] = useState<boolean>(false);
   const [isPopOver, setIsPopOver] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const username = "utpal95";
-  console.log("Sidebar component rendering");
+  const user = decodeToken();
+  const username = user?.username;
+
+  // Call the hook at the top level
+  const SidebarComponent = useSidebarCompFactory({ key: activeId });
 
   const drawerContent = useMemo<ReactNode>(() => {
-    const Component = useSidebarCompFactory({ key: activeId });
-    return Component ? <Component setIsDrawerOpen={setIsDrawerOpen}/> : null; // Execute the function to get the JSX element
-  }, [activeId]);
+    return SidebarComponent ? <SidebarComponent setIsDrawerOpen={setIsDrawerOpen} /> : null;
+  }, [SidebarComponent]);
 
   const handleItemClick = useCallback(
     (item: INavItems) => {
@@ -55,7 +51,7 @@ const Sidebar = () => {
           isDrawerOpen ? "max-w-fit" : "w-56"
         }`}
       >
-        {/* ADD LOGO SECTION */}
+        {/* LOGO SECTION */}
         <header
           className={`flex items-center  h-20  ${
             isDrawerOpen ? "justify-center" : "px-3"

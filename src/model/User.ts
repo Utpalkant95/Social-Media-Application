@@ -11,6 +11,7 @@ export interface User extends Document {
   phoneVerified: boolean;
   isFirstTimeLogin: boolean;
   phoneOtp: number;
+  privateAccount : boolean;
   emailOtp: number;
   profileImage: string;
   posts: string[];
@@ -18,6 +19,8 @@ export interface User extends Document {
   following: string[];
   saved: string[];
   tagged: string[];
+  sentFollowRequests :  string[];
+  recievedFollowRequests :  string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -71,11 +74,14 @@ const userSchema: Schema<User> = new Schema({
   phoneVerified: { type: Boolean, default: false, required: true },
   isFirstTimeLogin: { type: Boolean, default: true, required: true },
   profileImage: { type: String },
+  privateAccount : { type: Boolean, default: false, required: true },
   posts: { type: [String] },
-  followers: { type: [String] },
-  following: { type: [String] },
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   saved: { type: [String] },
   tagged: { type: [String] },
+  sentFollowRequests : { type: [String] },
+  recievedFollowRequests : { type: [String] },
   createdAt: { type: Date, default: Date.now, required: true },
   updatedAt: { type: Date, default: Date.now, required: true },
 });

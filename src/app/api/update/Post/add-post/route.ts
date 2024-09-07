@@ -6,7 +6,6 @@ import dbConnect from "@/lib/dbConnect";
 import { UTApi } from "uploadthing/server";
 import UserModel from "@/model/User";
 import PostModel from "@/model/Post";
-import redisClient from "@/lib/redisClient";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
@@ -28,14 +27,10 @@ export async function POST(request: NextRequest) {
       commentCount,
       shareCount,
     } = body;
+    
+    // const user = await UserModel.findById(jwtInfo.userId);
 
     // Check Redis cache for user
-    const cachedUser = await redisClient.get(`user:${refreshToken}`);
-    let user;
-    if (cachedUser) {
-      user = JSON.parse(cachedUser);
-    } else {
-      // Decode JWT and fetch user from database if not in cache
       const jwtInfo = await decodeJWT(refreshToken as string);
       if (!jwtInfo) {
         return NextResponse.json({
@@ -43,7 +38,7 @@ export async function POST(request: NextRequest) {
           message: "User not found in token",
         });
       }
-      user = await UserModel.findById(jwtInfo.userId);
+      const user = await UserModel.findById(jwtInfo.userId);
       if (!user) {
         return NextResponse.json({
           success: false,
@@ -51,10 +46,7 @@ export async function POST(request: NextRequest) {
         });
       }
       // Cache the user data in Redis
-      await redisClient.set(`user:${refreshToken}`, JSON.stringify(user), {
-        EX: 3600, // Cache expiration time in seconds
-      });
-    }
+    
 
     const decodedFile = await handleFileInApiRoute(file as File);
     const validation = postSchema.safeParse({

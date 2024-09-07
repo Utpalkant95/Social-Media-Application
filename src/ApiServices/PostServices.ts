@@ -14,7 +14,7 @@ export const getAllPosts = async (userName: string) => {
 };
 
 
-export const createPost = async (data: ICreatePost) => {
+export const createPost = async (data: FormData) => {
   try {
     const res = await axios.post("http://localhost:3000/api/update/Post/add-post", data);
     return res.data;

@@ -29,3 +29,8 @@ export interface ICreatePost {
     commentCount : number;
     shareCount : number;
 }
+
+export interface ISendFriendRequest {
+    senderId : string;
+    receiverId : string
+}

@@ -4,9 +4,11 @@ import { ProfileFrag } from "@/Fragments";
 import { decodeToken } from "@/helpers/userInfo";
 import { User } from "@/model/User";
 import { useQuery } from "@tanstack/react-query";
+import {useSocket} from "@/lib/SocketProvider"
 const Page = ({ params }: { params: { username: string } }) => {
   const { username } = params;
   const user = decodeToken();
+  const {sendFollow} =useSocket()
 
  const {data} = useQuery({
    queryKey: ["user", username],
@@ -19,7 +21,7 @@ const Page = ({ params }: { params: { username: string } }) => {
   
   // fetch user details
 
-  return <ProfileFrag user = {userData} userName = {username} ownViewer = {ownViewer}></ProfileFrag>;
+  return <ProfileFrag user = {userData} userName = {username} ownViewer = {ownViewer} />
 };
 
 export default Page;

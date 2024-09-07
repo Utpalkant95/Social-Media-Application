@@ -1,9 +1,12 @@
 "use client";
+import { Loader } from "@/components";
 import Image from "next/image";
-import { decodeToken } from "@/helpers/userInfo";
 
 const Page = () => {
-  const user = decodeToken();
+  // (() => {
+  //   window.location.reload
+  //   console.log("iffie called")
+  // })(); //TODO: remove this
 
   return (
     <div className="flex w-full h-screen px-24 py-4 gap-x-10">
@@ -29,7 +32,6 @@ const Page = () => {
             </div>
           ))}
         </div>
-
       </div>
 
       {/* Right Side (Profile Section) */}
@@ -48,9 +50,9 @@ const Page = () => {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">{user?.username}</span>
+              <span className="text-sm font-medium">utpal_9540</span>
               <span className="text-xs font-light text-gray-500">
-                {user?.username}
+                Utpal Kant
               </span>
             </div>
           </div>

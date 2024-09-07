@@ -10,6 +10,14 @@ import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
 import { User } from "@/model/User";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { sendFriendRequest } from "@/ApiServices/FriendServices";
+import { decodeToken } from "@/helpers/userInfo";
+import { ISendFriendRequest } from "@/ApiServices/interfaces/request";
+import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
+import { AxiosError } from "axios";
+import { enqueueSnackbar } from "notistack";
+import { useSocket } from "@/lib/SocketProvider";
+import Link from "next/link";
 
 const ProfileFrag = ({
   user,
@@ -22,6 +30,8 @@ const ProfileFrag = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const ActualUser = decodeToken();
+  const {sendFollow} =useSocket()
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -47,6 +57,9 @@ const ProfileFrag = ({
     },
   ];
 
+  console.log("userInPofile", user);
+  console.log("ActualUser", ActualUser);
+
   const { mutate, isLoading } = useMutation({
     mutationKey: ["user profile image"],
     mutationFn: updateUserProfileImage,
@@ -57,6 +70,32 @@ const ProfileFrag = ({
       console.log("error", error);
     },
   });
+
+  const {
+    data: sendRequestData,
+    mutate: sendRequest,
+    isLoading: sendRequestLoading,
+  } = useMutation({
+    mutationKey: ["send friend request"],
+    mutationFn: sendFriendRequest,
+    onSuccess: (data: IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "success",
+      });
+      sendFollow(ActualUser?.userId as string, user?._id as string)
+    },
+    onError: (error: AxiosError<IRESSignUpUser>) => {
+      console.log("error", error);
+      enqueueSnackbar(error?.response?.data?.message, {
+        variant: "error",
+      });
+    },
+  });
+
+  const sendRequestOnj: ISendFriendRequest = {
+    senderId: ActualUser?.userId as string,
+    receiverId: user?._id as string,
+  };
 
   return (
     <>
@@ -137,6 +176,7 @@ const ProfileFrag = ({
                       <Button
                         variant="profileButton"
                         className="bg-[#0095F6] text-white"
+                        onClick={() => sendRequest(sendRequestOnj)}
                       >
                         Follow
                       </Button>
@@ -159,10 +199,14 @@ const ProfileFrag = ({
                   <p>{user?.posts.length} posts</p>
                 </div>
                 <div>
+                  <Link href={`/${user?.userName}/followers`}>
                   <p>{user?.followers.length} followers</p>
+                  </Link>
                 </div>
                 <div>
+                  <Link  href={`/${user?.userName}/following`}>
                   <p>{user?.following.length} following</p>
+                  </Link>
                 </div>
               </div>
               {/* third */}

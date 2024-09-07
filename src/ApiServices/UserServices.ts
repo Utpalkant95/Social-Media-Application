@@ -1,4 +1,3 @@
-import { User } from "@/model/User";
 import axios from "axios";
 import { ISearchedUser } from "./interfaces/response";
 
@@ -31,4 +30,24 @@ export const seachUser = async (searchKey: string) => {
     `http://localhost:3000/api/search-user?searchKey=${searchKey}`
   );
   return res.data;
+}
+
+export const getFollowers = async (userName: string) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/user/followers?userName=${userName}`
+  );
+  return res.data.data as {
+    userName: string;
+    fullName: string;
+  }[];
+}
+
+export const getFollowings = async (userName: string) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/user/followings?userName=${userName}`
+  );
+  return res.data.data as {
+    userName: string;
+    fullName: string;
+  }[];
 }
