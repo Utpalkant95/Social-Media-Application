@@ -1,11 +1,12 @@
 import { ReactNode } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { IconType } from "react-icons/lib";
 // Define types for the component props
 interface TabItem {
   label: string;
   value: string;
   content: ReactNode;
+  Icon : IconType;
 }
 
 interface TabProps {
@@ -28,7 +29,7 @@ function Tab({
   return (
     <Tabs defaultValue={defaultValue} className={className}>
       <TabsList
-        className={`grid w-full grid-cols-3 ${TabsListClassName}`}
+        className={`flex items-center justify-center gap-x-16 ${TabsListClassName}`}
       >
         {tabItems.map((tabItem) => (
           <TabsTrigger
@@ -36,6 +37,7 @@ function Tab({
             value={tabItem.value}
             className={TabsTriggerClassName}
           >
+            {tabItem.Icon && <tabItem.Icon />}
             {tabItem.label}
           </TabsTrigger>
         ))}

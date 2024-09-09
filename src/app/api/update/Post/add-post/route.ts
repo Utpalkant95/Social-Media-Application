@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   await dbConnect();
   try {
     const cookies = request.cookies;
-    const refreshToken = cookies.get("refreshToken")?.value;
+    const accessToken = cookies.get("accessToken")?.value;
 
     const formData = await request.formData();
     const utapi = new UTApi();
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     // const user = await UserModel.findById(jwtInfo.userId);
 
     // Check Redis cache for user
-      const jwtInfo = await decodeJWT(refreshToken as string);
+      const jwtInfo = await decodeJWT(accessToken as string);
       if (!jwtInfo) {
         return NextResponse.json({
           success: false,

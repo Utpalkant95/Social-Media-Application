@@ -4,7 +4,7 @@ import { FaCamera } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { GoPlus } from "react-icons/go";
-import { DialogSheet, PopOver, Tab } from "@/components";
+import { DialogSheet, Loader, Tab } from "@/components";
 import { ProfilePostAtom, ProfileSavedAtom, ProfileTagedAtom } from "@/Atom";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
@@ -18,6 +18,10 @@ import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
 import { useSocket } from "@/lib/SocketProvider";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BsPostcardHeart } from "react-icons/bs";
+import { CiSaveDown2 } from "react-icons/ci";
+import { FaUserTag } from "react-icons/fa";
 
 const ProfileFrag = ({
   user,
@@ -31,7 +35,7 @@ const ProfileFrag = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const ActualUser = decodeToken();
-  const {sendFollow} =useSocket()
+  const { sendFollow } = useSocket();
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -44,16 +48,19 @@ const ProfileFrag = ({
       label: "POSTS",
       value: "posts",
       content: <ProfilePostAtom userName={userName} />,
+      Icon: BsPostcardHeart,
     },
     {
       label: "SAVED",
       value: "saved",
       content: <ProfileSavedAtom user={user} />,
+      Icon: CiSaveDown2,
     },
     {
       label: "TAGGED",
       value: "tagged",
       content: <ProfileTagedAtom user={user} />,
+      Icon: FaUserTag,
     },
   ];
 
@@ -82,7 +89,7 @@ const ProfileFrag = ({
       enqueueSnackbar(data && data.message, {
         variant: "success",
       });
-      sendFollow(ActualUser?.userId as string, user?._id as string)
+      sendFollow(ActualUser?.userId as string, user?._id as string);
     },
     onError: (error: AxiosError<IRESSignUpUser>) => {
       console.log("error", error);
@@ -99,53 +106,63 @@ const ProfileFrag = ({
 
   return (
     <>
-      <div className="px-44">
+      <div className="max-w-4xl mx-auto w-full">
         {/* User name profile section */}
         <div className="profile section  py-10 flex flex-col gap-y-10">
           {/* Profile Section */}
           <div className="flex items-center gap-x-24">
-            {/* photo section */}
-            <div onClick={handleButtonClick}>
-              <div className="relative cursor-pointer">
+            <Avatar
+              className=" cursor-pointer bg-yellow-800 relative max-w-36 max-h-36 w-full h-full"
+              onClick={handleButtonClick}
+            >
+              {ownViewer && (
                 <div
-                  className={`bg-black/60 absolute w-[150px] h-[150px] overflow-hidden rounded-full ${
-                    user?.profileImage ? "hidden" : ""
-                  }`}
-                ></div>
-                <Image
-                  src={
-                    user?.profileImage ||
-                    "https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
-                  }
-                  alt="profile"
-                  width={150}
-                  height={150}
-                  className="w-[150px] h-[150px] object-cover rounded-full overflow-hidden"
-                />
-                <div
-                  className={`absolute  left-[55px] bottom-[55px] ${
-                    user?.profileImage ? "hidden" : ""
+                  className={`absolute w-full h-full bg-black/60 flex items-center justify-center ${
+                    user?.profileImage || isLoading ? "hidden" : ""
                   } `}
                 >
                   <FaCamera className="text-white" size={40} />
                 </div>
+              )}
+              <div
+                className={`absolute w-full h-full bg-black/60 flex items-center justify-center ${
+                  isLoading ? "" : "hidden"
+                }`}
+              >
+                <Loader className="h-10 w-10" />
               </div>
-            </div>
-
-            <input
-              type="file"
-              name="file"
-              className="hidden"
-              ref={fileInputRef}
-              onChange={async (e) => {
-                if (e.target.files) {
-                  const formData = new FormData();
-                  formData.append("file", e.target.files[0]);
-                  formData.append("userId", "66c6de1a20ed93572455749c");
-                  mutate(formData);
+              <AvatarImage
+                src={
+                  user?.profileImage ||
+                  "https://images.pexels.com/photos/28220699/pexels-photo-28220699/free-photo-of-nguoitamchuyenhouse-sai-gon-vi-t-nam-2020-saigon-vietnam-2020.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load"
                 }
-              }}
-            />
+                alt="@shadcn"
+                className=""
+              />
+              <AvatarFallback>
+                <AvatarImage
+                  src="https://images.pexels.com/photos/28220699/pexels-photo-28220699/free-photo-of-nguoitamchuyenhouse-sai-gon-vi-t-nam-2020-saigon-vietnam-2020.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load"
+                  alt="@shadcn"
+                  className=""
+                />
+              </AvatarFallback>
+            </Avatar>
+
+            {ownViewer && (
+              <input
+                type="file"
+                name="file"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={async (e) => {
+                  if (e.target.files) {
+                    const formData = new FormData();
+                    formData.append("file", e.target.files[0]);
+                    mutate(formData);
+                  }
+                }}
+              />
+            )}
 
             {/* detail section */}
             <div className="flex  flex-col gap-y-4">
@@ -200,12 +217,12 @@ const ProfileFrag = ({
                 </div>
                 <div>
                   <Link href={`/${user?.userName}/followers`}>
-                  <p>{user?.followers.length} followers</p>
+                    <p>{user?.followers.length} followers</p>
                   </Link>
                 </div>
                 <div>
-                  <Link  href={`/${user?.userName}/following`}>
-                  <p>{user?.following.length} following</p>
+                  <Link href={`/${user?.userName}/following`}>
+                    <p>{user?.following.length} following</p>
                   </Link>
                 </div>
               </div>
@@ -230,7 +247,7 @@ const ProfileFrag = ({
             tabItems={tabItems}
             className="w-full border-t"
             TabsListClassName="bg-white"
-            TabsTriggerClassName="data-[state=active]:border-t border-black rounded-none shadow-none text-xs py-2 "
+            TabsTriggerClassName="data-[state=active]:border-t border-black rounded-none shadow-none text-xs py-2 flex items-center gap-x-1"
           />
         </div>
       </div>

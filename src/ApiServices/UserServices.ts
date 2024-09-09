@@ -1,10 +1,10 @@
 import axios from "axios";
 import { ISearchedUser } from "./interfaces/response";
 
-export const updateUserProfileImage = async (data: FormData) => {
+export const updateUserProfileImage = async (file : FormData) => {
   const res = await axios.post(
     "http://localhost:3000/api/user/update-profile-image",
-    data
+    file
   );
   return res.data;
 };

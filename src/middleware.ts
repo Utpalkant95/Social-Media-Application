@@ -104,6 +104,9 @@ export async function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get('accessToken')?.value;
+
+  console.log("MIDDLEWARE TOKEN", token);
+  
   if (!token) {
     return setPathHeader(NextResponse.redirect(new URL('/account/sign-in', request.url)), pathname);
   }

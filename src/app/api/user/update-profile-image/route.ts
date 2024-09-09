@@ -1,61 +1,122 @@
-import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
-import { UTApi } from "uploadthing/server";
-import UserModel, { User } from "@/model/User";
+import { handleFileInApiRoute } from "@/helpers/handleFileInApiRoute";
 import dbConnect from "@/lib/dbConnect";
+import { NextRequest, NextResponse } from "next/server";
+import { UTApi } from "uploadthing/server";
+import { decodeToken, getCookieValueInServerSide } from "@/helpers/userInfo";
+import UserModel from "@/model/User";
+import { removeFile } from "@/helpers/removeFile";
 
-const UPLOAD_DIR = path.resolve("public/uploads");
-
-export const POST = async (req: NextRequest) => {
+export async function POST(request: NextRequest, response: NextResponse) {
   await dbConnect();
-  const formData = await req.formData();
-  const body = Object.fromEntries(formData);
-  const fileBlob = (body.file as Blob) || null;
-  const utapi = new UTApi();
-  const user: User | null = await UserModel.findById(body.userId);
+  try {
+    const cookieString = request.headers.get("cookie");
+    const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
+    const user = decodeToken(accessToken as string);
+    const formData = await request.formData();
+    const body = Object.fromEntries(formData);
+    const { file } = body;
+    const utapi = new UTApi();
 
-  if (!user) {
-    return NextResponse.json({
-      success: false,
-      message: "User not found",
-    });
-  }
-
-  if (fileBlob) {
-    // Convert Blob to FileEsque object
-    const file = new File([fileBlob], (body.file as File).name, {
-      type: fileBlob.type,
-    });
-
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    // Ensure upload directory exists
-    if (!fs.existsSync(UPLOAD_DIR)) {
-      fs.mkdirSync(UPLOAD_DIR);
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User not found",
+        },
+        {
+          status: 404,
+        }
+      );
     }
 
-    // Write file to disk
-    fs.writeFileSync(path.resolve(UPLOAD_DIR, file.name), buffer);
+    if (!file) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "file not found",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
 
-    // Upload the file using uploadthing API
-    const response = await utapi.uploadFiles([file]);
+    const decodedFile = await handleFileInApiRoute(file as File);
 
-    // update user prole
-    // user?.set({ prof: response[0].data?.url });
-    // await user?.save();
-    user.profileImage = response[0].data?.url as string;
-    await user?.save();
+    if (!decodedFile) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Something went wrong while uploading profile picture",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
 
-    return NextResponse.json({
-      success: true,
-      name: file.name,
-      response: response,
-    });
-  } else {
-    return NextResponse.json({
-      success: false,
-      message: "No file uploaded",
-    });
+    const uploadImage = await utapi.uploadFiles([decodedFile]);
+    removeFile(decodedFile.name);
+
+    if (!uploadImage) {
+      removeFile(decodedFile.name);
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Something went wrong while uploading profile picture on uploadthing",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+
+    const updateUser = await UserModel.findOneAndUpdate(
+      {
+        _id: user.userId,
+      },
+      {
+        profileImage: uploadImage[0].data?.url,
+      },
+      {
+        new: true,
+      }
+    );
+
+    await updateUser.save();
+
+    if (!updateUser) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Something went wrong while updating profile picture",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "file uploaded succesfully",
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    console.log("erorr while uploading profile picture");
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Something went wrong while uploading profile picture",
+      },
+      {
+        status: 500,
+      }
+    );
   }
-};
+}
