@@ -10,8 +10,8 @@ interface IUserInfo {
   userId: string;
 }
 
-export const decodeToken = () : IUserInfo | null => {
-  const accessToken = Cookies.get("accessToken");
+export const decodeToken = (token ?: string) : IUserInfo | null => {
+  const accessToken =token ?? Cookies.get("accessToken");
   console.log("accessToken", accessToken);
 
   if (!accessToken) {
@@ -28,3 +28,11 @@ export const decodeToken = () : IUserInfo | null => {
     return null;
   }
 };
+
+
+
+export function getCookieValueInServerSide(cookieString : string | null, cookieName : string) {
+  // Use a regular expression to match the cookie name and value
+  const match = cookieString?.match(new RegExp('(^|;\\s*)' + cookieName + '=([^;]*)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}

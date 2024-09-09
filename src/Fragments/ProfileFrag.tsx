@@ -4,7 +4,7 @@ import { FaCamera } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { GoPlus } from "react-icons/go";
-import { DialogSheet, PopOver, Tab } from "@/components";
+import { DialogSheet, Tab } from "@/components";
 import { ProfilePostAtom, ProfileSavedAtom, ProfileTagedAtom } from "@/Atom";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
@@ -141,7 +141,6 @@ const ProfileFrag = ({
                 if (e.target.files) {
                   const formData = new FormData();
                   formData.append("file", e.target.files[0]);
-                  formData.append("userId", "66c6de1a20ed93572455749c");
                   mutate(formData);
                 }
               }}
