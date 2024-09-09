@@ -1,5 +1,6 @@
 "use client";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // import Link from "next/link";
 // import { Button } from "@/components/ui/button";
 // import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -159,26 +160,33 @@ import { useMutation } from "@tanstack/react-query";
 import React from "react";
 
 const Page = () => {
-  const { mutate , data} = useMutation({
-    mutationKey: ["update user profile image"],
-    mutationFn: updateUserProfileImage,
-  });
+
   return (
-    <div>
-      <input
-        type="file"
-        onChange={async (e) => {
-          if (e.target.files) {
-            const formData = new FormData();
-            formData.append("file", e.target.files[0]);
-            mutate(formData);
-          }
-        }}
-      />
+    // <div>
+    //   <input
+    //     type="file"
+    //     onChange={async (e) => {
+    //       if (e.target.files) {
+    //         const formData = new FormData();
+    //         formData.append("file", e.target.files[0]);
+    //         mutate(formData);
+    //       }
+    //     }}
+    //   />
 
-      {JSON.stringify(data)}
+    //   {JSON.stringify(data)}
 
-      {/* <button onClick={() => updateUserProfileImage()}>Send Request</button> */}
+    //   {/* <button onClick={() => updateUserProfileImage()}>Send Request</button> */}
+    // </div>
+
+    <div className="max-w-5xl mx-auto w-full border-4">
+      hello
+
+      <Avatar className="bg-yellow-800 relative max-w-36 max-h-36 w-full h-full">
+        <div className="absolute w-full h-full bg-black"></div>
+      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+      <AvatarFallback>CN</AvatarFallback>
+    </Avatar>
     </div>
   );
 };

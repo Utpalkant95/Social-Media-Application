@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { UTApi } from "uploadthing/server";
 import { decodeToken, getCookieValueInServerSide } from "@/helpers/userInfo";
 import UserModel from "@/model/User";
+import { removeFile } from "@/helpers/removeFile";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   await dbConnect();
@@ -55,8 +56,10 @@ export async function POST(request: NextRequest, response: NextResponse) {
     }
 
     const uploadImage = await utapi.uploadFiles([decodedFile]);
+    removeFile(decodedFile.name);
 
     if (!uploadImage) {
+      removeFile(decodedFile.name);
       return NextResponse.json(
         {
           success: false,
