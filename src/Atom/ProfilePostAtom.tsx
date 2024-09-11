@@ -1,5 +1,5 @@
 import { getAllPosts } from "@/ApiServices/PostServices";
-import { DialogSheet } from "@/components";
+import { DialogSheet, EmptyComp } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSidebarCompFactory } from "@/hooks";
 import { useQuery } from "@tanstack/react-query";
@@ -28,6 +28,10 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
           <Skeleton className="h-96" />
           <Skeleton className="h-96" />
         </div>
+      )}
+
+      {!isLoading && data?.length === 0 && (
+        <EmptyComp />
       )}
       <div className="grid grid-cols-3 gap-x-1 gap-y-1">
         {data?.map((post) => {

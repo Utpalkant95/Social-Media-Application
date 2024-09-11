@@ -4,7 +4,7 @@ import { IoIosSettings } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { GoPlus } from "react-icons/go";
 import { DialogSheet, Loader, Tab } from "@/components";
-import { ProfilePostAtom, ProfileSavedAtom, ProfileTagedAtom } from "@/Atom";
+import { ProfilePostAtom, ProfileSavedAtom, ProfileSettingUiAtom, ProfileTagedAtom } from "@/Atom";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
 import { User } from "@/model/User";
@@ -188,7 +188,7 @@ const ProfileFrag = ({
                       className="cursor-pointer"
                       onClick={() => {
                         setOpenDialog(true)
-                        setDialogContent(<div>hello world how are you</div>)
+                        setDialogContent(ProfileSettingUiAtom);
                       }}
                     >
                       <IoIosSettings size={30} />
