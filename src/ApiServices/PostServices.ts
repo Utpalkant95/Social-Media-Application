@@ -13,6 +13,17 @@ export const getAllPosts = async (userName: string) => {
   }
 };
 
+export const getAllSavedPosts = async (userName: string) => {
+  try {
+    const res = await axios.get(`http://localhost:3000/api/update/Post/saved-post?userName=${userName}`);
+    return res.data.data as IAllPost[];
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    // Optionally, return a default value or rethrow the error
+    throw error;
+  } 
+}
+
 
 export const createPost = async (data: FormData) => {
   try {

@@ -5,6 +5,7 @@ import { useSidebarCompFactory } from "@/hooks";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
+import { CiCamera } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { FaComment } from "react-icons/fa6";
 
@@ -31,7 +32,11 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
       )}
 
       {!isLoading && data?.length === 0 && (
-        <EmptyComp />
+        <EmptyComp
+          Icon={CiCamera}
+          des="When you share photos, they will appear on your profile."
+          label="Share Photos"
+        />
       )}
       <div className="grid grid-cols-3 gap-x-1 gap-y-1">
         {data?.map((post) => {

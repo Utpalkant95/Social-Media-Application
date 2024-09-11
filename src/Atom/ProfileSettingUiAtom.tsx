@@ -1,6 +1,6 @@
-"use client"
-import Link from 'next/link'
-import React from 'react'
+"use client";
+import Link from "next/link";
+import React from "react";
 
 const ProfileSettingUiAtom = () => {
   // const items = [
@@ -9,11 +9,11 @@ const ProfileSettingUiAtom = () => {
   //   "Log Out",
   // ]
 
-  const items =[
+  const items = [
     {
-      id : "1",
-      label : "QR code",
-      link  : "/qr",
+      id: "1",
+      label: "QR code",
+      link: "/qr",
     },
     // {
     //   id : "2",
@@ -21,24 +21,29 @@ const ProfileSettingUiAtom = () => {
     //   link  : "/settings",
     // },
     {
-      id : "3",
-      label : "Log Out",
-      onClick : () =>void(0)
-    }
-  ]
+      id: "3",
+      label: "Log Out",
+      onClick: () => void 0,
+    },
+  ];
   return (
-    <div className='rounded-xl bg-white max-w-md w-full'>
+    <div className="rounded-xl bg-white max-w-md w-full">
       {items.map((item, index) => {
         return (
-          <div className={`py-3 text-center cursor-pointer  text-sm ${index === items.length - 1 ? "border-0" : "border-b" }`} onClick={item?.onClick}>
-            <Link href={item.link ?? "#"}>
-            {item.label}
-            </Link>
-          </div>
-        )
+          <Link href={item.link ?? "#"}>
+            <div
+              className={`py-3 text-center cursor-pointer  text-sm ${
+                index === items.length - 1 ? "border-0" : "border-b"
+              }`}
+              onClick={item?.onClick}
+            >
+              {item.label}
+            </div>
+          </Link>
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
-export default ProfileSettingUiAtom
+export default ProfileSettingUiAtom;

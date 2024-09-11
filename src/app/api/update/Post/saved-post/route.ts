@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import SavedPostModel from "@/model/SavedPost";
 import UserModel from "@/model/User";
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function GET(request: NextRequest, response: NextResponse) {
   await dbConnect();
 
   try {
