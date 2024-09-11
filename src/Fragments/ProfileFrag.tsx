@@ -1,11 +1,10 @@
-import Image from "next/image";
 import { useRef, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { GoPlus } from "react-icons/go";
 import { DialogSheet, Loader, Tab } from "@/components";
-import { ProfilePostAtom, ProfileSavedAtom, ProfileTagedAtom } from "@/Atom";
+import { ProfilePostAtom, ProfileSavedAtom, ProfileSettingUiAtom, ProfileTagedAtom } from "@/Atom";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
 import { User } from "@/model/User";
@@ -22,6 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BsPostcardHeart } from "react-icons/bs";
 import { CiSaveDown2 } from "react-icons/ci";
 import { FaUserTag } from "react-icons/fa";
+import ChangePassword from "./ChangePassword";
 
 const ProfileFrag = ({
   user,
@@ -34,6 +34,7 @@ const ProfileFrag = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [dialogContent, setDialogContent] = useState<React.ReactNode>(null);
   const ActualUser = decodeToken();
   const { sendFollow } = useSocket();
 
@@ -176,12 +177,20 @@ const ProfileFrag = ({
                 {ownViewer && (
                   <div className="flex items-center gap-x-2">
                     <div>
-                      <Button variant="profileButton">Edit profile</Button>
+                      <Link href={`/${user?.userName}/edit`}>
+                        <Button variant="profileButton">Edit profile</Button>
+                      </Link>
                     </div>
                     <div>
                       <Button variant="profileButton">view archive</Button>
                     </div>
-                    <div>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setOpenDialog(true)
+                        setDialogContent(ProfileSettingUiAtom);
+                      }}
+                    >
                       <IoIosSettings size={30} />
                     </div>
                   </div>
@@ -203,7 +212,10 @@ const ProfileFrag = ({
                     </div>
                     <div
                       className="cursor-pointer"
-                      onClick={() => setOpenDialog(true)}
+                      onClick={() => {
+                        setOpenDialog(true)
+                        setDialogContent(ChangePassword)
+                      }}
                     >
                       <HiOutlineDotsHorizontal size={30} />
                     </div>
@@ -259,7 +271,7 @@ const ProfileFrag = ({
           setOpenDialog(false);
         }}
       >
-        <div className="w-10 h-10 bg-white">hwllo</div>
+        {dialogContent}
       </DialogSheet>
     </>
   );

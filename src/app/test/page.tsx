@@ -155,40 +155,73 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 //   );
 // }
 
-import { decodeToken } from "@/helpers/userInfo";
-import { useMutation } from "@tanstack/react-query";
-import React from "react";
+// import { decodeToken } from "@/helpers/userInfo";
+// import { useMutation } from "@tanstack/react-query";
+// import React from "react";
 
-const Page = () => {
+// const Page = () => {
+
+//   return (
+//     // <div>
+//     //   <input
+//     //     type="file"
+//     //     onChange={async (e) => {
+//     //       if (e.target.files) {
+//     //         const formData = new FormData();
+//     //         formData.append("file", e.target.files[0]);
+//     //         mutate(formData);
+//     //       }
+//     //     }}
+//     //   />
+
+//     //   {JSON.stringify(data)}
+
+//     //   {/* <button onClick={() => updateUserProfileImage()}>Send Request</button> */}
+//     // </div>
+
+//     <div className="max-w-5xl mx-auto w-full border-4">
+//       hello
+
+//       <Avatar className="bg-yellow-800 relative max-w-36 max-h-36 w-full h-full">
+//         <div className="absolute w-full h-full bg-black"></div>
+//       <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+//       <AvatarFallback>CN</AvatarFallback>
+//     </Avatar>
+//     </div>
+//   );
+// };
+
+// export default Page;
+
+
+import React, { useState } from 'react';
+
+const UserProfile = () => {
+  const [bio, setBio] = useState(''); // State to store the bio
+
+  const handleBioChange = (e : any) => {
+    setBio(e.target.value); // Update state with the new bio
+  };
 
   return (
-    // <div>
-    //   <input
-    //     type="file"
-    //     onChange={async (e) => {
-    //       if (e.target.files) {
-    //         const formData = new FormData();
-    //         formData.append("file", e.target.files[0]);
-    //         mutate(formData);
-    //       }
-    //     }}
-    //   />
+    <div>
+      <h2>User Profile</h2>
+      
+      {/* Textarea for user to input bio */}
+      <textarea 
+        placeholder="Write your bio here..." 
+        value={bio} 
+        onChange={handleBioChange} 
+        rows={5} // Adjust rows for height
+        style={{ width: '300px' }} 
+      />
 
-    //   {JSON.stringify(data)}
-
-    //   {/* <button onClick={() => updateUserProfileImage()}>Send Request</button> */}
-    // </div>
-
-    <div className="max-w-5xl mx-auto w-full border-4">
-      hello
-
-      <Avatar className="bg-yellow-800 relative max-w-36 max-h-36 w-full h-full">
-        <div className="absolute w-full h-full bg-black"></div>
-      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-      <AvatarFallback>CN</AvatarFallback>
-    </Avatar>
+      {/* Display bio with preserved line breaks */}
+      <div style={{ whiteSpace: 'pre-line', marginTop: '20px', border: '1px solid #ccc', padding: '10px' }}>
+        {bio}
+      </div>
     </div>
   );
 };
 
-export default Page;
+export default UserProfile;

@@ -5,3 +5,4 @@ export {default as NotificationAtom} from "./NotificationAtom";
 export {default as SearchAtom} from "./SearchAtom";
 export {default as RecentSearchItemAtom} from "./RecentSearchItemAtom"
 export {default as SidebarMore} from "./SidebarMore";
+export {default as ProfileSettingUiAtom} from "./ProfileSettingUiAtom";

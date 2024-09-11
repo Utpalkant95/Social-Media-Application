@@ -1,10 +1,11 @@
 import { getAllPosts } from "@/ApiServices/PostServices";
-import { DialogSheet } from "@/components";
+import { DialogSheet, EmptyComp } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSidebarCompFactory } from "@/hooks";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
+import { CiCamera } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { FaComment } from "react-icons/fa6";
 
@@ -28,6 +29,14 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
           <Skeleton className="h-96" />
           <Skeleton className="h-96" />
         </div>
+      )}
+
+      {!isLoading && data?.length === 0 && (
+        <EmptyComp
+          Icon={CiCamera}
+          des="When you share photos, they will appear on your profile."
+          label="Share Photos"
+        />
       )}
       <div className="grid grid-cols-3 gap-x-1 gap-y-1">
         {data?.map((post) => {

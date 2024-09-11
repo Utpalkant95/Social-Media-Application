@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "@/schemas/signUpSchema";
 import { verifySchema } from "@/schemas/verifySchema";
 import { signInSchema } from "@/schemas/signInSchema";
+import { editProfileSchema } from "@/schemas/editProfileSchema";
+import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
 
 // Define a custom hook to encapsulate the useForm logic
 export const useSignUpForm = () => {
@@ -36,6 +38,30 @@ export const useVerifyForm = () => {
       emailOtp : "",
       phoneOtp : "",
       userName : ""
+    },
+  });
+};
+
+export const useEditProfileForm = () => {
+  return useForm<z.infer<typeof editProfileSchema>>({
+    resolver: zodResolver(editProfileSchema),
+    defaultValues: {
+      fullName : "",
+      bio : "",
+      gender : "",
+      phone : "",
+      userName : ""
+    },
+  });
+};
+
+export const useUpdatePasswordForm = () => {
+  return useForm<z.infer<typeof updatePasswordSchema>>({
+    resolver: zodResolver(updatePasswordSchema),
+    defaultValues: {
+      confirmPassword : "",
+      currentPassword : "",
+      newPassword : ""
     },
   });
 };

@@ -9,3 +9,4 @@ export * from "./PopOver";
 export * from "./Tabs";
 export * from "./Slider";
 export * from "./Loader";
+export * from "./EmptyComp";
