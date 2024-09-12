@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import qrImage from "../../../../public/bibok12079_qr.png";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { getQrCode } from "@/ApiServices/UserServices";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const colorPalets = [
   {
@@ -29,18 +30,43 @@ const colorPalets = [
 
 const Page = () => {
   const [bgColor, setBgColor] = useState<string>("#d6cd6d");
+  const [qr, setQr] = useState<string>("");
+
+  const { data, mutate } = useMutation({
+    mutationKey: ["qrCode", bgColor],
+    mutationFn: getQrCode,
+    onSuccess : (data) =>{
+      setQr(data?.qrURL)
+    }
+  });
+
+  useEffect(() => {
+    mutate({ userName: "utpal95", color: encodeURIComponent(bgColor) });
+  }, [bgColor]);
+
+  console.log("data", data);
+
   return (
     <div
       style={{ backgroundColor: bgColor }}
       className="h-screen flex items-center justify-center"
     >
-      <div className="max-w-4xl w-full flex justify-center items-center">
-        <div className="w-full h-full">
+      <div className="max-w-4xl w-full flex justify-center items-center gap-x-10">
+        <div className="max-w-[220px] w-full h-full bg-white rounded-xl p-1">
           <Image
-            src={qrImage}
+            src={data?.qrURL}
             alt="qr"
-            className="max-w-[250px] max-h-[270px] w-full h-full"
+            className="max-w-[220px] max-h-[250px] w-full h-full"
+            width={220}
+            height={250}
           />
+
+          <h2
+            style={{ color: bgColor }}
+            className={`text-xl text-center uppercase font-bold`}
+          >
+            Utpal95
+          </h2>
         </div>
         <div className="flex flex-col gap-y-4">
           <h3 className="text-3xl text-white font-light">
@@ -56,7 +82,7 @@ const Page = () => {
               const active = colorPalate.bgColor === bgColor;
               return (
                 <div
-                  style={{ backgroundColor: colorPalate.bgColor }} // Inline style for dynamic background color
+                  style={{ backgroundColor: colorPalate.bgColor }}
                   className={`w-8 h-8 cursor-pointer rounded-full ${
                     active ? "border-2 border-black" : ""
                   }`}

@@ -51,3 +51,11 @@ export const getFollowings = async (userName: string) => {
     fullName: string;
   }[];
 }
+
+export const getQrCode = async (data : {userName : string, color : string}) => {
+  const res = await axios.post(
+    `http://localhost:3000/api/user/generateQr`,
+    data
+  );
+  return res.data;
+}
