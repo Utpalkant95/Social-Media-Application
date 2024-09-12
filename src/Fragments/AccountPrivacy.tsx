@@ -13,7 +13,7 @@ const AccountPrivacy = () => {
           <h2 className="text-xl font-medium">Private account</h2>
           <p className="text-sm">
             When your account is public, your profile and posts can be seen by
-            anyone, on or off Instagram, even if they don't have an Snapify
+            anyone, on or off Instagram, even if they don&apos;t have an Snapify
             account. When your account is private, only the followers you
             approve can see what you share, including your photos or videos on
             hashtag and location pages, and your followers and following lists.
