@@ -83,7 +83,12 @@ export default function Page({
                           </div>
                         </div>
                       </Link>
-                      <Button variant="outline">Follow</Button>
+                      {folloType === "following" && (
+                        <Button variant="outline">Unfollow</Button>
+                      )}
+                      {folloType === "followers" && (
+                        <Button variant="outline">Remove</Button>
+                      )}
                     </div>
                   </div>
                 </div>

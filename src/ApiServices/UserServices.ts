@@ -44,7 +44,7 @@ export const getFollowers = async (userName: string) => {
 
 export const getFollowings = async (userName: string) => {
   const res = await axios.get(
-    `http://localhost:3000/api/user/followings?userName=${userName}`
+    `http://localhost:3000/api/user/following?userName=${userName}`
   );
   return res.data.data as {
     userName: string;
