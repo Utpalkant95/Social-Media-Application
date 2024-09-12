@@ -30,7 +30,7 @@ const ProfileSettingUiAtom = () => {
     <div className="rounded-xl bg-white max-w-md w-full">
       {items.map((item, index) => {
         return (
-          <Link href={item.link ?? "#"}>
+          <Link href={item.link ?? "#"} key={item.id}>
             <div
               className={`py-3 text-center cursor-pointer  text-sm ${
                 index === items.length - 1 ? "border-0" : "border-b"

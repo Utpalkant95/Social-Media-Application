@@ -10,6 +10,10 @@ export interface User extends Document {
   emailVerified: boolean;
   phoneVerified: boolean;
   isFirstTimeLogin: boolean;
+  qrCode : {
+    url: string;
+    color : string;
+  }[];
   phoneOtp: number;
   privateAccount : boolean;
   emailOtp: number;
@@ -69,6 +73,7 @@ const userSchema: Schema<User> = new Schema({
     required: [true, "Email OTP is required"],
     trim: true,
   },
+  qrCode: { type: [Object] },
   isVerified: { type: Boolean, default: false, required: true },
   emailVerified: { type: Boolean, default: false, required: true },
   phoneVerified: { type: Boolean, default: false, required: true },
