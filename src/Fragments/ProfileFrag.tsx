@@ -4,12 +4,17 @@ import { IoIosSettings } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { GoPlus } from "react-icons/go";
 import { DialogSheet, Loader, Tab } from "@/components";
-import { ProfilePostAtom, ProfileSavedAtom, ProfileSettingUiAtom, ProfileTagedAtom } from "@/Atom";
+import {
+  ProfilePostAtom,
+  ProfileSavedAtom,
+  ProfileSettingUiAtom,
+  ProfileTagedAtom,
+} from "@/Atom";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
 import { User } from "@/model/User";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { sendFriendRequest } from "@/ApiServices/FriendServices";
+import { sendFollowRequest } from "@/ApiServices/FriendServices";
 import { decodeToken } from "@/helpers/userInfo";
 import { ISendFriendRequest } from "@/ApiServices/interfaces/request";
 import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
@@ -85,7 +90,7 @@ const ProfileFrag = ({
     isLoading: sendRequestLoading,
   } = useMutation({
     mutationKey: ["send friend request"],
-    mutationFn: sendFriendRequest,
+    mutationFn: sendFollowRequest,
     onSuccess: (data: IRESSignUpUser) => {
       enqueueSnackbar(data && data.message, {
         variant: "success",
@@ -187,7 +192,7 @@ const ProfileFrag = ({
                     <div
                       className="cursor-pointer"
                       onClick={() => {
-                        setOpenDialog(true)
+                        setOpenDialog(true);
                         setDialogContent(ProfileSettingUiAtom);
                       }}
                     >
@@ -199,26 +204,43 @@ const ProfileFrag = ({
                 {!ownViewer && (
                   <div className="flex items-center gap-x-2">
                     <div>
-                      <Button
+                      {user?.followers.includes(ActualUser?.userId as string) ? (
+                        <Button
+                          variant="profileButton"
+                          className="bg-[#0095F6] text-white"
+                          onClick={() => sendRequest(sendRequestOnj)}
+                        >
+                          Following
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="profileButton"
+                          className="bg-[#0095F6] text-white"
+                          onClick={() => sendRequest(sendRequestOnj)}
+                        >
+                          Follow
+                        </Button>
+                      )}
+                      {/* <Button
                         variant="profileButton"
                         className="bg-[#0095F6] text-white"
                         onClick={() => sendRequest(sendRequestOnj)}
                       >
                         Follow
-                      </Button>
+                      </Button> */}
                     </div>
                     <div>
                       <Button variant="profileButton">Message</Button>
                     </div>
-                    <div
+                    {/* <div
                       className="cursor-pointer"
                       onClick={() => {
-                        setOpenDialog(true)
-                        setDialogContent(ChangePassword)
+                        setOpenDialog(true);
+                        setDialogContent(ChangePassword);
                       }}
                     >
                       <HiOutlineDotsHorizontal size={30} />
-                    </div>
+                    </div> */}
                   </div>
                 )}
               </div>
