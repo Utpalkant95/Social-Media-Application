@@ -36,7 +36,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
     return NextResponse.json({
       success: true,
-      data: populatedUser?.followers || [],
+      data: populatedUser?.following || [],
     });
   } catch (error) {
     console.log(error);
