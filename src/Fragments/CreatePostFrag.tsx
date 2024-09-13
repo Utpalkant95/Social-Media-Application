@@ -22,14 +22,10 @@ const MySteps = () => {
     mutationFn: createPost,
   })
 
-  console.log("data", data);
-  console.log("isLoading", isLoading);
-  console.log("isSuccess", isSuccess);
-  
   return (
     <Steps>
-      <StepOne next={next} prev={prev} setFile={setFile} />
-      <StepTwo next={next} prev={prev} file={file} mutate={mutate}/>
+      <StepOne next={next} setFile={setFile} />
+      {/* <StepTwo next={next} prev={prev} file={file} mutate={mutate}/> */}
     </Steps>
   );
 };

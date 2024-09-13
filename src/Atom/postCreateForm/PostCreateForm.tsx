@@ -43,11 +43,9 @@ const stepTwoSchema = z.object({
 
 export const StepOne = ({
   next,
-  prev,
   setFile,
 }: {
   next: () => void;
-  prev: () => void;
   setFile: any;
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -73,8 +71,8 @@ export const StepOne = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      form.setValue("file", file); // Set the file object in the form state
-      form.handleSubmit(onSubmit)(); // Automatically submit the form
+      form.setValue("file", file);
+      form.handleSubmit(onSubmit)();
     }
   };
 
@@ -360,9 +358,3 @@ export const StepTwo = ({
     </DialogWrapper>
   );
 };
-
-const PostCreateForm = () => {
-  return <div>PostCreateForm</div>;
-};
-
-export default PostCreateForm;
