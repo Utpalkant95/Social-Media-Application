@@ -1,6 +1,6 @@
 "use client";
 import { createPost } from "@/ApiServices/PostServices";
-import { StepOne, StepTwo } from "@/Atom/postCreateForm/PostCreateForm";
+import { StepOne, StepThree, StepTwo } from "@/Atom/postCreateForm/PostCreateForm";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Steps, StepsProvider, useSteps } from "react-step-builder";
@@ -25,7 +25,8 @@ const MySteps = () => {
   return (
     <Steps>
       <StepOne next={next} setFile={setFile} />
-      {/* <StepTwo next={next} prev={prev} file={file} mutate={mutate}/> */}
+      <StepTwo next={next} prev={prev} file={file} mutate={mutate}/>
+      <StepThree loading={isLoading}/>
     </Steps>
   );
 };

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useRef, useState } from "react";
-import { DialogWrapper } from "@/components";
+import { DialogWrapper, Loader } from "@/components";
 import { z } from "zod";
 import { BsEmojiSmile } from "react-icons/bs";
 import { TbPhotoVideo } from "react-icons/tb";
@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import { PiPopcornFill } from "react-icons/pi";
 
 import {
   Accordion,
@@ -77,7 +78,7 @@ export const StepOne = ({
   };
 
   return (
-    <DialogWrapper title="Create new post" className="">
+    <DialogWrapper title="Create new post" className="max-w-2xl w-full">
       <div
         className="flex flex-col gap-y-4 items-center justify-center cursor-pointer h-[calc(100%-40px)]"
         onClick={handleFileButtonClick}
@@ -160,7 +161,7 @@ export const StepTwo = ({
       // Convert non-string and non-Blob values to strings
       if (typeof value === "boolean") {
         formData.append(key, value.toString()); // Convert boolean to string
-      } else if (typeof value === "string" || value as any instanceof Blob) {
+      } else if (typeof value === "string" || (value as any) instanceof Blob) {
         formData.append(key, value); // Directly append string or Blob values
       } else {
         // Handle other types as needed
@@ -186,21 +187,22 @@ export const StepTwo = ({
       title="Crop"
       share={form.handleSubmit(onSubmit)}
       backward={prev}
-      className="w-2/3"
+      className="max-w-5xl w-full"
     >
-      <div className="flex">
-        <div className="w-[60%] h-full">
+      <div className="grid grid-cols-2 h-[calc(100%-40px)]">
+        <div className="overflow-hidden">
           {file && (
             <Image
-              src={URL.createObjectURL(file)} // Convert the file to a URL
+              src={URL.createObjectURL(file)}
               alt="Selected File"
-              className="h-full w-full object-cover"
               width={500}
-              height={700}
+              height={500}
+              className="w-full h-full object-cover"
             />
           )}
+          hello
         </div>
-        <div className="w-[40%] border overflow-y-scroll h-96">
+        <div className="overflow-y-auto">
           <div className="flex items-center gap-x-2 px-2 py-3">
             <Image
               src="https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
@@ -211,6 +213,7 @@ export const StepTwo = ({
             />
             <p className="font-medium text-sm">utpal_9540</p>
           </div>
+
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -269,7 +272,7 @@ export const StepTwo = ({
                   </FormItem>
                 )}
               />
-              <Accordion type="single" collapsible className="w-full px-2">
+              <Accordion type="multiple" className="w-full px-2">
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Accessibility</AccordionTrigger>
                   <AccordionContent>
@@ -354,6 +357,16 @@ export const StepTwo = ({
             </form>
           </Form>
         </div>
+      </div>
+    </DialogWrapper>
+  );
+};
+
+export const StepThree = ({ loading }: { loading: boolean }) => {
+  return (
+    <DialogWrapper title="Sharing">
+      <div className="flex items-center justify-center h-[calc(100%-40px)]">
+        {loading ? <Loader /> : <PiPopcornFill />}
       </div>
     </DialogWrapper>
   );
