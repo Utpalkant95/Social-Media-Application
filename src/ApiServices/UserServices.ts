@@ -59,3 +59,11 @@ export const getQrCode = async (data : {userName : string, color : string}) => {
   );
   return res.data;
 }
+
+export const setAccountPrivate = async (data : {privateAccount : boolean}) => {
+  const res = await axios.patch(
+    `http://localhost:3000/api/user/accountPrivate`,
+    data
+  );
+  return res.data;
+}

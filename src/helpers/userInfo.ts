@@ -8,6 +8,7 @@ export interface IUserInfo {
   isVerified: boolean;
   username: string;
   userId: string;
+  privateAccount : boolean;
 }
 
 export const decodeToken = (token ?: string) : IUserInfo | null => {
