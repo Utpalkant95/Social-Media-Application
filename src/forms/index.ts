@@ -6,6 +6,8 @@ import { verifySchema } from "@/schemas/verifySchema";
 import { signInSchema } from "@/schemas/signInSchema";
 import { editProfileSchema } from "@/schemas/editProfileSchema";
 import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
+import { postSchema } from "@/schemas/PostSchema";
+import { stepTwoSchema } from "@/Atom/postCreateForm/PostCreateForm";
 
 // Define a custom hook to encapsulate the useForm logic
 export const useSignUpForm = () => {
@@ -62,6 +64,23 @@ export const useUpdatePasswordForm = () => {
       confirmPassword : "",
       currentPassword : "",
       newPassword : ""
+    },
+  });
+};
+
+
+export const useCreatePostForm = () => {
+  return useForm<z.infer<typeof stepTwoSchema>>({
+    resolver: zodResolver(stepTwoSchema),
+    defaultValues: {
+      altText : "",
+      commentCount : 0,
+      description : "",
+      hideComment : false,
+      hideLikeViewCount : false,
+      likeCount : 0,
+      location : "",
+      shareCount : 0
     },
   });
 };

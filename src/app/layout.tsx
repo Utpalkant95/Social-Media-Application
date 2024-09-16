@@ -19,7 +19,6 @@ export default function RootLayout({
 }>) {
   const headersList = headers();
   const currentPath = headersList.get("x-current-path") || "/api/api-doc";
-  console.log("current", currentPath);
 
   // List of paths where the sidebar should not be shown
   const noSidebarPaths = [

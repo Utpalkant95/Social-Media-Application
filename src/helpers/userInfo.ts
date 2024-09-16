@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 
-interface IUserInfo {
+export interface IUserInfo {
   email: string;
   exp: number;
   iat: number;
@@ -12,7 +12,7 @@ interface IUserInfo {
 
 export const decodeToken = (token ?: string) : IUserInfo | null => {
   const accessToken =token ?? Cookies.get("accessToken");
-  console.log("accessToken", accessToken);
+  // console.log("accessToken", accessToken);
 
   if (!accessToken) {
     console.error("No access token found");

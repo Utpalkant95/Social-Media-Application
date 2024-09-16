@@ -70,17 +70,17 @@ const ProfileFrag = ({
     },
   ];
 
-  console.log("userInPofile", user);
-  console.log("ActualUser", ActualUser);
+  // console.log("userInPofile", user);
+  // console.log("ActualUser", ActualUser);
 
   const { mutate, isLoading } = useMutation({
     mutationKey: ["user profile image"],
     mutationFn: updateUserProfileImage,
     onSuccess: (data: any) => {
-      console.log("success", data);
+      // console.log("success", data);
     },
     onError: (error: any) => {
-      console.log("error", error);
+      // console.log("error", error);
     },
   });
 

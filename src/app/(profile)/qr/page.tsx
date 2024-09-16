@@ -44,8 +44,6 @@ const Page = () => {
     mutate({ userName: "utpal95", color: encodeURIComponent(bgColor) });
   }, [bgColor]);
 
-  console.log("data", data);
-
   return (
     <div
       style={{ backgroundColor: bgColor }}
