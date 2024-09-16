@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export async function decodeJWT(token: string): Promise<any> {
   const cookie = Cookies.get('accessToken');
-  console.log("cookie in jwt deode", cookie);
+  // console.log("cookie in jwt deode", cookie);
   
   try {
     const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);

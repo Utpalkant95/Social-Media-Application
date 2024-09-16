@@ -31,7 +31,6 @@ export const createPost = async (data: FormData) => {
     return res.data;
   } catch (error) {
     console.error("Error creating post:", error);
-    // Optionally, return a default value or rethrow the error
     throw error;
   }
 }

@@ -21,7 +21,9 @@ const Sidebar = () => {
   const SidebarComponent = useSidebarCompFactory({ key: activeId });
 
   const drawerContent = useMemo<ReactNode>(() => {
-    return SidebarComponent ? <SidebarComponent setIsDrawerOpen={setIsDrawerOpen} /> : null;
+    return SidebarComponent ? (
+      <SidebarComponent setIsDrawerOpen={setIsDrawerOpen} />
+    ) : null;
   }, [SidebarComponent]);
 
   const handleItemClick = useCallback(
@@ -47,28 +49,56 @@ const Sidebar = () => {
   return (
     <>
       <aside
-        className={`border h-screen pr-1 pl-1 grid grid-rows-[max-content_1fr_max-content]  ${
+        className={`border h-screen pr-1 w-fit xl:w-56 pl-1 grid grid-rows-[max-content_1fr_max-content]  ${
           isDrawerOpen ? "max-w-fit" : "w-56"
         }`}
       >
         {/* LOGO SECTION */}
         <header
-          className={`flex items-center  h-20  ${
+          className={`flex items-center  h-20 ${
             isDrawerOpen ? "justify-center" : "px-3"
           }`}
         >
-          <span
-            className={`${isDrawerOpen ? "hidden" : "font-medium text-2xl"}`}
-          >
-            Snapify
-          </span>
-          <Image
+          {isDrawerOpen ? (
+            <span
+              className={` ${isDrawerOpen ? "hidden" : "font-medium text-2xl"}`}
+            >
+              Snapify
+            </span>
+          ) : (
+            <span
+              className={`hidden xl:block ${
+                isDrawerOpen ? "hidden" : "font-medium text-2xl"
+              }`}
+            >
+              Snapify
+            </span>
+          )}
+          {/* <Image
             src={logo}
             alt="logo"
             width={40}
             height={40}
             className={`${isDrawerOpen ? "block" : "hidden"}`}
-          />
+          /> */}
+          {isDrawerOpen ? (
+            <Image
+              style={isDrawerOpen ? { display: "block" } : { display: "none" }}
+              src={logo}
+              alt="logo"
+              width={40}
+              height={40}
+              // className={`${isDrawerOpen ? "block" : "hidden"}`}
+            />
+          ) : (
+            <Image
+              src={logo}
+              alt="logo"
+              width={40}
+              height={40}
+              className={`block xl:hidden`}
+            />
+          )}
         </header>
 
         <nav>
@@ -91,7 +121,7 @@ const Sidebar = () => {
                 >
                   <Link
                     href={item.drawer ? "#" : dynamicPath}
-                    className="flex items-center gap-x-3"
+                    className="flex items-center justify-center xl:justify-normal gap-x-3"
                   >
                     {isActive
                       ? item.DV_ICON && (
@@ -126,13 +156,23 @@ const Sidebar = () => {
                         />
                       </div>
                     )}
-                    <span
-                      className={`capitalize text-base ${
-                        isActive ? "font-bold" : "font-light"
-                      } ${isDrawerOpen ? "hidden" : ""}`}
-                    >
-                      {item.name}
-                    </span>
+                    {isDrawerOpen ? (
+                      <span
+                        className={`capitalize text-base ${
+                          isActive ? "font-bold" : "font-light"
+                        } ${isDrawerOpen ? "hidden" : ""}`}
+                      >
+                        {item.name}
+                      </span>
+                    ) : (
+                      <span
+                        className={`capitalize hidden xl:block text-base ${
+                          isActive ? "font-bold" : "font-light"
+                        }`}
+                      >
+                        {item.name}
+                      </span>
+                    )}
                   </Link>
                 </li>
               );
@@ -149,7 +189,10 @@ const Sidebar = () => {
                 className="group hover:bg-zinc-200 py-2 rounded-md px-2 transform transition-all duration-300 ease-in-out"
                 onClick={() => handleItemClick(item)}
               >
-                <Link href={item.path} className="flex items-center gap-x-3">
+                <Link
+                  href={item.path}
+                  className="flex items-center justify-center xl:justify-normal gap-x-3"
+                >
                   {isActive
                     ? item.DV_ICON && (
                         <item.DV_ICON
@@ -163,13 +206,23 @@ const Sidebar = () => {
                           className="transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
                         />
                       )}
-                  <span
-                    className={`capitalize text-base ${
-                      isDrawerOpen ? "hidden" : ""
-                    } ${isActive ? "font-bold" : "font-light"}`}
-                  >
-                    {item.name}
-                  </span>
+                  {isDrawerOpen ? (
+                    <span
+                      className={`capitalize text-base ${
+                        isDrawerOpen ? "hidden" : ""
+                      } ${isActive ? "font-bold" : "font-light"}`}
+                    >
+                      {item.name}
+                    </span>
+                  ) : (
+                    <span
+                      className={`capitalize hidden xl:block  text-base  ${
+                        isActive ? "font-bold" : "font-light"
+                      }`}
+                    >
+                      {item.name}
+                    </span>
+                  )}
                 </Link>
               </div>
             );

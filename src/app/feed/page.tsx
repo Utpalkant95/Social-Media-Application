@@ -1,16 +1,13 @@
 "use client";
-import { Loader } from "@/components";
 import Image from "next/image";
+import { decodeToken } from "@/helpers/userInfo";
 
 const Page = () => {
-  // (() => {
-  //   window.location.reload
-  //   console.log("iffie called")
-  // })(); //TODO: remove this
+  const user = decodeToken();
 
   return (
-    <div className="flex w-full h-screen px-24 py-4 gap-x-10">
-      <div className="w-8/12">
+    <div className="min-[1144px]:max-w-5xl w-full min-[1144px]:flex min-[1144px]:mx-auto py-6 min-[1144px]:gap-x-20">
+      <div className="min-[1144px]:max-w-2xl max-w-xl mx-auto w-full">
         {/* Stories Section */}
         <div className="flex overflow-x-auto space-x-4">
           {Array.from({ length: 10 }).map((_, index) => (
@@ -35,7 +32,7 @@ const Page = () => {
       </div>
 
       {/* Right Side (Profile Section) */}
-      <div className="w-4/12">
+      <div className="w-64 hidden min-[1144px]:block">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-2">
             <div>
@@ -50,9 +47,9 @@ const Page = () => {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">utpal_9540</span>
+              <span className="text-sm font-medium">{user?.username}</span>
               <span className="text-xs font-light text-gray-500">
-                Utpal Kant
+                {user?.username}
               </span>
             </div>
           </div>

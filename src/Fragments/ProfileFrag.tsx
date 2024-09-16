@@ -70,17 +70,21 @@ const ProfileFrag = ({
     },
   ];
 
-  console.log("userInPofile", user);
-  console.log("ActualUser", ActualUser);
+  // console.log("userInPofile", user);
+  // console.log("ActualUser", ActualUser);
 
   const { mutate, isLoading } = useMutation({
     mutationKey: ["user profile image"],
     mutationFn: updateUserProfileImage,
-    onSuccess: (data: any) => {
-      console.log("success", data);
+    onSuccess: (data: IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "success",
+      })
     },
-    onError: (error: any) => {
-      console.log("error", error);
+    onError: (error: AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(error?.response?.data?.message, {
+        variant: "error",
+      })
     },
   });
 
