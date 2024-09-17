@@ -61,9 +61,9 @@ export const useUpdatePasswordForm = () => {
   return useForm<z.infer<typeof updatePasswordSchema>>({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
-      confirmPassword : "",
+      newPassword : "",
       currentPassword : "",
-      newPassword : ""
+      confirmPassword : ""
     },
   });
 };

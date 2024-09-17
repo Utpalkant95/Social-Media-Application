@@ -1,5 +1,7 @@
 import axios from "axios";
 import { ISearchedUser } from "./interfaces/response";
+import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
+import { z } from "zod";
 
 export const updateUserProfileImage = async (file : FormData) => {
   const res = await axios.post(
@@ -55,6 +57,22 @@ export const getFollowings = async (userName: string) => {
 export const getQrCode = async (data : {userName : string, color : string}) => {
   const res = await axios.post(
     `http://localhost:3000/api/user/generateQr`,
+    data
+  );
+  return res.data;
+}
+
+export const setAccountPrivate = async (data : {privateAccount : boolean}) => {
+  const res = await axios.patch(
+    `http://localhost:3000/api/user/accountPrivate`,
+    data
+  );
+  return res.data;
+}
+
+export const updatePassword = async (data : z.infer<typeof updatePasswordSchema>) => {
+  const res = await axios.patch(
+    `http://localhost:3000/api/user/changePassword`,
     data
   );
   return res.data;

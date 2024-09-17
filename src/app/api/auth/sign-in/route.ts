@@ -98,6 +98,7 @@ export async function POST(request: Request) {
       userId: existingUserByEmail._id.toString(),
       username: existingUserByEmail.userName,
       isVerified: existingUserByEmail.isVerified,
+      privateAccount : existingUserByEmail.privateAccount
     });
 
     return Response.json(

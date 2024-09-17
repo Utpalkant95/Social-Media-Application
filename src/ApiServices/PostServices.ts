@@ -1,6 +1,5 @@
 import axios from "axios";
 import { IAllPost } from "./interfaces/response";
-import { ICreatePost } from "./interfaces/request";
 
 export const getAllPosts = async (userName: string) => {
   try {

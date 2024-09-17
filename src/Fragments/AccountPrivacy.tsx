@@ -1,11 +1,35 @@
 "use client";
-
+import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
+import { setAccountPrivate } from "@/ApiServices/UserServices";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { decodeToken, IUserInfo } from "@/helpers/userInfo";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { enqueueSnackbar } from "notistack";
 import { useId } from "react";
 
 const AccountPrivacy = () => {
   const id = useId();
+  const user: IUserInfo | null = decodeToken();
+
+  const { mutate } = useMutation({
+    mutationKey: ["update account privacy"],
+    mutationFn: setAccountPrivate,
+    onSuccess: (data: IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "success",
+        autoHideDuration: 2000
+      });
+    },
+    onError: (error: AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(error.response?.data.message, {
+        variant: "error",
+        autoHideDuration: 2000
+      });
+    },
+  });
+
   return (
     <div>
       <div className="flex items-center space-x-2">
@@ -21,7 +45,11 @@ const AccountPrivacy = () => {
             username, is visible to everyone on and off Instagram.
           </p>
         </Label>
-        <Switch id={id} />
+        <Switch
+          id={id}
+          defaultChecked={user?.privateAccount}
+          onCheckedChange={(value) => mutate({ privateAccount: value })}
+        />
       </div>
     </div>
   );

@@ -1,13 +1,12 @@
 "use client";
-
-import { InputField } from "@/components";
+import { InputField, Loader } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { changePasswordFormNodes } from "@/Constants/FormNodes";
-import { useEditProfile } from "@/hooks";
+import { useUpdatePassword } from "@/hooks";
 
 const ChangePassword = () => {
-  const {form, onSubmit} = useEditProfile();
+  const { form, onSubmit, isLoading } = useUpdatePassword();
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 w-full">
@@ -21,8 +20,12 @@ const ChangePassword = () => {
             />
           );
         })}
-        <Button type="submit" className="w-full bg-[#4CB5F9] text-white">
-          Change Password
+        <Button
+          type="submit"
+          className="w-full bg-[#4CB5F9] text-white"
+          disabled={isLoading}
+        >
+          {isLoading ? <Loader /> : "Change Password"}
         </Button>
       </form>
     </Form>

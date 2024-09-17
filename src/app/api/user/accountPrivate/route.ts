@@ -3,7 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel, { User } from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(request: NextRequest, _: NextResponse) {
+export async function PATCH(request: NextRequest, _: NextResponse) {
   await dbConnect();
   try {
     const cookieString = request.headers.get("cookie");
