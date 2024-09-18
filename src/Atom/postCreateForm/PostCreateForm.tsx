@@ -202,7 +202,6 @@ export const StepTwo = ({
               className="w-full h-full object-cover"
             />
           )}
-          hello
         </div>
         <div className="overflow-y-auto">
           <div className="flex items-center gap-x-2 px-2 py-3">

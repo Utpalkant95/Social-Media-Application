@@ -12,9 +12,9 @@ export const getAllPosts = async (userName: string) => {
   }
 };
 
-export const getAllSavedPosts = async (userName: string) => {
+export const getAllSavedPosts = async () => {
   try {
-    const res = await axios.get(`http://localhost:3000/api/update/Post/saved-post?userName=${userName}`);
+    const res = await axios.get(`http://localhost:3000/api/update/Post/saved-post`);
     return res.data.data as IAllPost[];
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -27,6 +27,20 @@ export const getAllSavedPosts = async (userName: string) => {
 export const createPost = async (data: FormData) => {
   try {
     const res = await axios.post("http://localhost:3000/api/update/Post/add-post", data);
+    return res.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+}
+
+export const addSavedPost = async ({postId} : {postId : string}) => {
+  try {
+    const res = await axios.post("http://localhost:3000/api/update/Post/saved-post/add", postId, {
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
     return res.data;
   } catch (error) {
     console.error("Error creating post:", error);
