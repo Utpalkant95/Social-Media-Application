@@ -12,7 +12,7 @@ export const getAllPosts = async (userName: string) => {
   }
 };
 
-export const getAllSavedPosts = async (userName: string) => {
+export const getAllSavedPosts = async () => {
   try {
     const res = await axios.get(`http://localhost:3000/api/update/Post/saved-post`);
     return res.data.data as IAllPost[];

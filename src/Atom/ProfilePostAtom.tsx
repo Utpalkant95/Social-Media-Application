@@ -1,10 +1,6 @@
 import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { addSavedPost, getAllPosts } from "@/ApiServices/PostServices";
-import {
-  DialogSheet,
-  EmptyComp,
-  GroupAvatars,
-} from "@/components";
+import { DialogSheet, EmptyComp, GroupAvatars } from "@/components";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSidebarCompFactory } from "@/hooks";
@@ -39,22 +35,22 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
     queryFn: () => getAllPosts(userName),
   });
 
-  const {mutate} = useMutation({
-    mutationKey : ["add saved post"],
-    mutationFn : addSavedPost,
-    onSuccess : (data : IRESSignUpUser) => {
+  const { mutate } = useMutation({
+    mutationKey: ["add saved post"],
+    mutationFn: addSavedPost,
+    onSuccess: (data: IRESSignUpUser) => {
       enqueueSnackbar(data && data.message, {
-        variant : "success",
-        autoHideDuration : 2000
-      })
+        variant: "success",
+        autoHideDuration: 2000,
+      });
     },
-    onError : (error : AxiosError<IRESSignUpUser>) => {
+    onError: (error: AxiosError<IRESSignUpUser>) => {
       enqueueSnackbar(error?.response?.data?.message, {
-        variant : "error",
-        autoHideDuration : 2000
-      })
-    }
-  })
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    },
+  });
 
   const handleClick = (post: IAllPost) => {
     setPostData(post);
@@ -173,7 +169,9 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
                 </div>
               </div>
 
-              <div className="notification seciton px-4 flex-1 border-b">hello</div>
+              <div className="notification seciton px-4 flex-1 border-b">
+                hello
+              </div>
 
               <div className="flex flex-col gap-y-1 py-2 border-b px-4">
                 <div className="live and save section flex items-center justify-between">
@@ -185,7 +183,10 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
                       <FaRegComment size={20} />
                     </div>
                   </div>
-                  <div className="cursor-pointer" onClick={() => mutate({postId : postData?._id as string})}>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => mutate({ postId: postData?._id as string })}
+                  >
                     <CiSaveDown2 size={20} />
                   </div>
                 </div>
@@ -218,7 +219,9 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
                   />
                 </div>
                 <div>
-                  <span className="cursor-pointer text-sm font-medium">Post</span>
+                  <span className="cursor-pointer text-sm font-medium">
+                    Post
+                  </span>
                 </div>
               </div>
             </div>

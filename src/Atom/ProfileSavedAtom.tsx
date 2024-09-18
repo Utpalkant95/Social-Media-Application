@@ -10,8 +10,8 @@ import { IoBookmarkOutline } from "react-icons/io5";
 
 const ProfileSavedAtom = ({ user }: { user: User }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["saved posts", user.userName],
-    queryFn: () => getAllSavedPosts(user.userName),
+    queryKey: ["saved posts"],
+    queryFn: getAllSavedPosts,
   });
 
   return (
