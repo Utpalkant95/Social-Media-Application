@@ -1,15 +1,14 @@
-import { IAllPost } from "@/ApiServices/interfaces/response";
-import { getAllPosts } from "@/ApiServices/PostServices";
+import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
+import { addSavedPost, getAllPosts } from "@/ApiServices/PostServices";
 import {
   DialogSheet,
-  DialogWrapper,
   EmptyComp,
   GroupAvatars,
 } from "@/components";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSidebarCompFactory } from "@/hooks";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 import { CiCamera } from "react-icons/ci";
@@ -22,6 +21,8 @@ import { FaRegComment } from "react-icons/fa";
 import { BsEmojiSmile } from "react-icons/bs";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { Textarea } from "@/components/ui/textarea";
+import { AxiosError } from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const ProfilePostAtom = ({ userName }: { userName: string }) => {
   const [isDailog, setIsDailog] = React.useState<boolean>(false);
@@ -37,6 +38,23 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
     queryKey: ["posts", userName],
     queryFn: () => getAllPosts(userName),
   });
+
+  const {mutate} = useMutation({
+    mutationKey : ["add saved post"],
+    mutationFn : addSavedPost,
+    onSuccess : (data : IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant : "success",
+        autoHideDuration : 2000
+      })
+    },
+    onError : (error : AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(error?.response?.data?.message, {
+        variant : "error",
+        autoHideDuration : 2000
+      })
+    }
+  })
 
   const handleClick = (post: IAllPost) => {
     setPostData(post);
@@ -167,7 +185,7 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
                       <FaRegComment size={20} />
                     </div>
                   </div>
-                  <div>
+                  <div className="cursor-pointer" onClick={() => mutate({postId : postData?._id as string})}>
                     <CiSaveDown2 size={20} />
                   </div>
                 </div>
