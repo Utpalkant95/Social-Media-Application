@@ -13,6 +13,7 @@ import {
   removeSeachedUser,
   removeAllSearchedUser,
 } from "@/Store/searchedUserSlice";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 // Define the state shape for better typing
 interface RootState {
@@ -25,28 +26,46 @@ const SearchAtom = ({
   setIsDrawerOpen: (value: boolean) => void;
 }) => {
   const [searchKey, setSearchKey] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [users, setUsers] = useState<ISearchedUser[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const dispatch = useDispatch();
   const searchedUser = useSelector(
     (state: RootState) => state.searchedUserSlice
   );
 
-  const { data, mutate, isLoading } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationKey: ["searchUser"],
     mutationFn: getSearchedUsers,
+    onSuccess: (data) => {
+      if (data.length === 0) {
+        setHasMore(false);
+      } else {
+        setUsers((prevUsers) => [...prevUsers, ...data]);
+      }
+    },
   });
 
   // Stable debounced search function
   const debouncedSearch = useCallback(
     debounce((query: string) => {
-      mutate(query);
+      setCurrentPage(1); // Reset page to 1 on new search
+      setUsers([]); // Clear previous users
+      mutate({ searchKey: query, page: 1 }); // Fetch first page of users
     }, 1000),
-    [mutate] // Depend on mutate
+    [mutate]
   );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchKey(value);
     debouncedSearch(value); // Pass the latest value directly
+  };
+
+  const fetchMoreUsers = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    mutate({ searchKey, page: nextPage });
   };
 
   const handleClearAll = () => {
@@ -67,7 +86,7 @@ const SearchAtom = ({
   };
 
   return (
-    <div className="">
+    <div className="h-full">
       <div className="p-6">
         <h2 className="font-medium text-2xl">Search</h2>
         <div className="flex items-center bg-[#FAFAFA] border rounded-md mt-6 pr-2">
@@ -84,16 +103,23 @@ const SearchAtom = ({
               className="text-[#C7C7C7] cursor-pointer"
               onClick={() => {
                 setSearchKey("");
-                mutate("");
+                mutate({ searchKey: "", page: 0 });
               }}
             />
           )}
         </div>
       </div>
-      <div className="border-t overflow-y-scroll">
-        {data && data.length > 0 && (
-          <>
-            {data.map((user: ISearchedUser) => (
+      <div className="border-t overflow-y-auto h-full" id="scrollableDiv">
+        {users && users.length > 0 && (
+          <InfiniteScroll
+            dataLength={users.length} 
+            next={fetchMoreUsers} 
+            hasMore={hasMore} 
+            loader={<Loader className="w-4 h-4" />} 
+            endMessage={<p>No more users</p>}
+            scrollableTarget="scrollableDiv" 
+          >
+            {users.map((user: ISearchedUser) => (
               <RecentSearchItemAtom
                 key={user.userName}
                 user={user}
@@ -103,10 +129,10 @@ const SearchAtom = ({
                 setIsDrawerOpen={handleAfterNavigation}
               />
             ))}
-          </>
+          </InfiniteScroll>
         )}
         <div className="">
-          <div className="flex items-center justify-between p-6">
+          <div className="flex items-center justify-between p-6 overflow-y-auto">
             <h2 className="font-medium text-base">Recent</h2>
             <span
               className="text-sm cursor-pointer text-blue-500 hover:text-black"

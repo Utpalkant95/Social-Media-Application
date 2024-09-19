@@ -19,12 +19,19 @@ export const getSignleUserData = async (userName: string) => {
 };
 
 
-export const getSearchedUsers = async (searchKey: string) => {
+export const getSearchedUsers = async ({
+  searchKey,
+  page,
+}: {
+  searchKey: string;
+  page: number;
+}) => {
   const res = await axios.get(
-    `http://localhost:3000/api/search-user?searchKey=${searchKey}`
+    `http://localhost:3000/api/search-user?searchKey=${searchKey}&page=${page}`
   );
   return res.data.data as ISearchedUser[];
-}
+};
+
 
 
 export const seachUser = async (searchKey: string) => {
