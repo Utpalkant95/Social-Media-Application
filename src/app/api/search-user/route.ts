@@ -7,25 +7,32 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
   try {
     const url = new URL(request.url);
-    const userName = url.searchParams.get("searchKey");
+    const searchKey = url.searchParams.get("searchKey");
+    const page = parseInt(url.searchParams.get("page") || "1");
+    const limit = parseInt(url.searchParams.get("limit") || "15");
 
-    if (!userName) {
+    if (!searchKey) {
       return NextResponse.json({
         success: true,
         data: [],
       });
     }
 
-    const users = await UserModel.find({
+    const query = {
       $or: [
-        { userName: { $regex: userName, $options: "i" } },
-        { fullName: { $regex: userName, $options: "i" } },
+        { userName: { $regex: searchKey, $options: "i" } },
+        { fullName: { $regex: searchKey, $options: "i" } },
       ],
-    })
-      .select("fullName userName profileImage followers")
-      .lean();
+    };
 
-    // Map over the users to add the followersCount field
+    const users = await UserModel.find(query)
+    .select("fullName userName profileImage followers")
+    .skip((page - 1) * limit) // Skip based on page number
+    .limit(limit) // Limit the number of results returned
+    .lean();
+
+    const totalUsers = await UserModel.countDocuments(query);
+
     const usersWithFollowersCount = users.map((user) => ({
       ...user,
       followersCount: user.followers.length,
@@ -34,6 +41,9 @@ export async function GET(request: NextRequest, response: NextResponse) {
     return NextResponse.json({
       success: true,
       data: usersWithFollowersCount,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / limit),
+      totalResults: totalUsers,
     });
   } catch (error) {
     console.error("Error searching users:", error);

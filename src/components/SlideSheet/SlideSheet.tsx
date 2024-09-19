@@ -17,7 +17,7 @@ const SlideSheet = ({ isOpen, onClose, children }: SlideSheetProps) => {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 left-0 h-full w-full md:w-2/4  shadow-xl border-r rounded-lg  bg-white z-50 transform transition-transform ${
+        className={`fixed top-0 left-0 h-full w-full md:w-2/4  shadow-xl border-r rounded-lg  bg-white z-50 transform transition-transform  ${
           isOpen ? "translate-x-14" : "-translate-x-full"
         }`}
       >
