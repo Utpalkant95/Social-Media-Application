@@ -1,43 +1,60 @@
+"use client";
+import { explorePosts } from "@/ApiServices/PostServices";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import { FaComment, FaHeart } from "react-icons/fa";
 
 const Page = () => {
-  const mediaItems = [
-    // Replace these URLs with your media URLs (images or videos)
-    "https://via.placeholder.com/300x400",
-    "https://via.placeholder.com/300x300",
-    "https://via.placeholder.com/300x200",
-    "https://via.placeholder.com/400x300",
-    "https://via.placeholder.com/200x300",
-    "https://via.placeholder.com/300x400",
-    "https://via.placeholder.com/300x300",
-    "https://via.placeholder.com/300x200",
-    "https://via.placeholder.com/400x300",
-  ];
+  const { data, isLoading } = useQuery({
+    queryKey: ["explore"],
+    queryFn: explorePosts,
+  });
+
   return (
-    <div className="px-24 pt-8">
-      <div className="grid grid-cols-3">
-        {mediaItems.map((item, index) => (
-          <div key={index} className="relative w-full h-48">
-            <Image
-              src={item}
-              alt={`Gallery Item ${index}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
-
-        {mediaItems.map((item, index) => (
-          <div className="flex items-center space-x-4" key={index}>
-            <Skeleton className="h-12 w-12 rounded-full" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px]" />
-              <Skeleton className="h-4 w-[200px]" />
+    <div className="max-w-6xl mx-auto w-full pt-8">
+      {isLoading && (
+        <div className="grid grid-cols-3 gap-1">
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+        </div>
+      )}
+      <div className="grid grid-cols-3 gap-1">
+        {data?.map((item, index) => (
+          <Link href={`p/${item._id}`}>
+            <div
+              className="h-96 relative cursor-pointer"
+              key={item._id}
+              //  onClick={() => handleClick(post)}
+            >
+              <Image
+                src={item.file}
+                alt={item.altText}
+                width={300}
+                height={300}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-0 bg-black/40 w-full h-full opacity-0 hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-1/2 flex items-center gap-x-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <p className="text-white font-bold text-sm flex  gap-x-1 items-center">
+                    <FaHeart />
+                    {item.likeCount || 0}
+                  </p>
+                  <p className="text-white font-bold flex items-center gap-x-1  text-sm">
+                    <FaComment />
+                    {item.commnetCount || 0}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
-
       </div>
     </div>
   );
