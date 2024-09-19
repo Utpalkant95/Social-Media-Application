@@ -27,7 +27,7 @@ const Page = () => {
       )}
       <div className="grid grid-cols-3 gap-1">
         {data?.map((item, index) => (
-          <Link href={`p/${item._id}`}>
+          <Link href={`p/${item._id}`} key={item._id}>
             <div
               className="h-96 relative cursor-pointer"
               key={item._id}
