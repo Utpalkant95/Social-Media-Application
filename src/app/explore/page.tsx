@@ -4,8 +4,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { FaComment, FaHeart } from "react-icons/fa";
+import {PostViewFrag} from "@/Fragments";
 
 const Page = () => {
   const { data, isLoading } = useQuery({
@@ -13,6 +14,18 @@ const Page = () => {
     queryFn: explorePosts,
   });
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
+
+  const handleOpenDialogPost = (index: number) => {
+    setSelectedPostIndex(index);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialogPost = () => {
+    setIsDialogOpen(false);
+    setSelectedPostIndex(null);
+  };
   return (
     <div className="max-w-6xl mx-auto w-full pt-8">
       {isLoading && (
@@ -27,11 +40,11 @@ const Page = () => {
       )}
       <div className="grid grid-cols-3 gap-1">
         {data?.map((item, index) => (
-          <Link href={`p/${item._id}`} key={item._id}>
+          // <Link href={`p/${item._id}`} key={item._id}>
             <div
               className="h-96 relative cursor-pointer"
               key={item._id}
-              //  onClick={() => handleClick(post)}
+              onClick={() => handleOpenDialogPost(index)}
             >
               <Image
                 src={item.file}
@@ -53,9 +66,19 @@ const Page = () => {
                 </div>
               </div>
             </div>
-          </Link>
+          // </Link>
         ))}
       </div>
+
+      {isDialogOpen && selectedPostIndex !== null && (
+        <PostViewFrag
+          posts={data} // Pass all posts
+          selectedIndex={selectedPostIndex} // Pass the selected post index
+          onClose={handleCloseDialogPost}
+          setSelectedPostIndex={setSelectedPostIndex} // Pass the function to change selected index
+        />
+      )}
+
     </div>
   );
 };
