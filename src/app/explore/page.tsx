@@ -3,7 +3,6 @@ import { explorePosts } from "@/ApiServices/PostServices";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from "react";
 import { FaComment, FaHeart } from "react-icons/fa";
 import {PostViewFrag} from "@/Fragments";
@@ -72,10 +71,10 @@ const Page = () => {
 
       {isDialogOpen && selectedPostIndex !== null && (
         <PostViewFrag
-          posts={data} // Pass all posts
-          selectedIndex={selectedPostIndex} // Pass the selected post index
+          posts={data}
+          selectedIndex={selectedPostIndex}
           onClose={handleCloseDialogPost}
-          setSelectedPostIndex={setSelectedPostIndex} // Pass the function to change selected index
+          setSelectedPostIndex={setSelectedPostIndex}
         />
       )}
 
