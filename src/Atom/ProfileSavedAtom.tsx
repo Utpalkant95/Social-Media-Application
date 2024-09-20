@@ -3,16 +3,31 @@ import { EmptyComp } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import { User } from "@/model/User";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import { FaComment, FaHeart } from "react-icons/fa";
 import Image from "next/image";
 import { IoBookmarkOutline } from "react-icons/io5";
+import { PostViewFrag } from "@/Fragments";
 
 const ProfileSavedAtom = ({ user }: { user: User }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(
+    null
+  );
   const { data, isLoading } = useQuery({
     queryKey: ["saved posts"],
     queryFn: getAllSavedPosts,
   });
+
+  const handleOpenDialogPost = (index: number) => {
+    setSelectedPostIndex(index);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialogPost = () => {
+    setIsDialogOpen(false);
+    setSelectedPostIndex(null);
+  };
 
   return (
     <>
@@ -35,9 +50,9 @@ const ProfileSavedAtom = ({ user }: { user: User }) => {
         />
       )}
       <div className="grid grid-cols-3 gap-x-1 gap-y-1">
-        {data?.map((post) => {
+        {data?.map((post, index) => {
           return (
-            <div className="h-96 relative cursor-pointer" key={post.id}>
+            <div className="h-96 relative cursor-pointer" key={post.id} onClick={() => handleOpenDialogPost(index)}>
               <Image
                 src={post.file}
                 alt={post.altText}
@@ -60,20 +75,16 @@ const ProfileSavedAtom = ({ user }: { user: User }) => {
             </div>
           );
         })}
-
-        {/* <div onClick={() => setIsDailog(true)} className="cursor-pointer">
-        hello open form
-      </div> */}
-
-        {/* <DialogSheet
-        isOpen={isDailog}
-        onClose={() => {``
-          setIsDailog(false);
-        }}
-      >
-        <Component />
-      </DialogSheet> */}
       </div>
+
+      {isDialogOpen && selectedPostIndex !== null && (
+        <PostViewFrag
+          posts={data}
+          selectedIndex={selectedPostIndex}
+          onClose={handleCloseDialogPost}
+          setSelectedPostIndex={setSelectedPostIndex}
+        />
+      )}
     </>
   );
 };
