@@ -89,10 +89,10 @@ const SearchAtom = ({
     <div className="h-full">
       <div className="p-6">
         <h2 className="font-medium text-2xl">Search</h2>
-        <div className="flex items-center bg-[#FAFAFA] border rounded-md mt-6 pr-2">
+        <div className="flex items-center bg-[#FAFAFA] gap-x-2 border rounded-md mt-6 pr-2">
           <Input
             placeholder="Search"
-            className="border-none"
+            className="border-none w-full"
             value={searchKey}
             onChange={handleOnChange}
           />

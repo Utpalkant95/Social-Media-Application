@@ -21,6 +21,7 @@ export interface User extends Document {
   posts: string[];
   followers: string[];
   following: string[];
+  stories : string[];
   saved: string[];
   tagged: string[];
   sentFollowRequests :  string[];
@@ -83,6 +84,7 @@ const userSchema: Schema<User> = new Schema({
   posts: { type: [String] },
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  stories : [{ type: mongoose.Schema.Types.ObjectId, ref: "Story" }],
   saved: { type: [String] },
   tagged: { type: [String] },
   sentFollowRequests : { type: [String] },

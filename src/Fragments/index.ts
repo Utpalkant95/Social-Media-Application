@@ -4,3 +4,4 @@ export {default as EditProfile} from "./EditProfile";
 export {default as AccountPrivacy} from "./AccountPrivacy";
 export {default as ChangePassword} from "./ChangePassword";
 export {default as PostViewFrag} from "./PostViewFrag";
+export {default as StoryFrag} from "./StoryFrag";
