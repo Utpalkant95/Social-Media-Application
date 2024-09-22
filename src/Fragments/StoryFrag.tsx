@@ -18,9 +18,6 @@ const StoryFrag = () => {
     queryFn: getStories,
   });
 
-  console.log("data", data);
-  
-
   return (
     <>
       <ScrollArea className="w-full  rounded-lg mb-8 bg-white">
@@ -72,7 +69,9 @@ const StoryFrag = () => {
         isOpen={openStoryPreview}
         onClose={() => setOpenStoryPreview(false)}
       >
+        <>
         <StoryPreview story={data}/>
+        </>
       </DialogSheet>
     </>
   );
