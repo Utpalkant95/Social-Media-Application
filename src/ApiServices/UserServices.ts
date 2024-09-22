@@ -2,6 +2,7 @@ import axios from "axios";
 import { ISearchedUser } from "./interfaces/response";
 import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
 import { z } from "zod";
+import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
 
 export const updateUserProfileImage = async (file: FormData) => {
   const res = await axios.post(
@@ -85,6 +86,11 @@ export const updatePassword = async (
 };
 
 export const setStory = async (file: FormData) => {
-  const res = await axios.post(`http://localhost:3000/api/update/Story`, file);
+  const res = await axios.post(`http://localhost:3000/api/update/Story/add-story`, file);
   return res.data;
 };
+
+export const getStories = async () => {
+  const res = await axios.get(`http://localhost:3000/api/update/Story/get-stories`);
+  return res.data.stories as GroupedStories[];
+}
