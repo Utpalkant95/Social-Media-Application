@@ -4,15 +4,31 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { IoAddSharp } from "react-icons/io5";
 import CreateStory from "./CreateStory";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getStories } from "@/ApiServices/UserServices";
+import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
+import StoryPreview from "./StoryPreview";
 
 const StoryFrag = () => {
   const [isOpenCreateStory, setIsOpenCreateStory] = useState<boolean>(false);
+  const [openStoryPreview, setOpenStoryPreview] = useState<boolean>(false);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["story"],
+    queryFn: getStories,
+  });
+
+  console.log("data", data);
+  
 
   return (
     <>
       <ScrollArea className="w-full  rounded-lg mb-8 bg-white">
         <div className="flex p-4 space-x-4">
-          <div className="flex flex-col items-center space-y-1 relative cursor-pointer" onClick={() => setIsOpenCreateStory(true)}>
+          <div
+            className="flex flex-col items-center space-y-1 relative cursor-pointer"
+            onClick={() => setIsOpenCreateStory(true)}
+          >
             <Avatar className="w-16 h-16 border-2 border-pink-500 p-1">
               <AvatarImage
                 src={`https://i.pravatar.cc/128?img=${1}`}
@@ -25,16 +41,20 @@ const StoryFrag = () => {
               <IoAddSharp className="text-white" size={16} />
             </div>
           </div>
-          {[...Array(20)].map((_, i) => (
-            <div key={i} className="flex flex-col items-center space-y-1">
+          {data?.map((story: GroupedStories, i) => (
+            <div
+              key={story.userDetails.username}
+              className="flex flex-col cursor-pointer items-center space-y-1"
+              onClick={() => setOpenStoryPreview(true)}
+            >
               <Avatar className="w-16 h-16 border-2 border-pink-500 p-1">
                 <AvatarImage
-                  src={`https://i.pravatar.cc/128?img=${i + 1}`}
+                  src={story.userDetails.profilePicture}
                   alt={`User ${i + 1}`}
                 />
                 <AvatarFallback>U{i + 1}</AvatarFallback>
               </Avatar>
-              <span className="text-xs">User {i + 1}</span>
+              <span className="text-xs">{story.userDetails.username}</span>
             </div>
           ))}
         </div>
@@ -46,6 +66,13 @@ const StoryFrag = () => {
         onClose={() => setIsOpenCreateStory(false)}
       >
         <CreateStory />
+      </DialogSheet>
+
+      <DialogSheet
+        isOpen={openStoryPreview}
+        onClose={() => setOpenStoryPreview(false)}
+      >
+        <StoryPreview story={data}/>
       </DialogSheet>
     </>
   );

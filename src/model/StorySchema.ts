@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface Story extends Document {
-  user_Id: mongoose.Types.ObjectId;
+  user_Id: mongoose.Schema.Types.ObjectId;  // Correct the ObjectId type
   file: string;
   created_at: Date;
   expired_at: Date;
@@ -28,6 +28,6 @@ const storySchema: Schema<Story> = new Schema({
 });
 
 const StoryModel =
-  mongoose.models.Post || mongoose.model<Story>("Story", storySchema);
+  mongoose.models.Story || mongoose.model<Story>("Story", storySchema);
 
 export default StoryModel;

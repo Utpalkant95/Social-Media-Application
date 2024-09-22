@@ -1,33 +1,51 @@
 import dbConnect from "@/lib/dbConnect";
-import StoryModel from "@/model/StorySchema";
+import StoryModel, { Story } from "@/model/StorySchema";
 import UserModel, { User } from "@/model/User";
-import { decodeToken, getCookieValueInServerSide } from "@/helpers/userInfo";
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
+import { decodeToken, getCookieValueInServerSide } from "@/helpers/userInfo";
+
+// Define GroupedStories interface
+export interface GroupedStories {
+  userDetails: {
+    username: string;
+    profilePicture: string;
+  };
+  stories: Story[];
+}
 
 export async function GET(request: NextRequest, response: NextResponse) {
   await dbConnect();
+
   try {
-    // Step 1: Get the logged-in user's token and decode it
+    // Extract userId from query parameters
     const cookieString = request.headers.get("cookie");
     const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
+    const tokenUser = decodeToken(accessToken as string);
 
     if (!accessToken) {
       return NextResponse.json(
-        { success: false, message: "Access token is missing" },
-        { status: 401 }
+        { success: false, message: "accessToken not found" },
+        { status: 404 }
       );
     }
 
-    const tokenUser = decodeToken(accessToken as string);
-    if (!tokenUser) {
+    if (!tokenUser){
       return NextResponse.json(
-        { success: false, message: "User not authenticated" },
-        { status: 401 }
+        { success: false, message: "User not found" },
+        { status: 404 }
       );
     }
 
-    // Step 2: Get the logged-in user's data (including their following list)
-    const user : User | null = await UserModel.findById(tokenUser.userId).populate("following");
+    if (!mongoose.Types.ObjectId.isValid(tokenUser.userId as string)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid userId" },
+        { status: 400 }
+      );
+    }
+
+    // Fetch user and populate following
+    const user: User | null = await UserModel.findById(tokenUser.userId).populate("following");
 
     if (!user) {
       return NextResponse.json(
@@ -36,27 +54,63 @@ export async function GET(request: NextRequest, response: NextResponse) {
       );
     }
 
-    // Step 3: Create a list of userIds that includes the logged-in user and the users they follow
-    const userIds = [user._id, ...user.following];
+    // If following is an array of user objects (after populate), use _id
+    const followingIds = Array.isArray(user.following)
+      ? user.following.map((f: any) => (f._id ? f._id : f)) // Check if _id exists, otherwise use f directly if it's a string
+      : [];
 
-    // Step 4: Query the StoryModel to find stories where the userId is in userIds
-    const stories = await StoryModel.find({
-      user_Id: { $in: userIds },  // Fetch stories by the logged-in user and followed users
-      expired_at: { $gt: new Date() },  // Only fetch stories that have not expired
-    }).sort({ created_at: -1 });  // Sort by most recent stories first
+    // Add the logged-in user ID to the list
+    const userIds = [user._id, ...followingIds];
 
-    // Step 5: Return the list of stories in the response
-    return NextResponse.json(
-      {
-        success: true,
-        stories,
-      },
-      { status: 200 }
+    // Fetch stories for user and their followings
+    const stories: Story[] = await StoryModel.find({
+      user_Id: { $in: userIds }, // Find stories by user IDs
+      expired_at: { $gt: new Date() }, // Only fetch non-expired stories
+    }).sort({ created_at: -1 });
+
+    // Get the user details for those who posted stories
+    const userDetails: User[] = await UserModel.find(
+      { _id: { $in: userIds } },
+      "userName profileImage"
     );
+
+    // Initialize an array for grouped stories
+    const groupedStories: GroupedStories[] = [];
+
+    // Create a mapping of user IDs to user details for easier lookup
+    const userDetailsMap = new Map<string, { username: string; profilePicture: string }>();
+
+    userDetails.forEach((user) => {
+      userDetailsMap.set(user._id.toString(), {
+        username: user.userName,
+        profilePicture: user.profileImage,
+      });
+    });
+
+    // Group stories by userId
+    stories.forEach((story) => {
+      const userDetail = userDetailsMap.get(story.user_Id.toString());
+
+      if (userDetail) {
+        const existingGroup = groupedStories.find(
+          (group) => group.userDetails.username === userDetail.username
+        );
+
+        if (existingGroup) {
+          existingGroup.stories.push(story);
+        } else {
+          groupedStories.push({
+            userDetails: userDetail,
+            stories: [story],
+          });
+        }
+      }
+    });
+
+    return NextResponse.json({ success: true,stories:groupedStories });
   } catch (error) {
-    console.error("Error fetching stories:", error);
     return NextResponse.json(
-      { success: false, message: "Something went wrong" },
+      { success: false, message: error },
       { status: 500 }
     );
   }
