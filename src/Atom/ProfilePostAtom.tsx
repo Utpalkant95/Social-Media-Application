@@ -72,7 +72,7 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
                   </p>
                   <p className="text-white font-bold flex items-center gap-x-1  text-sm">
                     <FaComment />
-                    {post.commnetCount || 0}
+                    {post.commentCount || 0}
                   </p>
                 </div>
               </div>

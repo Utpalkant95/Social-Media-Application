@@ -99,7 +99,7 @@ const ProfileFrag = ({
       enqueueSnackbar(data && data.message, {
         variant: "success",
       });
-      sendFollow(ActualUser?.userId as string, user?._id as string);
+      sendFollow(ActualUser?.userId as string, String(user?._id));
     },
     onError: (error: AxiosError<IRESSignUpUser>) => {
       console.log("error", error);
@@ -111,7 +111,7 @@ const ProfileFrag = ({
 
   const sendRequestOnj: ISendFriendRequest = {
     senderId: ActualUser?.userId as string,
-    receiverId: user?._id as string,
+    receiverId: String(user?._id),
   };
 
   return (
