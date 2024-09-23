@@ -1,7 +1,6 @@
 "use client";
-import { DialogSheet, GroupAvatars } from "@/components";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { DialogSheet, GroupAvatars, PopOver } from "@/components";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 import { addSavedPost } from "@/ApiServices/PostServices";
@@ -16,6 +15,9 @@ import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
+import { PrimaryPopOver } from "@/components/PrimaryPopOver";
+import PostCardFun from "./PostCardFun";
+import { PrimaryDialog } from "@/components/PrimaryDialog";
 
 const PostViewFrag = ({
   posts,
@@ -23,19 +25,15 @@ const PostViewFrag = ({
   onClose,
   setSelectedPostIndex,
 }: {
-  posts: IAllPost[] | undefined; // The array of posts
-  selectedIndex: number; // The index of the currently selected post
-  onClose: () => void; // Function to close the dialog
-  setSelectedPostIndex: (index: number) => void; // Function to update the selected post index
+  posts: IAllPost[] | undefined;
+  selectedIndex: number;
+  onClose: () => void;
+  setSelectedPostIndex: (index: number) => void;
 }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
-  const data : IAllPost | undefined = posts?.[selectedIndex];
-
-  // const { data } = useQuery({
-  //   queryKey: ["post", postId],
-  //   queryFn: () => getPostById(postId),
-  // });
+  const data: IAllPost | undefined = posts?.[selectedIndex];
+  const [open, setOpen] = React.useState(false);
 
   const { mutate } = useMutation({
     mutationKey: ["add saved post"],
@@ -58,24 +56,15 @@ const PostViewFrag = ({
     setText((prevText) => prevText + emojiData.emoji);
     setShowEmojiPicker(false);
   };
-  const handleNextPost = () => {
-    if (posts && selectedIndex < posts.length - 1) {
-      setSelectedPostIndex(selectedIndex + 1);
-    }
-  };
-  
-  const handlePreviousPost = () => {
-    if (posts && selectedIndex > 0) {
-      setSelectedPostIndex(selectedIndex - 1);
-    }
-  };
 
-  const router = useRouter();
   return (
     <>
       <DialogSheet isOpen={true} onClose={onClose}>
         <div className="w-full h-screen flex items-center justify-center gap-x-10">
-          <Button onClick={handlePreviousPost} disabled={selectedIndex === 0}>
+          <Button
+            onClick={() => setSelectedPostIndex(selectedIndex - 1)}
+            disabled={selectedIndex === 0}
+          >
             Left
           </Button>
           <div className="max-w-6xl w-full bg-white h-5/6">
@@ -89,7 +78,7 @@ const PostViewFrag = ({
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="cooment section flex flex-col">
+              <div className="comment section flex flex-col">
                 {/* user profile */}
                 <div className="flex items-center justify-between border-b py-2 px-4">
                   <div className="flex items-center gap-x-3">
@@ -102,13 +91,13 @@ const PostViewFrag = ({
                     </Avatar>
                     <h2>USERNAME</h2>
                   </div>
-                  <div>
+                  <Button onClick={()=>setOpen(true)}>
                     <HiDotsHorizontal />
-                  </div>
+                  </Button>
                 </div>
 
                 {/* Post details */}
-                <div className="notification seciton px-4 flex-1 border-b">
+                <div className="notification section px-4 flex-1 border-b">
                   {data?.description}
                 </div>
 
@@ -155,13 +144,17 @@ const PostViewFrag = ({
             </div>
           </div>
           <Button
-            onClick={handleNextPost}
-            disabled={selectedIndex === posts?.length as number - 1}
+            onClick={() => setSelectedPostIndex(selectedIndex + 1)}
+            disabled={selectedIndex === (posts?.length as number) - 1}
           >
             Right
           </Button>
         </div>
       </DialogSheet>
+
+      <PrimaryDialog isOpen={open}>
+        <PostCardFun setIsOpen = {setOpen} post={data}/>
+      </PrimaryDialog>
     </>
   );
 };

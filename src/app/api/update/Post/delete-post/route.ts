@@ -6,7 +6,8 @@ export async function DELETE(request: NextRequest, response: NextResponse) {
   await dbConnect();
 
   try {
-    const { postId } = await request.json();
+    const url = new URL(request.url);
+    const postId = url.searchParams.get("postId");
 
     const post = await PostModel.findByIdAndDelete(postId);
 
