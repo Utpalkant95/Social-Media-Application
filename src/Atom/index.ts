@@ -6,3 +6,5 @@ export {default as SearchAtom} from "./SearchAtom";
 export {default as RecentSearchItemAtom} from "./RecentSearchItemAtom"
 export {default as SidebarMore} from "./SidebarMore";
 export {default as ProfileSettingUiAtom} from "./ProfileSettingUiAtom";
+export {default as UserRecommendAtom} from "./UserRecommendAtom";
+export {default as PostCard} from "./PostCard";

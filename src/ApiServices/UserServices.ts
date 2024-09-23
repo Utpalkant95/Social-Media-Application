@@ -94,3 +94,8 @@ export const getStories = async () => {
   const res = await axios.get(`http://localhost:3000/api/update/Story/get-stories`);
   return res.data.stories as GroupedStories[];
 }
+
+export const getRecommendedUsers = async () => {
+  const res = await axios.get(`http://localhost:3000/api/user/recommendUser`);
+  return res.data.data 
+}

@@ -20,8 +20,8 @@ const StoryFrag = () => {
 
   return (
     <>
-      <ScrollArea className="w-full  rounded-lg mb-8 bg-white">
-        <div className="flex p-4 space-x-4">
+      <ScrollArea className="rounded-lg bg-white ">
+        <div className="flex space-x-4">
           <div
             className="flex flex-col items-center space-y-1 relative cursor-pointer"
             onClick={() => setIsOpenCreateStory(true)}
