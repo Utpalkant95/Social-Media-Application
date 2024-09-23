@@ -16,6 +16,8 @@ import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
 import { PrimaryPopOver } from "@/components/PrimaryPopOver";
+import PostCardFun from "./PostCardFun";
+import { PrimaryDialog } from "@/components/PrimaryDialog";
 
 const PostViewFrag = ({
   posts,
@@ -98,9 +100,7 @@ const PostViewFrag = ({
                     </Avatar>
                     <h2>USERNAME</h2>
                   </div>
-                  <Button
-                    onClick={handleClick}
-                  >
+                  <Button onClick={()=>setOpen(true)}>
                     <HiDotsHorizontal />
                   </Button>
                 </div>
@@ -161,9 +161,18 @@ const PostViewFrag = ({
         </div>
       </DialogSheet>
 
-      <PrimaryPopOver anchor={anchor} open={open} onClose={handleClose}>
-        <div>The content of the Popup.</div>
-      </PrimaryPopOver>
+      {/* <PrimaryPopOver anchor={anchor} open={open} onClose={handleClose}>
+        <div onClick={()=>alert("delete clicked")}>
+          {" "}
+          {/* Prevent the onClick from bubbling up */}
+          {/* <PostCardFun /> */}
+          {/* hwllo */}
+        {/* </div> */}
+      {/* // </PrimaryPopOver> */} 
+
+      <PrimaryDialog isOpen={open}>
+        <PostCardFun setIsOpen = {setOpen}/>
+      </PrimaryDialog>
     </>
   );
 };
