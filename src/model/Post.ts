@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { string } from "zod";
 
 export interface Post extends Document {
   file: string;
@@ -9,7 +8,7 @@ export interface Post extends Document {
   hideLikeViewCount: boolean;
   hideComment: boolean;
   likeCount: number;
-  commnetCount: number;
+  commentCount: number;  // Corrected typo
   shareCount: number;
 }
 
@@ -21,7 +20,7 @@ const postSchema: Schema<Post> = new Schema({
   hideLikeViewCount: Boolean,
   hideComment: Boolean,
   likeCount: Number,
-  commnetCount: Number,
+  commentCount: Number,
   shareCount: Number,
 });
 
