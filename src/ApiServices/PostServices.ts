@@ -70,3 +70,13 @@ export const explorePosts = async () => {
     throw error;
   }
 }
+
+export const deletePost = async ({postId} : {postId : string}) => {
+  try {
+    const res = await axios.delete(`http://localhost:3000/api/update/Post/delete-post?postId=${postId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+}

@@ -1,12 +1,18 @@
 "use client";
+import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
+import { deletePost } from "@/ApiServices/PostServices";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
 import { Dispatch, SetStateAction } from "react";
 
 interface IPostCardFun {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  post : IAllPost | undefined;
 }
 
-const PostCardFun = ({ setIsOpen }: IPostCardFun) => {
+const PostCardFun = ({ setIsOpen, post }: IPostCardFun) => {
+
   const handleCopyPostLink = () => {
     const fullUrl = window.location.href;
     navigator.clipboard
@@ -26,12 +32,30 @@ const PostCardFun = ({ setIsOpen }: IPostCardFun) => {
       });
   };
 
+  const {mutate : deleteMutate} = useMutation({
+    mutationKey: ["deletePost"],
+    mutationFn  : deletePost,
+    onSuccess : (data : IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "success",
+        autoHideDuration : 2000
+      });
+    },
+    onError : (error : AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(error?.response?.data?.message, {
+        variant: "error",
+        autoHideDuration : 2000
+      })
+    }
+  })
+
   const menus = [
     {
       id: "1",
       title: "Delete",
       onClick: () => {
-        alert("delete clicked");
+        setIsOpen(false);
+        deleteMutate({postId : post?._id as string})
       },
     },
     {

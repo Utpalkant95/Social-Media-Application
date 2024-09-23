@@ -32,9 +32,7 @@ const PostViewFrag = ({
 }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
-
   const data: IAllPost | undefined = posts?.[selectedIndex];
-  const [anchor, setAnchor] = React.useState<null | HTMLElement>(null);
   const [open, setOpen] = React.useState(false);
 
   const { mutate } = useMutation({
@@ -58,13 +56,6 @@ const PostViewFrag = ({
     setText((prevText) => prevText + emojiData.emoji);
     setShowEmojiPicker(false);
   };
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchor(event.currentTarget);
-    setOpen(!open);
-  };
-
-  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -161,17 +152,8 @@ const PostViewFrag = ({
         </div>
       </DialogSheet>
 
-      {/* <PrimaryPopOver anchor={anchor} open={open} onClose={handleClose}>
-        <div onClick={()=>alert("delete clicked")}>
-          {" "}
-          {/* Prevent the onClick from bubbling up */}
-          {/* <PostCardFun /> */}
-          {/* hwllo */}
-        {/* </div> */}
-      {/* // </PrimaryPopOver> */} 
-
       <PrimaryDialog isOpen={open}>
-        <PostCardFun setIsOpen = {setOpen}/>
+        <PostCardFun setIsOpen = {setOpen} post={data}/>
       </PrimaryDialog>
     </>
   );
