@@ -39,10 +39,7 @@ export const stepTwoSchema = z.object({
   location: z.string().optional(),
   altText: z.string().optional(),
   hideLikeViewCount: z.boolean(),
-  hideComment: z.boolean(),
-  likeCount: z.number(),
-  commentCount: z.number(),
-  shareCount: z.number(),
+  hideComment: z.boolean()
 });
 
 export const StepOne = ({
@@ -146,40 +143,21 @@ export const StepTwo = ({
   };
 
   function onSubmit(values: z.infer<typeof stepTwoSchema>) {
-    // Create a new FormData object
     const formData = new FormData();
-  
-    // Append all values from the form to the FormData object
     for (const [key, value] of Object.entries(values)) {
-      // Convert non-string and non-Blob values to strings
       if (typeof value === "boolean") {
-        formData.append(key, value.toString()); // Convert boolean to string
+        formData.append(key, value.toString());
       } else if (typeof value === "string" || (value as any) instanceof Blob) {
-        formData.append(key, value as any); // Directly append string or Blob values
+        formData.append(key, value as any);
       } else {
-        // Handle other types as needed
-        formData.append(key, String(value)); // Convert other types to string
+        formData.append(key, String(value));
       }
     }
-  
-    // Append the file to the FormData object, if file exists
+
     if (file) {
       formData.append("file", file);
     }
-  
-    // // Log the contents of FormData for debugging
-    // console.log("FormData Contents:");
-    // for (const [key, value] of formData.entries()) {
-    //   console.log(key, value); // This will print each key-value pair in FormData
-    // }
-  
-    // Send the formData directly using mutate
     mutate(formData);
-  
-    // Debugging: Check what is being sent via the network request
-    console.log("FormData sent in mutation:", formData);
-  
-    // Move to the next step after submission
     next();
   }
   

@@ -64,7 +64,7 @@ const ProfileSavedAtom = ({ user }: { user: User }) => {
                 <div className="absolute top-1/2 flex items-center gap-x-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <p className="text-white font-bold text-sm flex  gap-x-1 items-center">
                     <FaHeart />
-                    {post.likeCount || 0}
+                    {post.likeCount.length || 0}
                   </p>
                   <p className="text-white font-bold flex items-center gap-x-1  text-sm">
                     <FaComment />
