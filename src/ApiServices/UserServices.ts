@@ -4,6 +4,7 @@ import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
 import { z } from "zod";
 import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
 import { Post } from "@/app/api/home-page-post/route";
+import { IrecommendedUser } from "@/app/api/user/recommendUser/route";
 
 export const updateUserProfileImage = async (file: FormData) => {
   const res = await axios.post(
@@ -98,7 +99,7 @@ export const getStories = async () => {
 
 export const getRecommendedUsers = async () => {
   const res = await axios.get(`http://localhost:3000/api/user/recommendUser`);
-  return res.data.data 
+  return res.data.data  as IrecommendedUser[]
 }
 
 export const getHomePageContent = async () => {
