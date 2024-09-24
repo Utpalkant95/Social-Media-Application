@@ -11,7 +11,7 @@ const Page = () => {
   return (
     <div className="min-[1144px]:grid grid-cols-[1fr_max-content] max-w-5xl w-full mx-auto py-6 gap-x-20">
       <div className="max-[1144px]:flex items-center flex-col justify-center gap-y-4">
-        <StoryFrag />
+        <StoryFrag user={user}/>
         <PostCard />
       </div>
       <div className="w-64 hidden min-[1144px]:block">

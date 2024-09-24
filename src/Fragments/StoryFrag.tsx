@@ -8,12 +8,13 @@ import { useQuery } from "@tanstack/react-query";
 import { getStories } from "@/ApiServices/UserServices";
 import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
 import StoryPreview from "./StoryPreview";
+import { IUserInfo } from "@/helpers/userInfo";
 
-const StoryFrag = () => {
+const StoryFrag = ({user} : {user : IUserInfo | null}) => {
   const [isOpenCreateStory, setIsOpenCreateStory] = useState<boolean>(false);
   const [openStoryPreview, setOpenStoryPreview] = useState<boolean>(false);
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["story"],
     queryFn: getStories,
   });
@@ -33,7 +34,7 @@ const StoryFrag = () => {
               />
               <AvatarFallback>U 1</AvatarFallback>
             </Avatar>
-            <span className="text-xs">User {1}</span>
+            <span className="text-xs">{user?.username}</span>
             <div className="absolute bottom-5 right-1 w-4 h-4 rounded-full overflow-hidden bg-blue-500">
               <IoAddSharp className="text-white" size={16} />
             </div>
