@@ -9,31 +9,46 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Heart, MessageCircle, Send, MoreHorizontal } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getHomePageContent } from "@/ApiServices/UserServices";
 import { Post } from "@/app/api/home-page-post/route";
-import { useState } from "react";
 import { LuDot } from "react-icons/lu";
 import Link from "next/link";
+import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
+import { enqueueSnackbar } from "notistack";
+import { AxiosError } from "axios";
+import { likeThePost } from "@/ApiServices/PostServices";
 
 export default function PostCard() {
-  const [likes, setLikes] = useState(42);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleLike = () => {
-    if (isLiked) {
-      setLikes(likes - 1);
-      setIsLiked(false);
-    } else {
-      setLikes(likes + 1);
-      setIsLiked(true);
-    }
-  };
-
   const { data } = useQuery({
     queryKey: ["getHomePageContent"],
     queryFn: getHomePageContent,
   });
+
+  const {mutate : likePostMuatation} = useMutation({
+    mutationKey: ["sendLike"],
+    mutationFn: likeThePost,
+    onSuccess: (data : IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "success",
+        autoHideDuration: 3000,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      })
+    },
+    onError: (data : AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      })
+    }
+  })
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -78,7 +93,8 @@ export default function PostCard() {
             <CardFooter className="flex flex-col items-start px-4 gap-y-1 py-1">
               <div className="flex items-center w-full gap-x-3 py-2">
                 <Heart
-                  className={`cursor-pointer ${isLiked ? "fill-red-500 text-red-500" : ""}`}
+                  className={`cursor-pointer`}
+                  onClick={()=>likePostMuatation({postId : post._id})}
                 />
                 <MessageCircle className="cursor-pointer" />
                 <Send className="cursor-pointer" />
