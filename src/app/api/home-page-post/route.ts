@@ -1,15 +1,37 @@
 import { decodeToken, getCookieValueInServerSide } from "@/helpers/userInfo";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-import PostModel from "@/model/Post";  // Assuming you have a Post model
+import PostModel from "@/model/Post";
 import { NextRequest, NextResponse } from "next/server";
+
+export interface Post {
+  _id: string;
+  altText: string;
+  commentCount: number;
+  createdAt: string;
+  description: string;
+  file: string;
+  hideComment: boolean;
+  hideLikeViewCount: boolean;
+  likeCount: string[];
+  location: string;
+  ownerId: Owner;
+  shareCount: number;
+}
+
+interface Owner {
+  _id: string;
+  fullName: string;
+  profileImage: string;
+  userName: string;
+}
 
 export async function GET(request: NextRequest) {
   await dbConnect();
+
   try {
     const cookieString = request.headers.get("cookie");
     const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
-    const tokenUser = decodeToken(accessToken as string);
 
     if (!accessToken) {
       return NextResponse.json(
@@ -18,9 +40,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!tokenUser) {
+    const tokenUser = decodeToken(accessToken as string);
+    
+    if (!tokenUser || !tokenUser.userId) {
       return NextResponse.json(
-        { success: false, message: "User not found" },
+        { success: false, message: "Invalid token or user not found" },
         { status: 404 }
       );
     }
@@ -34,13 +58,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get the list of users that the authenticated user is following
-    const followingUsers = user.following; // Assuming `user.following` is an array of user IDs
-
-    // Fetch posts from users the authenticated user is following
+    const followingUsers = user.following;
     const posts = await PostModel.find({
-      author: { $in: followingUsers }
-    }).populate("author"); // Assuming Post model has an author field
+      ownerId: { $in: followingUsers }
+    }).populate("ownerId", "fullName userName profileImage");
 
     if (!posts.length) {
       return NextResponse.json(
@@ -49,14 +70,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Return the posts along with user data
     return NextResponse.json({
       success: true,
-      data : posts,  // This will include post content and author details (username, profileImage, etc.)
+      data: posts as Post[],
     });
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       { success: false, message: "Something went wrong" },
       { status: 500 }

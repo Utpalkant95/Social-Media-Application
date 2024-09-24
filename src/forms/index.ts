@@ -74,13 +74,10 @@ export const useCreatePostForm = () => {
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
       altText : "",
-      commentCount : 0,
       description : "",
       hideComment : false,
       hideLikeViewCount : false,
-      likeCount : 0,
       location : "",
-      shareCount : 0
     },
   });
 };

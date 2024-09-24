@@ -56,7 +56,7 @@ const Page = () => {
                 <div className="absolute top-1/2 flex items-center gap-x-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <p className="text-white font-bold text-sm flex  gap-x-1 items-center">
                     <FaHeart />
-                    {item.likeCount || 0}
+                    {item.likeCount.length || 0}
                   </p>
                   <p className="text-white font-bold flex items-center gap-x-1  text-sm">
                     <FaComment />

@@ -6,8 +6,5 @@ export const postSchema = z.object({
     location : z.string().optional(),
     altText : z.string().optional(),
     hideLikeViewCount : z.boolean(),
-    hideComment : z.boolean(),
-    likeCount : z.number(),
-    commentCount : z.number(),
-    shareCount : z.number(),
+    hideComment : z.boolean()
 })

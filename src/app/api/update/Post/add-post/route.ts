@@ -2,16 +2,12 @@ import dbConnect from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import PostModel, { Post } from "@/model/Post";
 import { postSchema } from "@/schemas/PostSchema";
-import {
-  decodeToken,
-  getCookieValueInServerSide,
-  IUserInfo,
-} from "@/helpers/userInfo";
+import { decodeToken, getCookieValueInServerSide, IUserInfo} from "@/helpers/userInfo";
 import { UTApi } from "uploadthing/server";
 import UserModel from "@/model/User";
-import { handleFileInApiRoute } from "@/helpers/handleFileInApiRoute";
+import { handleFileInApiRoute } from "@/helpers/handleFileInApiRoute";    
 export async function POST(request: NextRequest) {
-  await dbConnect();
+  await dbConnect();                  
   try {
     const cookieString = request.headers.get("cookie");
     const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
@@ -21,9 +17,6 @@ export async function POST(request: NextRequest) {
     const { file, description, location, altText } = body;
     const hideLikeViewCount = formData.get("hideLikeViewCount") === "true";
     const hideComment = formData.get("hideComment") === "true";
-    const likeCount = parseInt(formData.get("likeCount") as string, 10);
-    const commentCount = parseInt(formData.get("commentCount") as string, 10);
-    const shareCount = parseInt(formData.get("shareCount") as string, 10);
     const decodedFile = await handleFileInApiRoute(file as File);
     const utapi = new UTApi();
 
@@ -34,9 +27,6 @@ export async function POST(request: NextRequest) {
       altText,
       hideLikeViewCount,
       hideComment,
-      likeCount,
-      commentCount,
-      shareCount,
     });
 
     if (!validation.success) {
@@ -96,16 +86,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const newPost : Post = await new PostModel({
+    const newPost: Post = await new PostModel({
+      ownerId : userByToken.userId,
       file: uploadImage[0].data?.url,
       description,
       location,
       altText,
       hideLikeViewCount,
-      hideComment,
-      likeCount,
-      commentCount,
-      shareCount,
+      hideComment
     });
 
     await newPost.save();

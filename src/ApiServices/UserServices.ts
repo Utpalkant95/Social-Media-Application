@@ -1,8 +1,9 @@
 import axios from "axios";
-import { ISearchedUser } from "./interfaces/response";
+import { IAllPost, ISearchedUser } from "./interfaces/response";
 import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
 import { z } from "zod";
 import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
+import { Post } from "@/app/api/home-page-post/route";
 
 export const updateUserProfileImage = async (file: FormData) => {
   const res = await axios.post(
@@ -98,4 +99,9 @@ export const getStories = async () => {
 export const getRecommendedUsers = async () => {
   const res = await axios.get(`http://localhost:3000/api/user/recommendUser`);
   return res.data.data 
+}
+
+export const getHomePageContent = async () => {
+  const res = await axios.get(`http://localhost:3000/api/home-page-post`);
+  return res.data.data as Post[]
 }
