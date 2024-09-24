@@ -3,6 +3,13 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
 
+export interface IrecommendedUser {
+    _id: string;
+    profileImage: string;
+    userName: string;
+    fullName: string;
+} 
+
 export async function GET(request: NextRequest) {
     await dbConnect();
     try {
@@ -60,11 +67,11 @@ export async function GET(request: NextRequest) {
         // Fetch unique user data for recommendations
         const recommendations = await UserModel.find({
             _id: { $in: Array.from(recommendedUserIds) }
-        }).select('username profileImage fullName');
+        }).select('userName profileImage fullName ');
 
         return NextResponse.json({
             success: true,
-            data : recommendations,
+            data : recommendations as IrecommendedUser[],
         }, {
             status: 200
         });
