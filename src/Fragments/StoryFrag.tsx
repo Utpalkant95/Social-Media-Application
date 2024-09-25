@@ -29,7 +29,7 @@ const StoryFrag = ({user} : {user : IUserInfo | null}) => {
           >
             <Avatar className="w-16 h-16 border-2 border-pink-500 p-1">
               <AvatarImage
-                src={`https://i.pravatar.cc/128?img=${1}`}
+                src={user?.profileImage}
                 alt={`User `}
               />
               <AvatarFallback>U 1</AvatarFallback>

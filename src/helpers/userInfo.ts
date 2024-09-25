@@ -9,11 +9,11 @@ export interface IUserInfo {
   username: string;
   userId: string;
   privateAccount : boolean;
+  profileImage : string;
 }
 
 export const decodeToken = (token ?: string) : IUserInfo | null => {
   const accessToken =token ?? Cookies.get("accessToken");
-  // console.log("accessToken", accessToken);
 
   if (!accessToken) {
     console.error("No access token found");
@@ -21,7 +21,6 @@ export const decodeToken = (token ?: string) : IUserInfo | null => {
   }
 
   try {
-    // Decode the JWT token
     const decoded = jwtDecode(accessToken);
     return decoded as IUserInfo;
   } catch (error) {

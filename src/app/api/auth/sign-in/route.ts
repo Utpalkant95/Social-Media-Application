@@ -1,6 +1,6 @@
 import generateTokens from "@/helpers/jwt";
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/model/User";
+import UserModel, { User } from "@/model/User";
 import { signInSchema } from "@/schemas/signInSchema";
 import bcryptjs from "bcryptjs";
 
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   }
 
   //  checking user pehle se present hai ya nhi
-  const existingUserByEmail = await UserModel.findOne({ email: email });
+  const existingUserByEmail : User | null = await UserModel.findOne({ email: email });
   if (!existingUserByEmail) {
     return Response.json(
       {
@@ -98,7 +98,8 @@ export async function POST(request: Request) {
       userId: existingUserByEmail._id.toString(),
       username: existingUserByEmail.userName,
       isVerified: existingUserByEmail.isVerified,
-      privateAccount : existingUserByEmail.privateAccount
+      privateAccount : existingUserByEmail.privateAccount,
+      profileImage : existingUserByEmail.profileImage
     });
 
     return Response.json(
