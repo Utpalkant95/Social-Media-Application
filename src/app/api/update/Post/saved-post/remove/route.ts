@@ -7,9 +7,11 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel, { User } from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   await dbConnect();
   try {
+    const url = new URL(request.url);
+    const postId = url.searchParams.get("postId");
     const cookieString = request.headers.get("cookie");
     const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
 
@@ -33,9 +35,7 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-
-    const postId = await request.json();
-
+    
     if (!postId) {
       return NextResponse.json(
         {
@@ -57,40 +57,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (user.saved.includes(postId)) {
-      // user.saved = user.saved.filter((id) => id !== postId);
-      // await user.save();
-      // return NextResponse.json(
-      //   {
-      //     success: true,
-      //     message: "Post unsaved successfully",
-      //   },
-      //   {
-      //     status: 200,
-      //   }
-      // );
-
-      return NextResponse.json({
-        success: false,
-        message: "Post already saved",
-      }, {
-        status: 400
-      })
+    // Check if post is actually saved
+    if (!user.saved.includes(postId)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Post not found in saved list",
+        },
+        { status: 404 }
+      );
     }
 
-    user.saved.push(postId);
+    // Remove post from saved
+    user.saved = user.saved.filter((id) => id !== postId);
     await user.save();
 
     return NextResponse.json(
       {
         success: true,
-        message: "Post saved successfully",
-        data : user.saved
+        message: "Post unsaved successfully",
+        data: user.saved,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error while saving post", error);
+    console.error("Error while removing saved post", error);
     return NextResponse.json(
       {
         success: false,
