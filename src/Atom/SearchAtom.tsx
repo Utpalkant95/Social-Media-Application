@@ -49,9 +49,9 @@ const SearchAtom = ({
   // Stable debounced search function
   const debouncedSearch = useCallback(
     debounce((query: string) => {
-      setCurrentPage(1); // Reset page to 1 on new search
-      setUsers([]); // Clear previous users
-      mutate({ searchKey: query, page: 1 }); // Fetch first page of users
+      setCurrentPage(1); 
+      setUsers([]);
+      mutate({ searchKey: query, page: 1 });
     }, 1000),
     [mutate]
   );
