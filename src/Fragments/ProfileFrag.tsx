@@ -13,7 +13,6 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { updateUserProfileImage } from "@/ApiServices/UserServices";
 import { User } from "@/model/User";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { sendFollowRequest } from "@/ApiServices/FriendServices";
 import { decodeToken } from "@/helpers/userInfo";
 import { ISendFriendRequest } from "@/ApiServices/interfaces/request";
@@ -26,7 +25,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BsPostcardHeart } from "react-icons/bs";
 import { CiSaveDown2 } from "react-icons/ci";
 import { FaUserTag } from "react-icons/fa";
-import ChangePassword from "./ChangePassword";
 
 const ProfileFrag = ({
   user,
@@ -41,7 +39,6 @@ const ProfileFrag = ({
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [dialogContent, setDialogContent] = useState<React.ReactNode>(null);
   const ActualUser = decodeToken();
-  const { sendFollow } = useSocket();
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -99,7 +96,6 @@ const ProfileFrag = ({
       enqueueSnackbar(data && data.message, {
         variant: "success",
       });
-      sendFollow(ActualUser?.userId as string, String(user?._id));
     },
     onError: (error: AxiosError<IRESSignUpUser>) => {
       console.log("error", error);
@@ -236,15 +232,6 @@ const ProfileFrag = ({
                     <div>
                       <Button variant="profileButton">Message</Button>
                     </div>
-                    {/* <div
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setOpenDialog(true);
-                        setDialogContent(ChangePassword);
-                      }}
-                    >
-                      <HiOutlineDotsHorizontal size={30} />
-                    </div> */}
                   </div>
                 )}
               </div>

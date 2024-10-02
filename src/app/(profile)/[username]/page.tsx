@@ -1,27 +1,28 @@
 "use client";
 import { getSignleUserData } from "@/ApiServices/UserServices";
-import { ProfileFrag } from "@/Fragments";
+import { ProfileDetailFrag, ProfileFrag, ProfilePostSectionFrag } from "@/Fragments";
 import { decodeToken } from "@/helpers/userInfo";
 import { User } from "@/model/User";
 import { useQuery } from "@tanstack/react-query";
-import {useSocket} from "@/lib/SocketProvider"
 const Page = ({ params }: { params: { username: string } }) => {
   const { username } = params;
   const user = decodeToken();
-  const {sendFollow} =useSocket()
 
- const {data} = useQuery({
-   queryKey: ["user", username],
-   queryFn: () => getSignleUserData(username),
- })
+  const { data } = useQuery({
+    queryKey: ["user", username],
+    queryFn: () => getSignleUserData(username),
+  });
 
- const userData : User = data?.data
-  
-  const ownViewer= user?.username === username;
-  
-  // fetch user details
+  const userData: User = data?.data;
 
-  return <ProfileFrag user = {userData} userName = {username} ownViewer = {ownViewer} />
+  const ownViewer = user?.username === username;
+
+  return (
+    <div className="max-w-4xl mx-auto w-full">
+      <ProfileDetailFrag ownViewer={ownViewer} user={userData}/>
+      <ProfilePostSectionFrag  user={userData} username={username}/>
+    </div>
+  );
 };
 
 export default Page;

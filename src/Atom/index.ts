@@ -8,3 +8,5 @@ export {default as SidebarMore} from "./SidebarMore";
 export {default as ProfileSettingUiAtom} from "./ProfileSettingUiAtom";
 export {default as UserRecommendAtom} from "./UserRecommendAtom";
 export {default as PostCard} from "./PostCard";
+export {default as ProfileAvatarAtom} from "./ProfileAvatarAtom";
+export {default as ProfileHeaderAtom} from "./ProfileHeaderAtom";
