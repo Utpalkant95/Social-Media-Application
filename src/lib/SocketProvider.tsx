@@ -1,5 +1,4 @@
 "use client";
-
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -35,6 +34,10 @@ const SocketProvider = ({ children, userId }: ISocketProvider) => {
 
   const onFollowNotificationReceive = useCallback((data: { message: string }) => {
     console.log("Follow Notification received:", data.message);
+
+    const notifications = JSON.parse(localStorage.getItem('notifications') as string) || [];
+    notifications.push(data); // You can store the whole data object for more details
+    localStorage.setItem('notifications', JSON.stringify(notifications));
   }, []);
 
   useEffect(() => {

@@ -1,11 +1,28 @@
 "use client";
+import { getNotifications } from "@/ApiServices/UserServices";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSocket } from "@/lib/SocketProvider";
+import { decodeToken, IUserInfo } from "@/helpers/userInfo";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const NotificationAtom = () => {
-  const { notifications } = useSocket();
+  const user : IUserInfo | null =  decodeToken();
+  const [notifications, setNotifications] = useState([]);
+
+  const {data, isLoading} = useQuery({
+    queryKey: ["notifications"],
+    queryFn: () =>getNotifications(user?.userId as string),
+  })
+
+  useEffect(() => {
+    const localNotifications = JSON.parse(localStorage.getItem('notifications') as string) || [];
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      ...data,
+    ]);
+  }, []);
+
   return (
     <div className="px-2 py-2">
       {notifications.map((notification) => {
