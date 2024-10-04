@@ -33,12 +33,12 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className="space-y-4">
           <div className="flex justify-end">
             <div className="bg-blue-500 text-white rounded-lg py-2 px-4 max-w-[70%]">
-              Hey! How's it going?
+              Hey! How it going?
             </div>
           </div>
           <div className="flex justify-start">
             <div className="bg-gray-200 rounded-lg py-2 px-4 max-w-[70%]">
-              Hi! I'm doing great, thanks for asking. How about you?
+              Hi! Im doing great, thanks for asking. How about you?
             </div>
           </div>
         </div>

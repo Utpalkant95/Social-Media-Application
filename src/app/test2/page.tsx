@@ -53,11 +53,11 @@ import { useState } from 'react'
 
 const Page = () => {
   const [message, setMessage] = useState<string>("");
-  const {sendMessage} = useSocket()
+  // const {sendMessage} = useSocket()
   return (
     <div>
       <input type="text" onChange={(e) => setMessage(e.target.value)}/>
-      <button onClick={() => sendMessage(message)}>Send</button>
+      {/* <button onClick={() => sendMessage(message)}>Send</button> */}
     </div>
   )
 }
