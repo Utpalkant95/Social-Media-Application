@@ -25,7 +25,7 @@ export default function PostHeader({ post }: PostHeaderProps) {
           />
         </div>
         <div className="flex flex-col">
-          <Link href={`#`}>
+          <Link href={`/${post.ownerId.userName}`}>
             <div className="flex items-center text-sm font-medium leading-none">
               {post.ownerId.userName} <LuDot />
               <span className="text-xs font-light">

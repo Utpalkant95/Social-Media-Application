@@ -1,10 +1,11 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, mongo } from "mongoose";
 
 export interface Post extends Document {
   ownerId: mongoose.Types.ObjectId;
   createdAt: Date;
   file: string;
   likeCount: mongoose.Types.ObjectId[];
+  savedCount : mongoose.Schema.Types.ObjectId[];
   description: string;
   location: string;
   altText: string;
@@ -23,7 +24,8 @@ const postSchema: Schema<Post> = new Schema({
   altText: { type: String, default: '' },
   hideLikeViewCount: { type: Boolean, default: false },
   hideComment: { type: Boolean, default: false },
-  likeCount: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Array of ObjectIds
+  likeCount: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  savedCount: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   commentCount: { type: Number, default: 0 },
   shareCount: { type: Number, default: 0 },
 });

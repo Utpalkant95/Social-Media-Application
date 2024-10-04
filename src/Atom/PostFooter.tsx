@@ -7,14 +7,12 @@ interface PostFooterProps {
   post: Post;
   isPostSaved: boolean;
   handleBookmarkClick: (postId: string) => void;
-  likePostMutation: (postId: string) => void;
 }
 
 export default function PostFooter({
   post,
   isPostSaved,
-  handleBookmarkClick,
-  likePostMutation,
+  handleBookmarkClick
 }: PostFooterProps) {
   return (
     <div className="flex flex-col items-start px-2 gap-y-1 py-1">
@@ -22,7 +20,6 @@ export default function PostFooter({
         <div className="flex items-center gap-x-3">
           <Heart
             className={`cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300`}
-            onClick={() => likePostMutation(post._id)}
           />
           <MessageCircle className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" />
           <Send className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" />

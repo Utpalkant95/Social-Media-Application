@@ -49,7 +49,7 @@ import {
   
       return NextResponse.json({
         success: true,
-        data: user.liked,
+        data: user.likedPost,
       });
     } catch (error) {
       console.log(error);

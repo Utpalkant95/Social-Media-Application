@@ -6,10 +6,11 @@ import PostFooter from "./PostFooter";
 import { usePostMutations } from "@/hooks/usePostMutation";
 import { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { getSavedPostsForUser } from "@/ApiServices/PostServices";
+import { getLikedPostsForUser, getSavedPostsForUser } from "@/ApiServices/PostServices";
 
 export default function PostCard() {
   const [savedPosts, setSavedPosts] = useState<string[]>([]);
+
   const { data: posts } = useQuery({
     queryKey: ["getHomePageContent"],
     queryFn: getHomePageContent,
@@ -20,7 +21,8 @@ export default function PostCard() {
     queryFn: getSavedPostsForUser,
   });
 
-  const { likePostMutation, savePostMutation, unsavePostMutation } =
+
+  const {savePostMutation, unsavePostMutation } =
     usePostMutations();
 
   useEffect(() => {
@@ -54,7 +56,6 @@ export default function PostCard() {
               post={post}
               isPostSaved={isPostSaved}
               handleBookmarkClick={handleBookmarkClick}
-              likePostMutation={(postId) => likePostMutation.mutate({ postId })}
             />
           </div>
         );

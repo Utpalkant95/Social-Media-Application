@@ -4,7 +4,9 @@ import {
   IUserInfo,
 } from "@/helpers/userInfo";
 import dbConnect from "@/lib/dbConnect";
+import PostModel, { Post } from "@/model/Post";
 import UserModel, { User } from "@/model/User";
+import { ObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -57,6 +59,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const post : Post | null = await PostModel.findById(postId);
+
+    if (!post) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Post not found",
+        },
+        { status: 404 }
+      );
+    }
+
     if (user.saved.includes(postId)) {
       // user.saved = user.saved.filter((id) => id !== postId);
       // await user.save();
@@ -79,6 +93,8 @@ export async function POST(request: NextRequest) {
     }
 
     user.saved.push(postId);
+    post.savedCount.push(user._id);
+    await post.save();
     await user.save();
 
     return NextResponse.json(
