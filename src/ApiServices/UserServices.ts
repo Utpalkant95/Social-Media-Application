@@ -106,3 +106,8 @@ export const getHomePageContent = async () => {
   const res = await axios.get(`http://localhost:3000/api/home-page-post`);
   return res.data.data as Post[]
 }
+
+export const getNotifications = async (userId : string) => {
+  const res = await axios.get(`http://localhost:3000/api/update/Notification?userId=${userId}`);
+  return res.data.data
+}

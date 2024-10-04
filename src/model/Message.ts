@@ -1,11 +1,18 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IMessage extends Document {
-  message: string;
+  sender: string;
+  chat : string;
+  content : string;
 }
 
 const messageSchema: Schema = new Schema({
-  message: { type: String, required: true },
+  sender: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  chat : { type: mongoose.Schema.Types.ObjectId, ref: "Chat", required: true },
+  content : {type : String},
+  attachments : [{type : String}]
+}, {
+  timestamps : true
 });
 
 const MessageModel =

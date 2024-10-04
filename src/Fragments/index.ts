@@ -6,3 +6,5 @@ export {default as ChangePassword} from "./ChangePassword";
 export {default as PostViewFrag} from "./PostViewFrag";
 export {default as StoryFrag} from "./StoryFrag";
 export {default as PostCardFun} from "./PostCardFun";
+export {default as ProfileDetailFrag} from "./ProfileDetailFrag";
+export {default as ProfilePostSectionFrag} from "./ProfilePostSectionFrag";
