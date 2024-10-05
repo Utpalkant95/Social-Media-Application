@@ -1,26 +1,43 @@
 // components/PostFooter.tsx
 import { Heart, MessageCircle, Send } from "lucide-react";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
+import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { Post } from "@/app/api/home-page-post/route";
 
 interface PostFooterProps {
   post: Post;
   isPostSaved: boolean;
+  isPostLiked: boolean;
   handleBookmarkClick: (postId: string) => void;
+  handleLikeClick: (postId: string) => void;
 }
 
 export default function PostFooter({
   post,
   isPostSaved,
-  handleBookmarkClick
+  isPostLiked,
+  handleBookmarkClick,
+  handleLikeClick,
 }: PostFooterProps) {
   return (
     <div className="flex flex-col items-start px-2 gap-y-1 py-1">
       <div className="flex items-center justify-between w-full py-2">
         <div className="flex items-center gap-x-3">
-          <Heart
-            className={`cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300`}
-          />
+          <div>
+            {isPostLiked ? (
+              <FaHeart
+                size={24}
+                className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300"
+                onClick={() => handleLikeClick(post._id)}
+              />
+            ) : (
+              <FaRegHeart
+                size={24}
+                className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300"
+                onClick={() => handleLikeClick(post._id)}
+              />
+            )}
+          </div>
           <MessageCircle className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" />
           <Send className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" />
         </div>

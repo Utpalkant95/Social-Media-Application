@@ -4,7 +4,7 @@ export interface Post extends Document {
   ownerId: mongoose.Types.ObjectId;
   createdAt: Date;
   file: string;
-  likeCount: mongoose.Types.ObjectId[];
+  likeCount: mongoose.Schema.Types.ObjectId[];
   savedCount : mongoose.Schema.Types.ObjectId[];
   description: string;
   location: string;

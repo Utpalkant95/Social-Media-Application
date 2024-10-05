@@ -9,12 +9,12 @@ import { getSignleUserData } from "@/ApiServices/UserServices";
 
 const Page = () => {
   const user = decodeToken();
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: ["user", user?.username],
     queryFn: () => getSignleUserData(user?.username as string),
     enabled: !!user?.username,
   });
-  
+
   return (
     <div className="min-[1144px]:grid grid-cols-[1fr_max-content] max-w-5xl w-full mx-auto py-6 gap-x-20">
       <div className="flex max-[1144px]:items-center flex-col max-[1144px]:justify-center gap-y-4">

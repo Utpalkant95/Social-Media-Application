@@ -69,7 +69,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Remove post from saved
-    user.saved = user.saved.filter((id) => id !== postId);
+    user.saved = user.saved.filter((id) => id != postId);
     await user.save();
 
     return NextResponse.json(

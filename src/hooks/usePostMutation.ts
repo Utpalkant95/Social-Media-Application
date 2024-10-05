@@ -1,6 +1,11 @@
 // hooks/usePostMutations.ts
 import { useMutation } from "@tanstack/react-query";
-import { addSavedPost, removeSavedPost, likeThePost } from "@/ApiServices/PostServices";
+import {
+  addSavedPost,
+  removeSavedPost,
+  likeThePost,
+  unLikeThePost,
+} from "@/ApiServices/PostServices";
 import { enqueueSnackbar } from "notistack";
 import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { AxiosError } from "axios";
@@ -9,6 +14,23 @@ export function usePostMutations() {
   const likePostMutation = useMutation({
     mutationKey: ["sendLike"],
     mutationFn: likeThePost,
+    onSuccess: (data: IRESSignUpUser) => {
+      enqueueSnackbar(data?.message, {
+        variant: "success",
+        autoHideDuration: 3000,
+      });
+    },
+    onError: (error: AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(error?.message, {
+        variant: "error",
+        autoHideDuration: 3000,
+      });
+    },
+  });
+
+  const unLikePostMutation = useMutation({
+    mutationKey: ["unLike"],
+    mutationFn: unLikeThePost,
     onSuccess: (data: IRESSignUpUser) => {
       enqueueSnackbar(data?.message, {
         variant: "success",
@@ -57,5 +79,5 @@ export function usePostMutations() {
     },
   });
 
-  return { likePostMutation, savePostMutation, unsavePostMutation };
+  return { likePostMutation,unLikePostMutation, savePostMutation, unsavePostMutation };
 }

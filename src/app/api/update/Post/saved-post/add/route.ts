@@ -6,7 +6,6 @@ import {
 import dbConnect from "@/lib/dbConnect";
 import PostModel, { Post } from "@/model/Post";
 import UserModel, { User } from "@/model/User";
-import { ObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -59,7 +58,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const post : Post | null = await PostModel.findById(postId);
+    const post: Post | null = await PostModel.findById(postId);
 
     if (!post) {
       return NextResponse.json(
@@ -72,24 +71,15 @@ export async function POST(request: NextRequest) {
     }
 
     if (user.saved.includes(postId)) {
-      // user.saved = user.saved.filter((id) => id !== postId);
-      // await user.save();
-      // return NextResponse.json(
-      //   {
-      //     success: true,
-      //     message: "Post unsaved successfully",
-      //   },
-      //   {
-      //     status: 200,
-      //   }
-      // );
-
-      return NextResponse.json({
-        success: false,
-        message: "Post already saved",
-      }, {
-        status: 400
-      })
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Post already saved",
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
     user.saved.push(postId);
@@ -101,7 +91,7 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         message: "Post saved successfully",
-        data : user.saved
+        data: user.saved,
       },
       { status: 200 }
     );
