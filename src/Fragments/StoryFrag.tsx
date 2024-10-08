@@ -10,7 +10,7 @@ import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
 import StoryPreview from "./StoryPreview";
 import { User } from "@/model/User";
 
-const StoryFrag = ({user} : {user  : User}) => {
+const StoryFrag = ({user} : {user  : User | undefined}) => {
   const [isOpenCreateStory, setIsOpenCreateStory] = useState<boolean>(false);
   const [openStoryPreview, setOpenStoryPreview] = useState<boolean>(false);
 

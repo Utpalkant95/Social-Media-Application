@@ -38,9 +38,9 @@ export default function PostHeader({ post }: PostHeaderProps) {
           <span className="text-xs capitalize">{post.location}</span>
         </div>
       </div>
-      <Button variant="ghost" size="icon">
+      {/* <Button variant="ghost" size="icon">
         <MoreHorizontal className="h-4 w-4" />
-      </Button>
+      </Button> */}
     </div>
   );
 }

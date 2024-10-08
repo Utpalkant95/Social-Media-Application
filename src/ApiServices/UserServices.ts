@@ -5,6 +5,7 @@ import { z } from "zod";
 import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
 import { Post } from "@/app/api/home-page-post/route";
 import { IrecommendedUser } from "@/app/api/user/recommendUser/route";
+import { User } from "@/model/User";
 
 export const updateUserProfileImage = async (file: FormData) => {
   const res = await axios.post(
@@ -18,7 +19,7 @@ export const getSignleUserData = async (userName: string) => {
   const res = await axios.get(
     `http://localhost:3000/api/user/user-by-userName?userName=${userName}`
   );
-  return res.data;
+  return res.data.data as User;
 };
 
 export const getSearchedUsers = async ({

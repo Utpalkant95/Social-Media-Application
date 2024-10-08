@@ -39,7 +39,7 @@ export default function PostFooter({
             )}
           </div>
           <MessageCircle className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" />
-          <Send className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" />
+          {/* <Send className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" /> */}
         </div>
         <div>
           {isPostSaved ? (
