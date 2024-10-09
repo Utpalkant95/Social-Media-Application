@@ -8,9 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getStories } from "@/ApiServices/UserServices";
 import { GroupedStories } from "@/app/api/update/Story/get-stories/route";
 import StoryPreview from "./StoryPreview";
-import { IUserInfo } from "@/helpers/userInfo";
+import { User } from "@/model/User";
 
-const StoryFrag = ({user} : {user : IUserInfo | null}) => {
+const StoryFrag = ({user} : {user  : User | undefined}) => {
   const [isOpenCreateStory, setIsOpenCreateStory] = useState<boolean>(false);
   const [openStoryPreview, setOpenStoryPreview] = useState<boolean>(false);
 
@@ -27,14 +27,15 @@ const StoryFrag = ({user} : {user : IUserInfo | null}) => {
             className="flex flex-col items-center space-y-1 relative cursor-pointer"
             onClick={() => setIsOpenCreateStory(true)}
           >
-            <Avatar className="w-16 h-16 border-2 border-pink-500 p-1">
+            <Avatar className="w-16 h-16 border-2 border-pink-500">
               <AvatarImage
                 src={user?.profileImage}
                 alt={`User `}
+                className="rounded-full w-full h-full object-cover"
               />
               <AvatarFallback>U 1</AvatarFallback>
             </Avatar>
-            <span className="text-xs">{user?.username}</span>
+            <span className="text-xs">{user?.userName}</span>
             <div className="absolute bottom-5 right-1 w-4 h-4 rounded-full overflow-hidden bg-blue-500">
               <IoAddSharp className="text-white" size={16} />
             </div>

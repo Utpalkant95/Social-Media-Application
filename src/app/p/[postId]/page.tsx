@@ -1,4 +1,9 @@
 "use client";
+import { getAllPosts } from "@/ApiServices/PostServices";
+import { PostViewFrag } from "@/Fragments";
+import { decodeToken, IUserInfo } from "@/helpers/userInfo";
+import { User } from "@/model/User";
+import { useQuery } from "@tanstack/react-query";
 // import { DialogSheet, GroupAvatars } from "@/components";
 // import React, { useState } from "react";
 // import { useRouter } from "next/navigation";
@@ -145,63 +150,44 @@
 
 // export default Page;
 
-
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// Simulating car data fetching from a server
-const fetchCarData = async (id: string) => {
-  const cars = [
-    { id: "1", name: "Car 1", description: "This is car 1 description." },
-    { id: "2", name: "Car 2", description: "This is car 2 description." },
-    { id: "3", name: "Car 3", description: "This is car 3 description." },
-  ];
-  return cars.find((car) => car.id === id);
-};
-
 const CarDetailPage = ({ params }: { params: { postId: string } }) => {
+  const user: IUserInfo | null = decodeToken();
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number>(0);
   const router = useRouter();
-  const [car, setCar] = useState<any>(null);
 
-  const cars = ["1", "2", "3"]; // Only car IDs are needed for navigation
+  const { data } = useQuery({
+    queryKey: ["posts", user?.username],
+    queryFn: () => getAllPosts(user?.username as string),
+  });
 
   useEffect(() => {
-    // Fetch car data based on postId
-    const loadCarData = async () => {
-      const data = await fetchCarData(params.postId);
-      setCar(data);
-    };
-    loadCarData();
-  }, [params.postId]);
-
-  const currentIndex = cars.indexOf(params.postId);
-
-  const goToNextCar = () => {
-    if (currentIndex < cars.length - 1) {
-      router.push(`/p/${cars[currentIndex + 1]}`);
-    }
-  };
-
-  const goToPreviousCar = () => {
-    if (currentIndex > 0) {
-      router.push(`/p/${cars[currentIndex - 1]}`);
-    }
-  };
-
-  if (!car) {
-    return <div>Loading...</div>;
-  }
+    const selectedIndex = data?.findIndex((post) => post._id === params.postId);
+    setSelectedPostIndex(selectedIndex || 0);
+  }, [selectedPostIndex]);
 
   return (
     <div>
-      <button onClick={goToPreviousCar} disabled={currentIndex === 0}>
+      {/* <button onClick={goToPreviousCar} disabled={currentIndex === 0}>
         Left
       </button>
       <h1>{car.name}</h1>
       <p>{car.description}</p>
       <button onClick={goToNextCar} disabled={currentIndex === cars.length - 1}>
         Right
-      </button>
+      </button> */}
+
+      <PostViewFrag
+        posts={data}
+        selectedIndex={selectedPostIndex}
+        onClose={() => {
+          setSelectedPostIndex(0);
+          router.back();
+        }}
+        setSelectedPostIndex={setSelectedPostIndex}
+      />
     </div>
   );
 };

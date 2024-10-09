@@ -5,10 +5,12 @@ import {
 } from "@/helpers/userInfo";
 import dbConnect from "@/lib/dbConnect";
 import UserModel, { User } from "@/model/User";
+import PostModel from "@/model/Post"; // If needed for checking post existence
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(request: NextRequest) {
   await dbConnect();
+
   try {
     const url = new URL(request.url);
     const postId = url.searchParams.get("postId");
@@ -35,7 +37,7 @@ export async function DELETE(request: NextRequest) {
         { status: 401 }
       );
     }
-    
+
     if (!postId) {
       return NextResponse.json(
         {
@@ -45,8 +47,12 @@ export async function DELETE(request: NextRequest) {
         { status: 400 }
       );
     }
+    
+    const [user , post] = await Promise.all([
+      UserModel.findById(primaryUser.userId),
+      PostModel.findById(postId),
+    ]);
 
-    const user: User | null = await UserModel.findById(primaryUser.userId);
     if (!user) {
       return NextResponse.json(
         {
@@ -57,31 +63,46 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Check if post is actually saved
-    if (!user.saved.includes(postId)) {
+    // Ensure post exists if you fetched it
+    if (!post) {
       return NextResponse.json(
         {
           success: false,
-          message: "Post not found in saved list",
+          message: "Post not found",
         },
         { status: 404 }
       );
     }
 
-    // Remove post from saved
-    user.saved = user.saved.filter((id) => id != postId);
+    // Check if post is actually liked by the user
+    const hasLiked = user.liked.includes(postId);
+    if (!hasLiked) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Post not found in liked list",
+        },
+        { status: 404 }
+      );
+    }
+
+    // Remove post from liked list and save user
+    user.liked  = user.liked.filter((id : string) => id !== postId);
     await user.save();
+
+    // Also, update the post's likeCount if necessary
+    post.likeCount = post.likeCount.filter((id : string) => id.toString() !== user._id.toString());
+    await post.save();
 
     return NextResponse.json(
       {
         success: true,
-        message: "Post unsaved successfully",
-        data: user.saved,
+        message: "Post unliked successfully",
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error while removing saved post", error);
+    console.error("Error while unliking the post", error);
     return NextResponse.json(
       {
         success: false,

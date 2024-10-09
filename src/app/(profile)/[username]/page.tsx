@@ -11,16 +11,15 @@ const Page = ({ params }: { params: { username: string } }) => {
   const { data } = useQuery({
     queryKey: ["user", username],
     queryFn: () => getSignleUserData(username),
+    enabled: !!username,
   });
-
-  const userData: User = data?.data;
 
   const ownViewer = user?.username === username;
 
   return (
     <div className="max-w-4xl mx-auto w-full">
-      <ProfileDetailFrag ownViewer={ownViewer} user={userData}/>
-      <ProfilePostSectionFrag  user={userData} username={username}/>
+      <ProfileDetailFrag ownViewer={ownViewer} user={data as User}/>
+      <ProfilePostSectionFrag  user={data as User} username={username}/>
     </div>
   );
 };

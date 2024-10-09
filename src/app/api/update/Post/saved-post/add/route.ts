@@ -4,6 +4,7 @@ import {
   IUserInfo,
 } from "@/helpers/userInfo";
 import dbConnect from "@/lib/dbConnect";
+import PostModel, { Post } from "@/model/Post";
 import UserModel, { User } from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -57,35 +58,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (user.saved.includes(postId)) {
-      // user.saved = user.saved.filter((id) => id !== postId);
-      // await user.save();
-      // return NextResponse.json(
-      //   {
-      //     success: true,
-      //     message: "Post unsaved successfully",
-      //   },
-      //   {
-      //     status: 200,
-      //   }
-      // );
+    const post: Post | null = await PostModel.findById(postId);
 
-      return NextResponse.json({
-        success: false,
-        message: "Post already saved",
-      }, {
-        status: 400
-      })
+    if (!post) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Post not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    if (user.saved.includes(postId)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Post already saved",
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
     user.saved.push(postId);
+    post.savedCount.push(user._id);
+    await post.save();
     await user.save();
 
     return NextResponse.json(
       {
         success: true,
         message: "Post saved successfully",
-        data : user.saved
+        data: user.saved,
       },
       { status: 200 }
     );

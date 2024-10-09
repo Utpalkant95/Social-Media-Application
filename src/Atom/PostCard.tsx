@@ -6,11 +6,17 @@ import PostFooter from "./PostFooter";
 import { usePostMutations } from "@/hooks/usePostMutation";
 import { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { getSavedPostsForUser } from "@/ApiServices/PostServices";
+import {
+  getLikedPostsForUser,
+  getSavedPostsForUser,
+} from "@/ApiServices/PostServices";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PostCard() {
   const [savedPosts, setSavedPosts] = useState<string[]>([]);
-  const { data: posts } = useQuery({
+  const [likedPosts, setLikedPosts] = useState<string[]>([]);
+
+  const { data: posts, isLoading } = useQuery({
     queryKey: ["getHomePageContent"],
     queryFn: getHomePageContent,
   });
@@ -20,13 +26,27 @@ export default function PostCard() {
     queryFn: getSavedPostsForUser,
   });
 
-  const { likePostMutation, savePostMutation, unsavePostMutation } =
-    usePostMutations();
+  const { data: likedPostArr, refetch: likedPostRefetch } = useQuery({
+    queryKey: ["get liked post"],
+    queryFn: getLikedPostsForUser,
+  });
+
+  const {
+    savePostMutation,
+    unsavePostMutation,
+    likePostMutation,
+    unLikePostMutation,
+  } = usePostMutations();
 
   useEffect(() => {
     refetch();
     setSavedPosts(savedPostArr || []);
-  }, [savedPostArr, savePostMutation, unsavePostMutation]);
+  }, [likePostMutation, unsavePostMutation]);
+
+  useEffect(() => {
+    likedPostRefetch();
+    setLikedPosts(likedPostArr || []);
+  }, [savePostMutation, unLikePostMutation]);
 
   const handleBookmarkClick = debounce((postId: string) => {
     if (savedPosts.includes(postId)) {
@@ -36,10 +56,28 @@ export default function PostCard() {
     }
   }, 1000);
 
+  const handleLikeClick = debounce((postId: string) => {
+    if (likedPosts.includes(postId)) {
+      unLikePostMutation.mutate({ postId });
+    } else {
+      likePostMutation.mutate({ postId });
+    }
+  }, 1000);
+
   return (
     <div className="flex flex-col gap-y-4">
+      {isLoading && (
+        <div className="w-full max-w-md mx-auto flex flex-col gap-y-1">
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+        </div>
+      )}
+
       {posts?.map((post) => {
         const isPostSaved = savedPosts.includes(post._id);
+        const isPostLiked = likedPosts.includes(post._id);
         return (
           <div className="w-full max-w-md mx-auto" key={post._id}>
             <PostHeader post={post} />
@@ -53,8 +91,9 @@ export default function PostCard() {
             <PostFooter
               post={post}
               isPostSaved={isPostSaved}
+              isPostLiked={isPostLiked}
               handleBookmarkClick={handleBookmarkClick}
-              likePostMutation={(postId) => likePostMutation.mutate({ postId })}
+              handleLikeClick={handleLikeClick}
             />
           </div>
         );

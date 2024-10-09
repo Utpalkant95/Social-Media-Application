@@ -25,7 +25,7 @@ export default function PostHeader({ post }: PostHeaderProps) {
           />
         </div>
         <div className="flex flex-col">
-          <Link href={`#`}>
+          <Link href={`/${post.ownerId.userName}`}>
             <div className="flex items-center text-sm font-medium leading-none">
               {post.ownerId.userName} <LuDot />
               <span className="text-xs font-light">
@@ -38,9 +38,9 @@ export default function PostHeader({ post }: PostHeaderProps) {
           <span className="text-xs capitalize">{post.location}</span>
         </div>
       </div>
-      <Button variant="ghost" size="icon">
+      {/* <Button variant="ghost" size="icon">
         <MoreHorizontal className="h-4 w-4" />
-      </Button>
+      </Button> */}
     </div>
   );
 }

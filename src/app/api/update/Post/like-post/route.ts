@@ -4,8 +4,8 @@ import {
   IUserInfo,
 } from "@/helpers/userInfo";
 import dbConnect from "@/lib/dbConnect";
-import PostModel from "@/model/Post";
-import UserModel from "@/model/User";
+import PostModel, { Post } from "@/model/Post";
+import UserModel, { User } from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -15,10 +15,7 @@ export async function POST(request: NextRequest) {
     const cookieString = request.headers.get("cookie");
     const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
     const userByToken: IUserInfo | null = decodeToken(accessToken as string);
-    const {postId} = await request.json(); 
-
-    console.log("postId", postId);
-    
+    const { postId } = await request.json();
 
     if (!postId) {
       return NextResponse.json(
@@ -44,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await UserModel.findById(userByToken.userId);
+    const user: User | null = await UserModel.findById(userByToken.userId);
 
     if (!user) {
       return NextResponse.json(
@@ -58,7 +55,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const post = await PostModel.findById(postId);
+    const post: Post | null = await PostModel.findById(postId);
 
     if (!post) {
       return NextResponse.json(
@@ -75,22 +72,27 @@ export async function POST(request: NextRequest) {
     const hasLiked = post.likeCount.includes(user._id);
 
     if (hasLiked) {
-      // If the user has already liked, we will remove the like
-      post.likeCount = post.likeCount.filter(
-        (userId: string) => userId.toString() !== user._id.toString()
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Post already liked",
+        },
+        {
+          status: 400,
+        }
       );
     } else {
       post.likeCount.push(user._id);
+      user.liked.push(postId);
     }
 
     await post.save();
+    await user.save();
 
     return NextResponse.json(
       {
         success: true,
-        message: hasLiked
-          ? "Post unliked successfully"
-          : "Post liked successfully",
+        message: "Post liked successfully",
       },
       {
         status: 200,
