@@ -7,6 +7,8 @@ import { ReactNode, useRef, useState, useMemo, useCallback } from "react";
 import { DialogSheet, PopOver, SlideSheet } from "@/components";
 import logo from "../../../public/snapify-favicon-white.svg";
 import { decodeToken } from "@/helpers/userInfo";
+import { useQuery } from "@tanstack/react-query";
+import { getSignleUserData } from "@/ApiServices/UserServices";
 
 const Sidebar = () => {
   const [activeId, setActiveId] = useState<number>(0);
@@ -16,6 +18,12 @@ const Sidebar = () => {
   const anchorRef = useRef<HTMLButtonElement>(null);
   const user = decodeToken();
   const username = user?.username;
+
+  const { data } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => getSignleUserData(username as string),
+    enabled: !!username,
+  });
 
   // Call the hook at the top level
   const SidebarComponent = useSidebarCompFactory({ key: activeId });
@@ -74,13 +82,6 @@ const Sidebar = () => {
               Snapify
             </span>
           )}
-          {/* <Image
-            src={logo}
-            alt="logo"
-            width={40}
-            height={40}
-            className={`${isDrawerOpen ? "block" : "hidden"}`}
-          /> */}
           {isDrawerOpen ? (
             <Image
               style={isDrawerOpen ? { display: "block" } : { display: "none" }}
@@ -88,7 +89,6 @@ const Sidebar = () => {
               alt="logo"
               width={40}
               height={40}
-              // className={`${isDrawerOpen ? "block" : "hidden"}`}
             />
           ) : (
             <Image
@@ -107,7 +107,7 @@ const Sidebar = () => {
               const isActive = activeId === item.id;
               const dynamicPath =
                 item.name === "profile"
-                  ? `/${username}`
+                  ? `/${data?.userName}`
                   : item.path && item.path;
               return (
                 <li
@@ -144,16 +144,18 @@ const Sidebar = () => {
                             : ""
                         } `}
                       >
-                        <Image
-                          src={
-                            item.img ||
-                            "https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
-                          }
-                          alt="profile"
-                          width={28}
-                          height={28}
-                          className="rounded-full overflow-hidden transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                        />
+                        <div className="w-7 h-7 rounded-full overflow-hidden">
+                          <Image
+                            src={
+                              data?.profileImage ||
+                              "https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
+                            }
+                            alt="profile"
+                            width={28}
+                            height={28}
+                            className="rounded-full object-cover overflow-hidden transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
+                          />
+                        </div>
                       </div>
                     )}
                     {isDrawerOpen ? (

@@ -3,9 +3,8 @@ import { explorePosts } from "@/ApiServices/PostServices";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import React, { useState } from "react";
 import { FaComment, FaHeart } from "react-icons/fa";
-import {PostViewFrag} from "@/Fragments";
+import Link from "next/link";
 
 const Page = () => {
   const { data, isLoading } = useQuery({
@@ -13,18 +12,6 @@ const Page = () => {
     queryFn: explorePosts,
   });
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
-
-  const handleOpenDialogPost = (index: number) => {
-    setSelectedPostIndex(index);
-    setIsDialogOpen(true);
-  };
-
-  const handleCloseDialogPost = () => {
-    setIsDialogOpen(false);
-    setSelectedPostIndex(null);
-  };
   return (
     <div className="max-w-6xl mx-auto w-full pt-8">
       {isLoading && (
@@ -38,12 +25,11 @@ const Page = () => {
         </div>
       )}
       <div className="grid grid-cols-3 gap-1">
-        {data?.map((item, index) => (
-          // <Link href={`p/${item._id}`} key={item._id}>
+        {data?.map((item) => (
+          <Link href={`p/${item._id}`} key={item._id}>
             <div
               className="h-96 relative cursor-pointer"
               key={item._id}
-              onClick={() => handleOpenDialogPost(index)}
             >
               <Image
                 src={item.file}
@@ -65,19 +51,9 @@ const Page = () => {
                 </div>
               </div>
             </div>
-          // </Link>
+           </Link>
         ))}
       </div>
-
-      {isDialogOpen && selectedPostIndex !== null && (
-        <PostViewFrag
-          posts={data}
-          selectedIndex={selectedPostIndex}
-          onClose={handleCloseDialogPost}
-          setSelectedPostIndex={setSelectedPostIndex}
-        />
-      )}
-
     </div>
   );
 };
