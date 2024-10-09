@@ -6,13 +6,17 @@ import PostFooter from "./PostFooter";
 import { usePostMutations } from "@/hooks/usePostMutation";
 import { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { getLikedPostsForUser, getSavedPostsForUser } from "@/ApiServices/PostServices";
+import {
+  getLikedPostsForUser,
+  getSavedPostsForUser,
+} from "@/ApiServices/PostServices";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PostCard() {
   const [savedPosts, setSavedPosts] = useState<string[]>([]);
   const [likedPosts, setLikedPosts] = useState<string[]>([]);
 
-  const { data: posts } = useQuery({
+  const { data: posts, isLoading } = useQuery({
     queryKey: ["getHomePageContent"],
     queryFn: getHomePageContent,
   });
@@ -22,23 +26,27 @@ export default function PostCard() {
     queryFn: getSavedPostsForUser,
   });
 
-  const {data : likedPostArr, refetch : likedPostRefetch} = useQuery({
+  const { data: likedPostArr, refetch: likedPostRefetch } = useQuery({
     queryKey: ["get liked post"],
-    queryFn : getLikedPostsForUser
-  })
+    queryFn: getLikedPostsForUser,
+  });
 
-  const {savePostMutation, unsavePostMutation, likePostMutation, unLikePostMutation } =
-    usePostMutations();
+  const {
+    savePostMutation,
+    unsavePostMutation,
+    likePostMutation,
+    unLikePostMutation,
+  } = usePostMutations();
 
   useEffect(() => {
     refetch();
     setSavedPosts(savedPostArr || []);
-  }, [ likePostMutation, unsavePostMutation]);
+  }, [likePostMutation, unsavePostMutation]);
 
   useEffect(() => {
     likedPostRefetch();
     setLikedPosts(likedPostArr || []);
-  }, [ savePostMutation, unLikePostMutation]);
+  }, [savePostMutation, unLikePostMutation]);
 
   const handleBookmarkClick = debounce((postId: string) => {
     if (savedPosts.includes(postId)) {
@@ -48,7 +56,6 @@ export default function PostCard() {
     }
   }, 1000);
 
-
   const handleLikeClick = debounce((postId: string) => {
     if (likedPosts.includes(postId)) {
       unLikePostMutation.mutate({ postId });
@@ -57,11 +64,17 @@ export default function PostCard() {
     }
   }, 1000);
 
-  console.log("likedPostArr", likedPostArr);
-  
-
   return (
     <div className="flex flex-col gap-y-4">
+      {isLoading && (
+        <div className="w-full max-w-md mx-auto flex flex-col gap-y-1">
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+        </div>
+      )}
+
       {posts?.map((post) => {
         const isPostSaved = savedPosts.includes(post._id);
         const isPostLiked = likedPosts.includes(post._id);
@@ -78,9 +91,9 @@ export default function PostCard() {
             <PostFooter
               post={post}
               isPostSaved={isPostSaved}
-              isPostLiked = {isPostLiked}
+              isPostLiked={isPostLiked}
               handleBookmarkClick={handleBookmarkClick}
-              handleLikeClick = {handleLikeClick}
+              handleLikeClick={handleLikeClick}
             />
           </div>
         );
