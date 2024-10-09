@@ -4,27 +4,13 @@ import { EmptyComp } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import React, { useState } from "react";
 import { CiCamera } from "react-icons/ci";
 import { FaComment } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa";
-import { PostViewFrag } from "@/Fragments";
+import { useRouter } from "next/navigation";
 
 const ProfilePostAtom = ({ userName }: { userName: string }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(
-    null
-  );
-
-  const handleOpenDialogPost = (index: number) => {
-    setSelectedPostIndex(index);
-    setIsDialogOpen(true);
-  };
-
-  const handleCloseDialogPost = () => {
-    setIsDialogOpen(false);
-    setSelectedPostIndex(null);
-  };
+  const router = useRouter();
   const { data, isLoading } = useQuery({
     queryKey: ["posts", userName],
     queryFn: () => getAllPosts(userName),
@@ -55,7 +41,7 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
             <div
               className="h-96 relative cursor-pointer"
               key={post.id}
-              onClick={() => handleOpenDialogPost(index)}
+              onClick={() => router.push(`/p/${post._id}`)}
             >
               <Image
                 src={post.file}
@@ -80,15 +66,6 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
           );
         })}
       </div>
-
-      {isDialogOpen && selectedPostIndex !== null && (
-        <PostViewFrag
-          posts={data}
-          selectedIndex={selectedPostIndex}
-          onClose={handleCloseDialogPost}
-          setSelectedPostIndex={setSelectedPostIndex}
-        />
-      )}
     </>
   );
 };

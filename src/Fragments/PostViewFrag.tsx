@@ -1,6 +1,6 @@
 "use client";
 import { DialogSheet, GroupAvatars, PopOver } from "@/components";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 import { addSavedPost } from "@/ApiServices/PostServices";
@@ -15,9 +15,9 @@ import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
-import { PrimaryPopOver } from "@/components/PrimaryPopOver";
 import PostCardFun from "./PostCardFun";
 import { PrimaryDialog } from "@/components/PrimaryDialog";
+import { useRouter } from "next/navigation";
 
 const PostViewFrag = ({
   posts,
@@ -34,6 +34,7 @@ const PostViewFrag = ({
   const [text, setText] = useState<string>("");
   const data: IAllPost | undefined = posts?.[selectedIndex];
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
 
   const { mutate } = useMutation({
     mutationKey: ["add saved post"],
@@ -62,7 +63,10 @@ const PostViewFrag = ({
       <DialogSheet isOpen={true} onClose={onClose}>
         <div className="w-full h-screen flex items-center justify-center gap-x-10">
           <Button
-            onClick={() => setSelectedPostIndex(selectedIndex - 1)}
+            onClick={() => {
+              router.push(`/p/${posts?.[selectedIndex - 1]?._id}`);
+              setSelectedPostIndex(selectedIndex - 1);
+            }}
             disabled={selectedIndex === 0}
           >
             Left
@@ -144,7 +148,10 @@ const PostViewFrag = ({
             </div>
           </div>
           <Button
-            onClick={() => setSelectedPostIndex(selectedIndex + 1)}
+            onClick={() => {
+              router.push(`/p/${posts?.[selectedIndex + 1]?._id}`);
+              setSelectedPostIndex(selectedIndex + 1);
+            }}
             disabled={selectedIndex === (posts?.length as number) - 1}
           >
             Right
