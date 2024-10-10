@@ -4,6 +4,8 @@ import UserModel from "@/model/User";
 import PostModel from "@/model/Post";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export interface Post {
   _id: string;
   altText: string;

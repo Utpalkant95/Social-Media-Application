@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import UserModel from "@/model/User";
 import PostModel from "@/model/Post";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request : NextRequest, response: NextResponse) {
   await dbConnect();
 

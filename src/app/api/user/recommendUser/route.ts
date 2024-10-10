@@ -3,6 +3,8 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export interface IrecommendedUser {
     _id: string;
     profileImage: string;

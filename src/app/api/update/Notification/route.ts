@@ -3,6 +3,8 @@ import NotificationModel from "@/model/Notifications";
 import UserModel from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 // Helper function for error responses
 const createErrorResponse = (message: string, status: number) => {
   return NextResponse.json(
