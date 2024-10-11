@@ -18,21 +18,23 @@ import { Button } from "@/components/ui/button";
 import PostCardFun from "./PostCardFun";
 import { PrimaryDialog } from "@/components/PrimaryDialog";
 import { useRouter } from "next/navigation";
+import { Post } from "@/app/api/home-page-post/route";
 
 const PostViewFrag = ({
   posts,
+  type,
   selectedIndex,
   onClose,
   setSelectedPostIndex,
 }: {
-  posts: IAllPost[] | undefined;
+  posts: Post[] | undefined;
   selectedIndex: number;
+  type: string | null;
   onClose: () => void;
   setSelectedPostIndex: (index: number) => void;
 }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
-  const data: IAllPost | undefined = posts?.[selectedIndex];
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
@@ -58,14 +60,20 @@ const PostViewFrag = ({
     setShowEmojiPicker(false);
   };
 
+  const post = posts && posts[selectedIndex];
+
   return (
     <>
       <DialogSheet isOpen={true} onClose={onClose}>
         <div className="w-full h-screen flex items-center justify-center gap-x-10">
           <Button
             onClick={() => {
-              router.push(`/p/${posts?.[selectedIndex - 1]?._id}`);
-              setSelectedPostIndex(selectedIndex - 1);
+              if (post && selectedIndex > 0) {
+                const prevIndex = selectedIndex - 1;
+                const prevPost = posts?.[prevIndex];
+                setSelectedPostIndex(prevIndex); // Update the index state
+                router.push(`/p/${prevPost?._id}?type=${type}`); // Update the post ID in the URL
+              }
             }}
             disabled={selectedIndex === 0}
           >
@@ -75,8 +83,8 @@ const PostViewFrag = ({
             <div className="grid grid-cols-2 h-full bg-white">
               <div className="h-full overflow-hidden">
                 <Image
-                  src={data?.file as string}
-                  alt={data?.altText as string}
+                  src={post?.file as string}
+                  alt={post?.altText as string}
                   width={576}
                   height={1}
                   className="w-full h-full object-cover"
@@ -88,21 +96,24 @@ const PostViewFrag = ({
                   <div className="flex items-center gap-x-3">
                     <Avatar className="w-8 h-8">
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
+                        src={
+                          post?.ownerId.profileImage ||
+                          "https://github.com/shadcn.png"
+                        }
                         alt="@shadcn"
                       />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
-                    <h2>USERNAME</h2>
+                    <h2>{post?.ownerId.userName}</h2>
                   </div>
-                  <Button onClick={()=>setOpen(true)}>
+                  <Button onClick={() => setOpen(true)}>
                     <HiDotsHorizontal />
                   </Button>
                 </div>
 
                 {/* Post details */}
                 <div className="notification section px-4 flex-1 border-b">
-                  {data?.description}
+                  {post?.description}
                 </div>
 
                 {/* Live, save, and comment section */}
@@ -149,8 +160,12 @@ const PostViewFrag = ({
           </div>
           <Button
             onClick={() => {
-              router.push(`/p/${posts?.[selectedIndex + 1]?._id}`);
-              setSelectedPostIndex(selectedIndex + 1);
+              if (post && selectedIndex < (posts?.length as number) - 1) {
+                const nextIndex = selectedIndex + 1;
+                const nextPost = posts?.[nextIndex];
+                setSelectedPostIndex(nextIndex); // Update the index state
+                router.push(`/p/${nextPost?._id}?type=${type}`); // Update the post ID in the URL
+              }
             }}
             disabled={selectedIndex === (posts?.length as number) - 1}
           >
@@ -160,7 +175,7 @@ const PostViewFrag = ({
       </DialogSheet>
 
       <PrimaryDialog isOpen={open}>
-        <PostCardFun setIsOpen = {setOpen} post={data}/>
+        <PostCardFun setIsOpen={setOpen} post={post} />
       </PrimaryDialog>
     </>
   );

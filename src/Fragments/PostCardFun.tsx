@@ -1,6 +1,7 @@
 "use client";
 import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { deletePost } from "@/ApiServices/PostServices";
+import { Post } from "@/app/api/home-page-post/route";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
@@ -8,7 +9,7 @@ import { Dispatch, SetStateAction } from "react";
 
 interface IPostCardFun {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  post : IAllPost | undefined;
+  post : Post | undefined;
 }
 
 const PostCardFun = ({ setIsOpen, post }: IPostCardFun) => {
