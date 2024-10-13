@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IAllPost, ISearchedUser } from "./interfaces/response";
+import { ISearchedUser } from "./interfaces/response";
 import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
 import { z } from "zod";
 import { GroupedStories } from "@/app/api/update/Story/get-stories/route";

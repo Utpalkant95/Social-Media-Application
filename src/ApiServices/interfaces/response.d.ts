@@ -16,3 +16,14 @@ export interface ISearchedUser {
     profileImage : string;
     followersCount : string;
 }
+
+export interface IComment {
+    _id: string;
+    senderId: string;
+    senderUsername: string;
+    senderProfileImage: string;
+    comment: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }

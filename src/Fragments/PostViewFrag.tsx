@@ -2,8 +2,12 @@
 import { DialogSheet, GroupAvatars, PopOver } from "@/components";
 import React, { useState } from "react";
 import Image from "next/image";
-import { useMutation } from "@tanstack/react-query";
-import { addSavedPost } from "@/ApiServices/PostServices";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  addComment,
+  addSavedPost,
+  getComment,
+} from "@/ApiServices/PostServices";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaRegComment, FaRegHeart } from "react-icons/fa";
@@ -11,30 +15,41 @@ import { CiSaveDown2 } from "react-icons/ci";
 import { BsEmojiSmile } from "react-icons/bs";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { Textarea } from "@/components/ui/textarea";
-import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
+import { IComment, IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
 import PostCardFun from "./PostCardFun";
 import { PrimaryDialog } from "@/components/PrimaryDialog";
 import { useRouter } from "next/navigation";
+import { Post } from "@/app/api/home-page-post/route";
+import RenderCommentFrag from "./RenderCommentFrag";
 
 const PostViewFrag = ({
   posts,
+  type,
   selectedIndex,
   onClose,
   setSelectedPostIndex,
 }: {
-  posts: IAllPost[] | undefined;
+  posts: Post[] | undefined;
   selectedIndex: number;
+  type: string | null;
   onClose: () => void;
   setSelectedPostIndex: (index: number) => void;
 }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
-  const data: IAllPost | undefined = posts?.[selectedIndex];
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+
+  const post = posts && posts[selectedIndex];
+
+  const { data: postComments , refetch : refetchComments} = useQuery({
+    queryKey: ["get comment of post", post?._id],
+    queryFn: () => getComment({ postId: post?._id as string }),
+    enabled: !!post?._id,
+  });
 
   const { mutate } = useMutation({
     mutationKey: ["add saved post"],
@@ -53,19 +68,41 @@ const PostViewFrag = ({
     },
   });
 
+  const { mutate: addCommentMutation } = useMutation({
+    mutationKey: ["post comment"],
+    mutationFn: addComment,
+    onSuccess: (data: IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "success",
+        autoHideDuration: 2000,
+      });
+      setText("");
+      refetchComments();
+    },
+    onError: (error: AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(error?.response?.data?.message, {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    },
+  });
+
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     setText((prevText) => prevText + emojiData.emoji);
     setShowEmojiPicker(false);
   };
-
   return (
     <>
       <DialogSheet isOpen={true} onClose={onClose}>
         <div className="w-full h-screen flex items-center justify-center gap-x-10">
           <Button
             onClick={() => {
-              router.push(`/p/${posts?.[selectedIndex - 1]?._id}`);
-              setSelectedPostIndex(selectedIndex - 1);
+              if (post && selectedIndex > 0) {
+                const prevIndex = selectedIndex - 1;
+                const prevPost = posts?.[prevIndex];
+                setSelectedPostIndex(prevIndex); 
+                router.push(`/p/${prevPost?._id}?type=${type}`);
+              }
             }}
             disabled={selectedIndex === 0}
           >
@@ -75,8 +112,8 @@ const PostViewFrag = ({
             <div className="grid grid-cols-2 h-full bg-white">
               <div className="h-full overflow-hidden">
                 <Image
-                  src={data?.file as string}
-                  alt={data?.altText as string}
+                  src={post?.file as string}
+                  alt={post?.altText as string}
                   width={576}
                   height={1}
                   className="w-full h-full object-cover"
@@ -88,21 +125,31 @@ const PostViewFrag = ({
                   <div className="flex items-center gap-x-3">
                     <Avatar className="w-8 h-8">
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
+                        src={
+                          post?.ownerId.profileImage ||
+                          "https://github.com/shadcn.png"
+                        }
                         alt="@shadcn"
                       />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
-                    <h2>USERNAME</h2>
+                    <h2>{post?.ownerId.userName}</h2>
                   </div>
-                  <Button onClick={()=>setOpen(true)}>
+                  <Button onClick={() => setOpen(true)}>
                     <HiDotsHorizontal />
                   </Button>
                 </div>
 
                 {/* Post details */}
                 <div className="notification section px-4 flex-1 border-b">
-                  {data?.description}
+                  {/* {post?.description} */}
+                  <ul className="h-full flex flex-col gap-y-4 mt-4">
+                    {postComments?.map((comment: IComment) => {
+                      return (
+                        <RenderCommentFrag comment={comment} postId = {post?._id} key={comment._id} refetchComments={refetchComments}/>
+                      );
+                    })}
+                  </ul>
                 </div>
 
                 {/* Live, save, and comment section */}
@@ -140,7 +187,15 @@ const PostViewFrag = ({
                     className="w-full border-none focus:outline-none"
                     style={{ resize: "none" }}
                   />
-                  <span className="cursor-pointer text-sm font-medium">
+                  <span
+                    className="cursor-pointer text-sm font-medium"
+                    onClick={() =>
+                      addCommentMutation({
+                        comment: text,
+                        postId: post?._id as string,
+                      })
+                    }
+                  >
                     Post
                   </span>
                 </div>
@@ -149,8 +204,12 @@ const PostViewFrag = ({
           </div>
           <Button
             onClick={() => {
-              router.push(`/p/${posts?.[selectedIndex + 1]?._id}`);
-              setSelectedPostIndex(selectedIndex + 1);
+              if (post && selectedIndex < (posts?.length as number) - 1) {
+                const nextIndex = selectedIndex + 1;
+                const nextPost = posts?.[nextIndex];
+                setSelectedPostIndex(nextIndex); // Update the index state
+                router.push(`/p/${nextPost?._id}?type=${type}`); // Update the post ID in the URL
+              }
             }}
             disabled={selectedIndex === (posts?.length as number) - 1}
           >
@@ -160,7 +219,7 @@ const PostViewFrag = ({
       </DialogSheet>
 
       <PrimaryDialog isOpen={open}>
-        <PostCardFun setIsOpen = {setOpen} post={data}/>
+        <PostCardFun setIsOpen={setOpen} post={post} />
       </PrimaryDialog>
     </>
   );
