@@ -87,7 +87,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Remove post from liked list and save user
-    user.liked  = user.liked.filter((id : string) => id !== postId);
+    user.liked  = user.liked.filter((id : string) => id != postId);
     await user.save();
 
     // Also, update the post's likeCount if necessary
