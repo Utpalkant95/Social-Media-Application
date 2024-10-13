@@ -3,6 +3,8 @@ import CommentModel from "@/model/Comment";
 import PostModel, { Post } from "@/model/Post";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   await dbConnect();
 
