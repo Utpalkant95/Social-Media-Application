@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IAllPost } from "./interfaces/response";
+import { IAllPost, IComment } from "./interfaces/response";
 import { Post } from "@/app/api/home-page-post/route";
 
 export const getAllPosts = async (userName: string) => {
@@ -144,11 +144,50 @@ export const getLikedPostsForUser = async () => {
   }
 };
 
-
 export const unLikeThePost = async (data: { postId: string }) => {
   try {
     const res = await axios.delete(
-      `http://localhost:3000/api/update/Post/unlike-post?postId=${data.postId}`,
+      `http://localhost:3000/api/update/Post/unlike-post?postId=${data.postId}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
+
+export const addComment = async (data: { postId: string; comment: string }) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:3000/api/update/Post/comment/add`,
+      data
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
+
+export const getComment = async (data: { postId: string }) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:3000/api/update/Post/comment/get?postId=${data.postId}`
+    );
+    return res.data.data as IComment[];
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
+
+export const deleteComment = async (data: {
+  postId: string;
+  commentId: string;
+}) => {
+  try {
+    const res = await axios.delete(
+      `http://localhost:3000/api/update/Post/comment/delete?postId=${data.postId}&commentId=${data.commentId}`
     );
     return res.data;
   } catch (error) {

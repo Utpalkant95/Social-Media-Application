@@ -1,5 +1,5 @@
 "use client";
-import { explorePosts, getAllPosts } from "@/ApiServices/PostServices";
+import { explorePosts } from "@/ApiServices/PostServices";
 import { getHomePageContent } from "@/ApiServices/UserServices";
 import { PostViewFrag } from "@/Fragments";
 import { useQuery } from "@tanstack/react-query";
@@ -27,13 +27,12 @@ const CarDetailPage = ({ params }: { params: { postId: string } }) => {
 
   useEffect(() => {
     if (data) {
-      const selectedIndex = data.findIndex((post) => post._id === params.postId);
+      const selectedIndex = data.findIndex(
+        (post) => post._id === params.postId
+      );
       setSelectedPostIndex(selectedIndex !== -1 ? selectedIndex : 0);
     }
   }, [params.postId, data]);
-  
-
-  const post = data?.[selectedPostIndex];
   return (
     <PostViewFrag
       posts={data}

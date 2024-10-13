@@ -6,6 +6,7 @@ export interface Post extends Document {
   file: string;
   likeCount: mongoose.Schema.Types.ObjectId[];
   savedCount : mongoose.Schema.Types.ObjectId[];
+  comments : mongoose.Schema.Types.ObjectId[];
   description: string;
   location: string;
   altText: string;
@@ -26,6 +27,7 @@ const postSchema: Schema<Post> = new Schema({
   hideComment: { type: Boolean, default: false },
   likeCount: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   savedCount: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  comments : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
   commentCount: { type: Number, default: 0 },
   shareCount: { type: Number, default: 0 },
 });

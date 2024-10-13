@@ -2,8 +2,12 @@
 import { DialogSheet, GroupAvatars, PopOver } from "@/components";
 import React, { useState } from "react";
 import Image from "next/image";
-import { useMutation } from "@tanstack/react-query";
-import { addSavedPost } from "@/ApiServices/PostServices";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  addComment,
+  addSavedPost,
+  getComment,
+} from "@/ApiServices/PostServices";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaRegComment, FaRegHeart } from "react-icons/fa";
@@ -11,7 +15,7 @@ import { CiSaveDown2 } from "react-icons/ci";
 import { BsEmojiSmile } from "react-icons/bs";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { Textarea } from "@/components/ui/textarea";
-import { IAllPost, IRESSignUpUser } from "@/ApiServices/interfaces/response";
+import { IComment, IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
@@ -19,6 +23,7 @@ import PostCardFun from "./PostCardFun";
 import { PrimaryDialog } from "@/components/PrimaryDialog";
 import { useRouter } from "next/navigation";
 import { Post } from "@/app/api/home-page-post/route";
+import RenderCommentFrag from "./RenderCommentFrag";
 
 const PostViewFrag = ({
   posts,
@@ -38,6 +43,14 @@ const PostViewFrag = ({
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
+  const post = posts && posts[selectedIndex];
+
+  const { data: postComments , refetch : refetchComments} = useQuery({
+    queryKey: ["get comment of post", post?._id],
+    queryFn: () => getComment({ postId: post?._id as string }),
+    enabled: !!post?._id,
+  });
+
   const { mutate } = useMutation({
     mutationKey: ["add saved post"],
     mutationFn: addSavedPost,
@@ -55,13 +68,29 @@ const PostViewFrag = ({
     },
   });
 
+  const { mutate: addCommentMutation } = useMutation({
+    mutationKey: ["post comment"],
+    mutationFn: addComment,
+    onSuccess: (data: IRESSignUpUser) => {
+      enqueueSnackbar(data && data.message, {
+        variant: "success",
+        autoHideDuration: 2000,
+      });
+      setText("");
+      refetchComments();
+    },
+    onError: (error: AxiosError<IRESSignUpUser>) => {
+      enqueueSnackbar(error?.response?.data?.message, {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    },
+  });
+
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     setText((prevText) => prevText + emojiData.emoji);
     setShowEmojiPicker(false);
   };
-
-  const post = posts && posts[selectedIndex];
-
   return (
     <>
       <DialogSheet isOpen={true} onClose={onClose}>
@@ -71,8 +100,8 @@ const PostViewFrag = ({
               if (post && selectedIndex > 0) {
                 const prevIndex = selectedIndex - 1;
                 const prevPost = posts?.[prevIndex];
-                setSelectedPostIndex(prevIndex); // Update the index state
-                router.push(`/p/${prevPost?._id}?type=${type}`); // Update the post ID in the URL
+                setSelectedPostIndex(prevIndex); 
+                router.push(`/p/${prevPost?._id}?type=${type}`);
               }
             }}
             disabled={selectedIndex === 0}
@@ -113,7 +142,14 @@ const PostViewFrag = ({
 
                 {/* Post details */}
                 <div className="notification section px-4 flex-1 border-b">
-                  {post?.description}
+                  {/* {post?.description} */}
+                  <ul className="h-full flex flex-col gap-y-4 mt-4">
+                    {postComments?.map((comment: IComment) => {
+                      return (
+                        <RenderCommentFrag comment={comment} postId = {post?._id} key={comment._id} refetchComments={refetchComments}/>
+                      );
+                    })}
+                  </ul>
                 </div>
 
                 {/* Live, save, and comment section */}
@@ -151,7 +187,15 @@ const PostViewFrag = ({
                     className="w-full border-none focus:outline-none"
                     style={{ resize: "none" }}
                   />
-                  <span className="cursor-pointer text-sm font-medium">
+                  <span
+                    className="cursor-pointer text-sm font-medium"
+                    onClick={() =>
+                      addCommentMutation({
+                        comment: text,
+                        postId: post?._id as string,
+                      })
+                    }
+                  >
                     Post
                   </span>
                 </div>
