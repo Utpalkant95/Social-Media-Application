@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function PostCard() {
   const [savedPosts, setSavedPosts] = useState<string[]>([]);
   const [likedPosts, setLikedPosts] = useState<string[]>([]);
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
 
   const { data: posts, isLoading } = useQuery({
     queryKey: ["getHomePageContent"],
@@ -39,6 +40,17 @@ export default function PostCard() {
   } = usePostMutations();
 
   useEffect(() => {
+    if (posts) {
+      // Initialize the like count state for each post
+      const initialLikeCounts = posts.reduce((acc, post) => {
+        acc[post._id] = post.likeCount.length;
+        return acc;
+      }, {} as Record<string, number>);
+      setLikeCounts(initialLikeCounts);
+    }
+  }, [posts]);
+
+  useEffect(() => {
     refetch();
     setSavedPosts(savedPostArr || []);
   }, [likePostMutation, unsavePostMutation]);
@@ -58,11 +70,33 @@ export default function PostCard() {
 
   const handleLikeClick = debounce((postId: string) => {
     if (likedPosts.includes(postId)) {
-      unLikePostMutation.mutate({ postId });
+      unLikePostMutation.mutate(
+        { postId },
+        {
+          onSuccess: () => {
+            setLikedPosts((prev) => prev.filter((id) => id !== postId));
+            setLikeCounts((prev) => ({
+              ...prev,
+              [postId]: prev[postId] - 1,
+            }));
+          },
+        }
+      );
     } else {
-      likePostMutation.mutate({ postId });
+      likePostMutation.mutate(
+        { postId },
+        {
+          onSuccess: () => {
+            setLikedPosts((prev) => [...prev, postId]);
+            setLikeCounts((prev) => ({
+              ...prev,
+              [postId]: prev[postId] + 1,
+            }));
+          },
+        }
+      );
     }
-  }, 1000);
+  }, 100);
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -78,6 +112,7 @@ export default function PostCard() {
       {posts?.map((post) => {
         const isPostSaved = savedPosts.includes(post._id);
         const isPostLiked = likedPosts.includes(post._id);
+        const likeCount = likeCounts[post._id] || 0;
         return (
           <div className="w-full max-w-md mx-auto" key={post._id}>
             <PostHeader post={post} />
@@ -94,6 +129,7 @@ export default function PostCard() {
               isPostLiked={isPostLiked}
               handleBookmarkClick={handleBookmarkClick}
               handleLikeClick={handleLikeClick}
+              likeCount={likeCount}
             />
           </div>
         );

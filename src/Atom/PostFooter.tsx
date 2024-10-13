@@ -10,6 +10,7 @@ interface PostFooterProps {
   isPostLiked: boolean;
   handleBookmarkClick: (postId: string) => void;
   handleLikeClick: (postId: string) => void;
+  likeCount: number;
 }
 
 export default function PostFooter({
@@ -18,6 +19,7 @@ export default function PostFooter({
   isPostLiked,
   handleBookmarkClick,
   handleLikeClick,
+  likeCount
 }: PostFooterProps) {
   const router = useRouter();
   return (
@@ -62,7 +64,7 @@ export default function PostFooter({
         </div>
       </div>
       <div className="space-y-1 w-full">
-        <p className="text-sm font-medium">{post.likeCount.length} likes</p>
+        <p className="text-sm font-medium">{likeCount} likes</p>
         <p className="text-sm">
           <span className="font-medium">{post.ownerId.userName}</span>{" "}
           {post.description}
