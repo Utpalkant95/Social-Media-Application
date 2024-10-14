@@ -69,7 +69,7 @@ export default function PostFooter({
           <span className="font-medium">{post.ownerId.userName}</span>{" "}
           {post.description}
         </p>
-        <p className="text-sm text-muted-foreground">View all 3 comments</p>
+        <p className="text-sm text-muted-foreground cursor-pointer" onClick={() => router.push(`/p/${post._id}?type=home`)}>View all {post.comments.length}  comments</p>
       </div>
     </div>
   );

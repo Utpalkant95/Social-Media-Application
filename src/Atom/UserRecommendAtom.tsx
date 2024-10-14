@@ -67,7 +67,9 @@ const UserRecommendAtom = ({ user }: { user: User | undefined }) => {
             />
             <span className="text-sm font-medium">{user.userName}</span>
           </div>
-          <span className="text-xs text-blue-500 cursor-pointer">Follow</span>
+          <Link href={`/${user.userName}`} prefetch={false}>
+            <span className="text-xs text-blue-500 cursor-pointer">View</span>
+          </Link>
         </div>
       ))}
 

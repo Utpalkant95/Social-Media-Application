@@ -17,6 +17,7 @@ export interface Post {
   hideLikeViewCount: boolean;
   likeCount: string[];
   location: string;
+  comments: string[];
   ownerId: Owner;
   shareCount: number;
 }
