@@ -65,7 +65,7 @@ const ProfileHeaderAtom = ({
       enqueueSnackbar(data && data.message, {
         variant: "success",
       });
-      setIsFollowing(false); // Update state immediately on success
+      setIsFollowing(false);
     },
     onError: (error: AxiosError<IRESSignUpUser>) => {
       enqueueSnackbar(error?.response?.data?.message, {
@@ -100,14 +100,14 @@ const ProfileHeaderAtom = ({
         {/* buttons */}
         {ownViewer && (
           <div className="flex items-center gap-x-2">
-            <div>
+            <div className="">
               <Link href={`/${user?.userName}/edit`}>
                 <Button variant="profileButton">Edit profile</Button>
               </Link>
             </div>
-            <div>
+            {/* <div className="hidden sm:block">
               <Button variant="profileButton">view archive</Button>
-            </div>
+            </div> */}
             <div
               className="cursor-pointer"
               onClick={() => {

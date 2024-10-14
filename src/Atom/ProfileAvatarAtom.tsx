@@ -38,7 +38,7 @@ const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
   return (
     <>
       <Avatar
-        className=" cursor-pointer bg-yellow-800 relative max-w-36 max-h-36 w-full h-full"
+        className=" cursor-pointer bg-yellow-800 relative max-w-20 max-h-20 sm:max-w-36 sm:max-h-36 w-full h-full"
         onClick={handleButtonClick}
       >
         {ownViewer && (

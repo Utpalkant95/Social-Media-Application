@@ -12,9 +12,9 @@ interface IProfileDetailFrag {
 const ProfileDetailFrag = ({ ownViewer, user }: IProfileDetailFrag) => {
   const ActualUser = decodeToken();
   return (
-    <div className="py-10 flex flex-col gap-y-10">
+    <div className="py-10 flex flex-col gap-y-5 sm:gap-y-10 px-2">
       {/* Profile Section */}
-      <div className="flex items-center gap-x-24">
+      <div className="flex items-center gap-x-4 sm:gap-x-24">
         <ProfileAvatarAtom ownViewer={ownViewer} user={user} />
 
         {/* detail section */}
@@ -38,10 +38,14 @@ const ProfileDetailFrag = ({ ownViewer, user }: IProfileDetailFrag) => {
             </div>
           </div>
           {/* third */}
-          <div>
+          <div className="hidden sm:block">
             <p className="text-sm font-medium">{user?.fullName}</p>
           </div>
         </div>
+      </div>
+
+      <div>
+        <p>{user?.fullName}</p>
       </div>
 
       {/* Highlish Section */}

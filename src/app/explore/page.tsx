@@ -15,7 +15,7 @@ const Page = () => {
   return (
     <div className="max-w-6xl mx-auto w-full pt-8">
       {isLoading && (
-        <div className="grid grid-cols-3 gap-1">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 grid-cols-3 gap-1">
           <Skeleton className="h-96" />
           <Skeleton className="h-96" />
           <Skeleton className="h-96" />
@@ -24,7 +24,7 @@ const Page = () => {
           <Skeleton className="h-96" />
         </div>
       )}
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid  grid-cols-2 sm:grid-cols-3 gap-1">
         {data?.map((item) => (
           <Link href={`p/${item._id}`} key={item._id}>
             <div
