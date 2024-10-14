@@ -42,13 +42,13 @@ export default function RootLayout({
           </main>
           <div className="md:hidden h-screen flex flex-col">
             <header className="sticky top-0 z-10">
-              <MobileViewNavbar />
+              {showSidebar && <MobileViewNavbar />}
             </header>
             <main className="flex-grow overflow-y-auto">
               {children}
             </main>
             <footer className="sticky bottom-0">
-              <MobileViewSidebar />
+              {showSidebar && <MobileViewSidebar />}
             </footer>
           </div>
         </Providers>
