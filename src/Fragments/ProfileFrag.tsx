@@ -19,7 +19,7 @@ import { ISendFriendRequest } from "@/ApiServices/interfaces/request";
 import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
-import { useSocket } from "@/lib/SocketProvider";
+// import { useSocket } from "@/lib/SocketProvider";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BsPostcardHeart } from "react-icons/bs";

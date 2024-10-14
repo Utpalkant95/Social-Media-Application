@@ -15,7 +15,7 @@ import { IRESSignUpUser } from "@/ApiServices/interfaces/response";
 import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import debounce from "lodash/debounce";
-import { useSocket } from "@/lib/SocketProvider";
+// import { useSocket } from "@/lib/SocketProvider";
 
 interface IProfileHeaderAtom {
   user: User;
@@ -30,7 +30,7 @@ const ProfileHeaderAtom = ({
 }: IProfileHeaderAtom) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const { sendFollowNotification } = useSocket();
+  // const { sendFollowNotification } = useSocket();
 
   useEffect(() => {
     if (user && ActualUser) {
@@ -46,10 +46,10 @@ const ProfileHeaderAtom = ({
         variant: "success",
       });
       setIsFollowing(true);
-      sendFollowNotification(
-        String(user?._id) as string,
-        ActualUser?.userId as string
-      );
+      // sendFollowNotification(
+      //   String(user?._id) as string,
+      //   ActualUser?.userId as string
+      // );
     },
     onError: (error: AxiosError<IRESSignUpUser>) => {
       enqueueSnackbar(error?.response?.data?.message, {
