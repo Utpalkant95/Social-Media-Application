@@ -153,7 +153,7 @@ const Sidebar = () => {
                             alt="profile"
                             width={28}
                             height={28}
-                            className="rounded-full object-cover overflow-hidden transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
+                            className="rounded-full w-full h-full object-cover overflow-hidden transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
                           />
                         </div>
                       </div>

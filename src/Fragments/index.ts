@@ -10,3 +10,4 @@ export {default as ProfileDetailFrag} from "./ProfileDetailFrag";
 export {default as ProfilePostSectionFrag} from "./ProfilePostSectionFrag";
 export {default as LoginFrag} from "./LoginFrag";
 export {default as RenderCommentFrag} from "./RenderCommentFrag";
+export {default as PostCommentFrag} from "./PostCommentFrag";
