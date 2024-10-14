@@ -66,10 +66,10 @@ export default function PostFooter({
       <div className="space-y-1 w-full">
         <p className="text-sm font-medium">{likeCount} likes</p>
         <p className="text-sm">
-          <span className="font-medium">{post.ownerId.userName}</span>{" "}
-          {post.description}
+          <span className="font-medium">{post?.ownerId.userName}</span>{" "}
+          {post?.description}
         </p>
-        <p className="text-sm text-muted-foreground cursor-pointer" onClick={() => router.push(`/p/${post._id}?type=home`)}>View all {post.comments.length}  comments</p>
+        <p className="text-sm text-muted-foreground cursor-pointer" onClick={() => router.push(`/p/${post._id}?type=home`)}>View all {post?.comments.length}  comments</p>
       </div>
     </div>
   );

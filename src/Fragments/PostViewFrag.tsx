@@ -1,5 +1,5 @@
 "use client";
-import { DialogSheet, GroupAvatars, PopOver } from "@/components";
+import { DialogSheet } from "@/components";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -10,8 +10,6 @@ import {
 } from "@/ApiServices/PostServices";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { FaRegComment, FaRegHeart } from "react-icons/fa";
-import { CiSaveDown2 } from "react-icons/ci";
 import { BsEmojiSmile } from "react-icons/bs";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +22,8 @@ import { PrimaryDialog } from "@/components/PrimaryDialog";
 import { useRouter } from "next/navigation";
 import { Post } from "@/app/api/home-page-post/route";
 import RenderCommentFrag from "./RenderCommentFrag";
+import PostFooter from "@/Atom/PostFooter";
+import { usePostInteractions } from "@/hooks";
 
 const PostViewFrag = ({
   posts,
@@ -42,30 +42,20 @@ const PostViewFrag = ({
   const [text, setText] = useState<string>("");
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const {
+    savedPosts,
+    likedPosts,
+    likeCounts,
+    handleBookmarkClick,
+    handleLikeClick,
+  } = usePostInteractions(posts);
 
-  const post = posts && posts[selectedIndex];
+  const post: Post | undefined = posts && posts[selectedIndex];
 
-  const { data: postComments , refetch : refetchComments} = useQuery({
+  const { data: postComments, refetch: refetchComments } = useQuery({
     queryKey: ["get comment of post", post?._id],
     queryFn: () => getComment({ postId: post?._id as string }),
     enabled: !!post?._id,
-  });
-
-  const { mutate } = useMutation({
-    mutationKey: ["add saved post"],
-    mutationFn: addSavedPost,
-    onSuccess: (data: IRESSignUpUser) => {
-      enqueueSnackbar(data && data.message, {
-        variant: "success",
-        autoHideDuration: 2000,
-      });
-    },
-    onError: (error: AxiosError<IRESSignUpUser>) => {
-      enqueueSnackbar(error?.response?.data?.message, {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-    },
   });
 
   const { mutate: addCommentMutation } = useMutation({
@@ -91,6 +81,10 @@ const PostViewFrag = ({
     setText((prevText) => prevText + emojiData.emoji);
     setShowEmojiPicker(false);
   };
+
+  const isPostSaved = savedPosts.includes(post?._id as string);
+  const isPostLiked = likedPosts.includes(post?._id as string);
+  const likeCount = likeCounts[post?._id as string] || 0;
   return (
     <>
       <DialogSheet isOpen={true} onClose={onClose}>
@@ -100,7 +94,7 @@ const PostViewFrag = ({
               if (post && selectedIndex > 0) {
                 const prevIndex = selectedIndex - 1;
                 const prevPost = posts?.[prevIndex];
-                setSelectedPostIndex(prevIndex); 
+                setSelectedPostIndex(prevIndex);
                 router.push(`/p/${prevPost?._id}?type=${type}`);
               }
             }}
@@ -146,27 +140,26 @@ const PostViewFrag = ({
                   <ul className="h-full flex flex-col gap-y-4 mt-4">
                     {postComments?.map((comment: IComment) => {
                       return (
-                        <RenderCommentFrag comment={comment} postId = {post?._id} key={comment._id} refetchComments={refetchComments}/>
+                        <RenderCommentFrag
+                          comment={comment}
+                          postId={post?._id}
+                          key={comment._id}
+                          refetchComments={refetchComments}
+                        />
                       );
                     })}
                   </ul>
                 </div>
 
                 {/* Live, save, and comment section */}
-                <div className="flex flex-col gap-y-1 py-2 border-b px-4">
-                  <div className="live and save section flex items-center justify-between">
-                    <div className="flex items-center gap-x-3">
-                      <FaRegHeart size={20} />
-                      <FaRegComment size={20} />
-                    </div>
-                    <div>
-                      <CiSaveDown2 size={20} />
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <GroupAvatars />
-                  </div>
-                </div>
+                <PostFooter
+                  handleBookmarkClick={handleBookmarkClick}
+                  handleLikeClick={handleLikeClick}
+                  isPostLiked={isPostLiked}
+                  isPostSaved={isPostSaved}
+                  likeCount={likeCount}
+                  post={post as Post}
+                />
 
                 {/* Comment input section */}
                 <div className="flex items-center gap-x-2 px-4">

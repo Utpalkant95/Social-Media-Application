@@ -4,6 +4,7 @@ import { getHomePageContent } from "@/ApiServices/UserServices";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 import { usePostMutations } from "@/hooks/usePostMutation";
+import { usePostInteractions } from "@/hooks";
 import { useEffect, useState } from "react";
 import { debounce } from "lodash";
 import {
@@ -13,14 +14,21 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PostCard() {
-  const [savedPosts, setSavedPosts] = useState<string[]>([]);
-  const [likedPosts, setLikedPosts] = useState<string[]>([]);
-  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
-
   const { data: posts, isLoading } = useQuery({
     queryKey: ["getHomePageContent"],
     queryFn: getHomePageContent,
   });
+
+  const {
+    savedPosts,
+    likedPosts,
+    likeCounts,
+    handleBookmarkClick,
+    handleLikeClick,
+    setSavedPosts,
+    setLikeCounts,
+    setLikedPosts,
+  } = usePostInteractions(posts);
 
   const { data: savedPostArr, refetch } = useQuery({
     queryKey: ["get saved post"],
@@ -59,44 +67,6 @@ export default function PostCard() {
     likedPostRefetch();
     setLikedPosts(likedPostArr || []);
   }, [savePostMutation, unLikePostMutation]);
-
-  const handleBookmarkClick = debounce((postId: string) => {
-    if (savedPosts.includes(postId)) {
-      unsavePostMutation.mutate({ postId });
-    } else {
-      savePostMutation.mutate({ postId });
-    }
-  }, 1000);
-
-  const handleLikeClick = debounce((postId: string) => {
-    if (likedPosts.includes(postId)) {
-      unLikePostMutation.mutate(
-        { postId },
-        {
-          onSuccess: () => {
-            setLikedPosts((prev) => prev.filter((id) => id !== postId));
-            setLikeCounts((prev) => ({
-              ...prev,
-              [postId]: prev[postId] - 1,
-            }));
-          },
-        }
-      );
-    } else {
-      likePostMutation.mutate(
-        { postId },
-        {
-          onSuccess: () => {
-            setLikedPosts((prev) => [...prev, postId]);
-            setLikeCounts((prev) => ({
-              ...prev,
-              [postId]: prev[postId] + 1,
-            }));
-          },
-        }
-      );
-    }
-  }, 100);
 
   return (
     <div className="flex flex-col gap-y-4">
