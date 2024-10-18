@@ -1,4 +1,5 @@
 "use client";
+import Logout from "@/helpers/Logout";
 import Link from "next/link";
 import React from "react";
 
@@ -23,7 +24,7 @@ const ProfileSettingUiAtom = () => {
     {
       id: "3",
       label: "Log Out",
-      onClick: () => void 0,
+      onClick: Logout,
     },
   ];
   return (
