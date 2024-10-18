@@ -4,6 +4,7 @@ import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { Post } from "@/app/api/home-page-post/route";
 import { useRouter } from "next/navigation";
+import { useWindowSize } from "@/hooks";
 interface PostFooterProps {
   post: Post;
   isPostSaved: boolean;
@@ -22,6 +23,7 @@ export default function PostFooter({
   likeCount
 }: PostFooterProps) {
   const router = useRouter();
+  const {width} = useWindowSize();
   return (
     <div className="flex flex-col items-start px-2 gap-y-1 py-1">
       <div className="flex items-center justify-between w-full py-2">
@@ -43,7 +45,7 @@ export default function PostFooter({
           </div>
           <MessageCircle
             className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300"
-            onClick={() => router.push(`/p/${post._id}?type=home`)}
+            onClick={() => router.push(`/p/${post._id}?type=home&screenType=${width > 768 ? "desktop" : "mobile"}`)}
           />
           {/* <Send className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" /> */}
         </div>

@@ -5,3 +5,4 @@ export {default as useVerify} from "./useVerify";
 export {default as useEditProfileCompFactory} from "./useEditProfileCompFactory";
 export {default as useUpdatePassword} from "./useUpdatePassword";
 export {default as usePostInteractions} from "./usePostInteractions";
+export {default as useWindowSize} from "./useWindowSize";
