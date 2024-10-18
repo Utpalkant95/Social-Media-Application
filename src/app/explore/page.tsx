@@ -5,15 +5,17 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { FaComment, FaHeart } from "react-icons/fa";
 import Link from "next/link";
+import { useWindowSize } from "@/hooks";
 
 const Page = () => {
+  const { width } = useWindowSize();
   const { data, isLoading } = useQuery({
     queryKey: ["explore"],
     queryFn: explorePosts,
   });
 
   return (
-    <div className="max-w-6xl mx-auto w-full pt-8">
+    <div className="max-w-6xl mx-auto w-full pt-2 sm:pt-8">
       {isLoading && (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 grid-cols-3 gap-1">
           <Skeleton className="h-96" />
@@ -26,11 +28,8 @@ const Page = () => {
       )}
       <div className="grid  grid-cols-2 sm:grid-cols-3 gap-1">
         {data?.map((item) => (
-          <Link href={`p/${item._id}`} key={item._id}>
-            <div
-              className="h-96 relative cursor-pointer"
-              key={item._id}
-            >
+          <Link href={`p/${item._id}?screenType=${width > 768 ? "desktop" : "mobile"}`} key={item._id}>
+            <div className="h-96 relative cursor-pointer" key={item._id}>
               <Image
                 src={item.file}
                 alt={item.altText}
@@ -51,7 +50,7 @@ const Page = () => {
                 </div>
               </div>
             </div>
-           </Link>
+          </Link>
         ))}
       </div>
     </div>

@@ -12,7 +12,7 @@ interface DialogWrapperProps {
 
 const DialogWrapper = ({ children, backward, next, share,title, className }: DialogWrapperProps) => {
   return (
-    <div className={`w-1/3 bg-white h-4/5 rounded-xl ${className}`}>
+    <div className={`w-1/3 bg-white h-5/6 sm:h-4/5 rounded-xl ${className}`}>
       <div className="grid grid-cols-3 py-2 border-b px-2">
         <div className="">
           {backward && <IoArrowBackSharp size={20} className="cursor-pointer" onClick={backward}/>}

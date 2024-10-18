@@ -5,8 +5,7 @@ import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 import { usePostMutations } from "@/hooks/usePostMutation";
 import { usePostInteractions } from "@/hooks";
-import { useEffect, useState } from "react";
-import { debounce } from "lodash";
+import { useEffect} from "react";
 import {
   getLikedPostsForUser,
   getSavedPostsForUser,

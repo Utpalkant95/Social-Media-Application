@@ -51,16 +51,16 @@ const SelectFile = ({
   };
 
   return (
-    <DialogWrapper title="Create new post" className="max-w-2xl w-full">
+    <DialogWrapper title="New Story" className="max-w-2xl w-full">
       <div
         className="flex flex-col gap-y-4 items-center justify-center cursor-pointer h-[calc(100%-40px)]"
-        onClick={handleFileButtonClick}
       >
         <TbPhotoVideo size={100} />
         <p className="text-xl">Drag photos and videos here</p>
         <Button
           variant="outline"
           className="bg-[#0095F6] text-white font-medium"
+          onClick={handleFileButtonClick}
         >
           Select from computer
         </Button>

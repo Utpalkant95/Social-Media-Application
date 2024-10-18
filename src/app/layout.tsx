@@ -32,6 +32,10 @@ export default function RootLayout({
   // Check if the current pathname is in the list of no-sidebar paths
   const showSidebar = !noSidebarPaths.includes(currentPath);
 
+  const noMobileNavbar = [
+    "/api/api-doc",
+  ];
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -42,7 +46,7 @@ export default function RootLayout({
           </main>
           <div className="md:hidden h-screen flex flex-col">
             <header className="sticky top-0 z-10">
-              {showSidebar && <MobileViewNavbar />}
+              {showSidebar && noMobileNavbar.includes(currentPath) ? <MobileViewNavbar /> : ""}
             </header>
             <main className="flex-grow overflow-y-auto">
               {children}
