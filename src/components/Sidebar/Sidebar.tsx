@@ -9,6 +9,8 @@ import logo from "../../../public/snapify-favicon-white.svg";
 import { decodeToken } from "@/helpers/userInfo";
 import { useQuery } from "@tanstack/react-query";
 import { getSignleUserData } from "@/ApiServices/UserServices";
+import { CiLogout } from "react-icons/ci";
+import Logout from "@/helpers/Logout";
 
 const Sidebar = () => {
   const [activeId, setActiveId] = useState<number>(0);
@@ -183,7 +185,7 @@ const Sidebar = () => {
         </nav>
 
         <nav className="flex flex-col gap-y-2 pb-4">
-          {navItems2.map((item: INavItems) => {
+          {/* {navItems2.map((item: INavItems) => {
             const isActive = activeId === item.id;
             return (
               <div
@@ -228,7 +230,37 @@ const Sidebar = () => {
                 </Link>
               </div>
             );
-          })}
+          })} */}
+
+          <div
+            className="group hover:bg-zinc-200 py-2 rounded-md px-2 transform transition-all duration-300 ease-in-out"
+            onClick={Logout}
+          >
+            <Link
+              href=""
+              className="flex items-center justify-center xl:justify-normal gap-x-3"
+            >
+              <CiLogout
+                size={28}
+                className="transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
+              />
+              {isDrawerOpen ? (
+                <span
+                  className={`capitalize text-base ${
+                    isDrawerOpen ? "hidden" : ""
+                  }`}
+                >
+                  Log Out
+                </span>
+              ) : (
+                <span
+                  className={`capitalize hidden xl:block  text-base`}
+                >
+                  Log Out
+                </span>
+              )}
+            </Link>
+          </div>
         </nav>
       </aside>
 
