@@ -46,7 +46,7 @@ export default function RootLayout({
             <div className="overflow-y-scroll h-screen">{children}</div>
           </main>
           <div className="md:hidden h-screen flex flex-col">
-            <header className="sticky top-0 z-10">
+            <header className="sticky top-0">
               {showSidebar && noMobileNavbar.includes(currentPath) ? <MobileViewNavbar /> : ""}
             </header>
             <main className="flex-grow overflow-y-auto">

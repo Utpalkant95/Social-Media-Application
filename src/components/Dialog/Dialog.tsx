@@ -27,7 +27,7 @@ const DailogSheet = ({ isOpen, onClose, children }: SlideSheetProps) => {
         aria-hidden={!isOpen}
       >
         {/* Close Button */}
-        <div className="absolute top-0 right-0 p-4">
+        <div className="absolute top-0 right-0 pt-1">
           <IoIosCloseCircleOutline
             size={32}
             onClick={onClose}
