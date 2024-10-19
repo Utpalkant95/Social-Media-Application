@@ -34,6 +34,7 @@ export default function RootLayout({
 
   const noMobileNavbar = [
     "/api/api-doc",
+    "/"
   ];
 
   return (
