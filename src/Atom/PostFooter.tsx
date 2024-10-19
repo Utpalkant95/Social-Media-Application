@@ -20,10 +20,19 @@ export default function PostFooter({
   isPostLiked,
   handleBookmarkClick,
   handleLikeClick,
-  likeCount
+  likeCount,
 }: PostFooterProps) {
   const router = useRouter();
-  const {width} = useWindowSize();
+  const { width } = useWindowSize();
+
+  const handleRedirectCommentInLaptop = (id: string) => {
+    return router.push(`/p/${id}?type=home`);
+  };
+
+  const handleRedirectCommentInMobile = (id: string) => {
+    return router.push(`/p/${id}/comment`);
+  };
+
   return (
     <div className="flex flex-col items-start px-2 gap-y-1 py-1">
       <div className="flex items-center justify-between w-full py-2">
@@ -45,7 +54,13 @@ export default function PostFooter({
           </div>
           <MessageCircle
             className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300"
-            onClick={() => router.push(`/p/${post._id}?type=home&screenType=${width > 768 ? "desktop" : "mobile"}`)}
+            onClick={() =>
+              router.push(
+                `/p/${post._id}?type=home&screenType=${
+                  width > 768 ? "desktop" : "mobile"
+                }`
+              )
+            }
           />
           {/* <Send className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" /> */}
         </div>
@@ -71,7 +86,16 @@ export default function PostFooter({
           <span className="font-medium">{post?.ownerId.userName}</span>{" "}
           {post?.description}
         </p>
-        <p className="text-sm text-muted-foreground cursor-pointer" onClick={() => router.push(`/p/${post._id}?type=home`)}>View all {post?.comments.length}  comments</p>
+        <p
+          className="text-sm text-muted-foreground cursor-pointer"
+          onClick={
+            width > 768
+              ? () => handleRedirectCommentInLaptop(post._id)
+              : () => handleRedirectCommentInMobile(post._id)
+          }
+        >
+          View all {post?.comments.length} comments
+        </p>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ const Page = () => {
       <div className="w-64 hidden min-[1144px]:block">
         <UserRecommendAtom user={data}/>
       </div>
-    </div>
+  </div>
   );
 };
 

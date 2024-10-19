@@ -35,7 +35,7 @@ const MobileViewNavbar = () => {
             <FiUsers size={20} />
           </button>
           <div>
-            <RiMessengerLine size={20} />
+            {/* <RiMessengerLine size={20} /> */}
           </div>
         </div>
       </header>
