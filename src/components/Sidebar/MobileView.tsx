@@ -13,14 +13,14 @@ import { CreatePostFrag } from "@/Fragments";
 const MobileViewSidebar = () => {
   const user : IUserInfo | null =  decodeToken();
   const [openSlideSheet, setOpenSlideSheet] = useState<boolean>(false);
+
   const {data} = useQuery({
     queryKey : ["user", user?.username],
     queryFn : () =>getSignleUserData(user?.username as string)
-  })
-
+  });
 
   return (
-    <footer className="flex justify-around items-center p-4 border-t">
+    <footer className="flex justify-around items-center py-2 border-t">
       <Button variant="ghost" size="icon">
         <Link href={"/"}>
           <Home className="h-6 w-6" />

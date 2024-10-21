@@ -1,5 +1,5 @@
 "use client";
-import { explorePosts } from "@/ApiServices/PostServices";
+import { explorePosts, getAllPosts } from "@/ApiServices/PostServices";
 import { getHomePageContent } from "@/ApiServices/UserServices";
 import PostFooter from "@/Atom/PostFooter";
 import PostHeader from "@/Atom/PostHeader";
@@ -14,13 +14,16 @@ const CarDetailPage = ({ params }: { params: { postId: string } }) => {
   const [selectedPostIndex, setSelectedPostIndex] = useState<number>(0);
   const router = useRouter();
   const type = searchParams.get("type");
+  const userName = searchParams.get("userName");
   const screenType = searchParams.get("screenType");
 
   const fetchPosts = async () => {
     if (type === "home") {
       return await getHomePageContent();
-    } else {
+    } else if (type === "explore") {
       return await explorePosts();
+    } else if (type === "profilePost"){
+      return await getAllPosts(userName as string)
     }
   };
 

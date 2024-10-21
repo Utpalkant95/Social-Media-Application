@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { Post } from "@/app/api/home-page-post/route";
 import RenderCommentFrag from "./RenderCommentFrag";
 import PostFooter from "@/Atom/PostFooter";
-import { usePostInteractions } from "@/hooks";
+import { usePostInteractions, useWindowSize } from "@/hooks";
 import { PostCommentFrag } from "@/Fragments";
 import { useState } from "react";
 
@@ -32,6 +32,7 @@ const PostViewFrag = ({
 }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { width } = useWindowSize();
 
   const {
     savedPosts,
@@ -62,7 +63,7 @@ const PostViewFrag = ({
                 const prevIndex = selectedIndex - 1;
                 const prevPost = posts?.[prevIndex];
                 setSelectedPostIndex(prevIndex);
-                router.push(`/p/${prevPost?._id}?type=${type}`);
+                router.push(`/p/${prevPost?._id}?type=${type}&screenType=${width > 768 ? "desktop" : "mobile"}`);
               }
             }}
             disabled={selectedIndex === 0}
@@ -141,8 +142,8 @@ const PostViewFrag = ({
               if (post && selectedIndex < (posts?.length as number) - 1) {
                 const nextIndex = selectedIndex + 1;
                 const nextPost = posts?.[nextIndex];
-                setSelectedPostIndex(nextIndex); // Update the index state
-                router.push(`/p/${nextPost?._id}?type=${type}`); // Update the post ID in the URL
+                setSelectedPostIndex(nextIndex);
+                router.push(`/p/${nextPost?._id}?type=${type}&screenType=${width > 768 ? "desktop" : "mobile"}`); 
               }
             }}
             disabled={selectedIndex === (posts?.length as number) - 1}

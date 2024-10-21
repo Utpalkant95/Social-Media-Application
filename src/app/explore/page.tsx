@@ -28,7 +28,7 @@ const Page = () => {
       )}
       <div className="grid  grid-cols-2 sm:grid-cols-3 gap-1">
         {data?.map((item) => (
-          <Link href={`p/${item._id}?screenType=${width > 768 ? "desktop" : "mobile"}`} key={item._id}>
+          <Link href={`p/${item._id}?screenType=${width > 768 ? "desktop" : "mobile"}&type=explore`} key={item._id}>
             <div className="h-96 relative cursor-pointer" key={item._id}>
               <Image
                 src={item.file}

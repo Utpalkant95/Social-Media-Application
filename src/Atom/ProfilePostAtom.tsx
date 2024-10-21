@@ -8,9 +8,12 @@ import { CiCamera } from "react-icons/ci";
 import { FaComment } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useWindowSize } from "@/hooks";
+import { Post } from "@/app/api/home-page-post/route";
 
 const ProfilePostAtom = ({ userName }: { userName: string }) => {
   const router = useRouter();
+  const {width} = useWindowSize();
   const { data, isLoading } = useQuery({
     queryKey: ["posts", userName],
     queryFn: () => getAllPosts(userName),
@@ -36,12 +39,12 @@ const ProfilePostAtom = ({ userName }: { userName: string }) => {
         />
       )}
       <div className="grid grid-cols-3 gap-x-1 gap-y-1">
-        {data?.map((post: IAllPost, index) => {
+        {data?.map((post: Post) => {
           return (
             <div
               className="h-96 relative cursor-pointer"
-              key={post.id}
-              onClick={() => router.push(`/p/${post._id}`)}
+              key={post?._id}
+              onClick={() => router.push(`/p/${post._id}?type=profilePost&screenType=${width > 768 ? "desktop" : "mobile"}&userName=${userName}`)}
             >
               <Image
                 src={post.file}

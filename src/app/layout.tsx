@@ -33,7 +33,6 @@ export default function RootLayout({
   const showSidebar = !noSidebarPaths.includes(currentPath);
 
   const noMobileNavbar = [
-    "/api/api-doc",
     "/"
   ];
 
