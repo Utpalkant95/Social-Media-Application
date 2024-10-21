@@ -187,6 +187,7 @@ export async function POST(request: Request) {
         message: "Error in registering user",
         route : "/account/sign-up"
       }),
+      // d
       { status: 500 }
     );
   }
