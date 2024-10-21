@@ -26,7 +26,9 @@ export default function PostFooter({
   const { width } = useWindowSize();
 
   const handleRedirectCommentInLaptop = (id: string) => {
-    return router.push(`/p/${id}?type=home`);
+    return router.push(
+      `/p/${id}?type=home&screenType=${width > 768 ? "desktop" : "mobile"}`
+    );
   };
 
   const handleRedirectCommentInMobile = (id: string) => {
@@ -54,12 +56,10 @@ export default function PostFooter({
           </div>
           <MessageCircle
             className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300"
-            onClick={() =>
-              router.push(
-                `/p/${post._id}?type=home&screenType=${
-                  width > 768 ? "desktop" : "mobile"
-                }`
-              )
+            onClick={
+              width > 768
+                ? () => handleRedirectCommentInLaptop(post._id)
+                : () => handleRedirectCommentInMobile(post._id)
             }
           />
           {/* <Send className="cursor-pointer hover:scale-110 hover:text-red-800 transition-all duration-300" /> */}

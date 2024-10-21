@@ -7,7 +7,7 @@ export const getAllPosts = async (userName: string) => {
     const res = await axios.get(
       `http://localhost:3000/api/update/Post/all-post?userName=${userName}`
     );
-    return res.data.data as IAllPost[];
+    return res.data.data as Post[];
   } catch (error) {
     console.error("Error fetching posts:", error);
     // Optionally, return a default value or rethrow the error

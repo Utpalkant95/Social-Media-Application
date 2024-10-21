@@ -44,7 +44,7 @@ const ProfileDetailFrag = ({ ownViewer, user }: IProfileDetailFrag) => {
         </div>
       </div>
 
-      <div>
+      <div className="block sm:hidden">
         <p>{user?.fullName}</p>
       </div>
 

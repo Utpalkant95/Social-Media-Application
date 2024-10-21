@@ -18,6 +18,7 @@ const MobileViewNavbar = () => {
   const handleClose = () => {
     setIsPopoverOpen(false);
   };
+
   return (
     <>
       <header className="flex items-center justify-between py-4 border-b px-4">
@@ -34,9 +35,7 @@ const MobileViewNavbar = () => {
           >
             <FiUsers size={20} />
           </button>
-          <div>
-            {/* <RiMessengerLine size={20} /> */}
-          </div>
+          <div>{/* <RiMessengerLine size={20} /> */}</div>
         </div>
       </header>
 
@@ -49,14 +48,19 @@ const MobileViewNavbar = () => {
         <ul className="flex flex-col w-24 py-1 gap-y-2">
           <Link href={`/${user?.username}/followers`}>
             <li
-              className="border-b text-center py-2 hover:bg-red-600"
-              onClick={() => alert("hello")}
+              className="border-b text-center py-2"
+              onClick={() => setIsPopoverOpen(false)}
             >
               Followers
             </li>
           </Link>
           <Link href={`/${user?.username}/following`}>
-            <li className="text-center py-2">Followings</li>
+            <li
+              className="text-center py-2"
+              onClick={() => setIsPopoverOpen(false)}
+            >
+              Followings
+            </li>
           </Link>
         </ul>
       </PrimaryPopOver>
