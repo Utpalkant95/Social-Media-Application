@@ -2,15 +2,17 @@ import axios from "axios";
 import { IAllPost, IComment } from "./interfaces/response";
 import { Post } from "@/app/api/home-page-post/route";
 
+
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const getAllPosts = async (userName: string) => {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/update/Post/all-post?userName=${userName}`
+      `${baseUrl}update/Post/all-post?userName=${userName}`
     );
     return res.data.data as Post[];
   } catch (error) {
     console.error("Error fetching posts:", error);
-    // Optionally, return a default value or rethrow the error
     throw error;
   }
 };
@@ -18,7 +20,7 @@ export const getAllPosts = async (userName: string) => {
 export const getPostById = async (postId: string) => {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/update/Post/get-post-by-id?postId=${postId}`
+      `${baseUrl}update/Post/get-post-by-id?postId=${postId}`
     );
     return res.data.data as IAllPost;
   } catch (error) {
@@ -31,7 +33,7 @@ export const getPostById = async (postId: string) => {
 export const getAllSavedPosts = async () => {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/update/Post/saved-post`
+      `${baseUrl}update/Post/saved-post`
     );
     return res.data.data as IAllPost[];
   } catch (error) {
@@ -44,7 +46,7 @@ export const getAllSavedPosts = async () => {
 export const createPost = async (data: FormData) => {
   try {
     const res = await axios.post(
-      "http://localhost:3000/api/update/Post/add-post",
+      `${baseUrl}update/Post/add-post`,
       data
     );
     return res.data;
@@ -57,7 +59,7 @@ export const createPost = async (data: FormData) => {
 export const addSavedPost = async ({ postId }: { postId: string }) => {
   try {
     const res = await axios.post(
-      "http://localhost:3000/api/update/Post/saved-post/add",
+      `${baseUrl}update/Post/saved-post/add`,
       postId,
       {
         headers: {
@@ -75,7 +77,7 @@ export const addSavedPost = async ({ postId }: { postId: string }) => {
 export const removeSavedPost = async ({ postId }: { postId: string }) => {
   try {
     const res = await axios.delete(
-      `http://localhost:3000/api/update/Post/saved-post/remove?postId=${postId}`
+      `${baseUrl}update/Post/saved-post/remove?postId=${postId}`
     );
     return res.data;
   } catch (error) {
@@ -87,7 +89,7 @@ export const removeSavedPost = async ({ postId }: { postId: string }) => {
 export const getSavedPostsForUser = async () => {
   try {
     const res = await axios.get(
-      "http://localhost:3000/api/update/Post/saved-post/get"
+      `${baseUrl}update/Post/saved-post/get`
     );
     return res.data.data as string[];
   } catch (error) {
@@ -98,7 +100,7 @@ export const getSavedPostsForUser = async () => {
 
 export const explorePosts = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/api/explore");
+    const res = await axios.get(`${baseUrl}explore`);
     return res.data.data as Post[];
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -110,7 +112,7 @@ export const explorePosts = async () => {
 export const deletePost = async ({ postId }: { postId: string }) => {
   try {
     const res = await axios.delete(
-      `http://localhost:3000/api/update/Post/delete-post?postId=${postId}`
+      `${baseUrl}update/Post/delete-post?postId=${postId}`
     );
     return res.data;
   } catch (error) {
@@ -122,7 +124,7 @@ export const deletePost = async ({ postId }: { postId: string }) => {
 export const likeThePost = async (data: { postId: string }) => {
   try {
     const res = await axios.post(
-      `http://localhost:3000/api/update/Post/like-post`,
+      `${baseUrl}update/Post/like-post`,
       data
     );
     return res.data;
@@ -135,7 +137,7 @@ export const likeThePost = async (data: { postId: string }) => {
 export const getLikedPostsForUser = async () => {
   try {
     const res = await axios.get(
-      "http://localhost:3000/api/update/Post/get-like-post"
+      `${baseUrl}update/Post/get-like-post`
     );
     return res.data.data as string[];
   } catch (error) {
@@ -147,7 +149,7 @@ export const getLikedPostsForUser = async () => {
 export const unLikeThePost = async (data: { postId: string }) => {
   try {
     const res = await axios.delete(
-      `http://localhost:3000/api/update/Post/unlike-post?postId=${data.postId}`
+      `${baseUrl}update/Post/unlike-post?postId=${data.postId}`
     );
     return res.data;
   } catch (error) {
@@ -159,7 +161,7 @@ export const unLikeThePost = async (data: { postId: string }) => {
 export const addComment = async (data: { postId: string; comment: string }) => {
   try {
     const res = await axios.post(
-      `http://localhost:3000/api/update/Post/comment/add`,
+      `${baseUrl}update/Post/comment/add`,
       data
     );
     return res.data;
@@ -172,7 +174,7 @@ export const addComment = async (data: { postId: string; comment: string }) => {
 export const getComment = async (data: { postId: string }) => {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/update/Post/comment/get?postId=${data.postId}`
+      `${baseUrl}update/Post/comment/get?postId=${data.postId}`
     );
     return res.data.data as IComment[];
   } catch (error) {
@@ -187,7 +189,7 @@ export const deleteComment = async (data: {
 }) => {
   try {
     const res = await axios.delete(
-      `http://localhost:3000/api/update/Post/comment/delete?postId=${data.postId}&commentId=${data.commentId}`
+      `${baseUrl}update/Post/comment/delete?postId=${data.postId}&commentId=${data.commentId}`
     );
     return res.data;
   } catch (error) {
