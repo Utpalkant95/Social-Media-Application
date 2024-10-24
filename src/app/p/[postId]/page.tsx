@@ -1,5 +1,5 @@
 "use client";
-import { explorePosts, getAllPosts } from "@/ApiServices/PostServices";
+import { explorePosts, getAllPosts, getAllSavedPosts } from "@/ApiServices/PostServices";
 import { getHomePageContent } from "@/ApiServices/UserServices";
 import PostFooter from "@/Atom/PostFooter";
 import PostHeader from "@/Atom/PostHeader";
@@ -24,6 +24,8 @@ const CarDetailPage = ({ params }: { params: { postId: string } }) => {
       return await explorePosts();
     } else if (type === "profilePost"){
       return await getAllPosts(userName as string)
+    } else if (type === "savedPost") {
+      return await getAllSavedPosts()
     }
   };
 
@@ -33,6 +35,8 @@ const CarDetailPage = ({ params }: { params: { postId: string } }) => {
     } else if (type === "explore") {
       router.push("/explore");
     } else if (type === "profilePost"){
+      router.push(`/${userName}`)
+    } else if (type === "savedPost") {
       router.push(`/${userName}`)
     }
   }
