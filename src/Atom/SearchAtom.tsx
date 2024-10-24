@@ -59,7 +59,7 @@ const SearchAtom = ({
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchKey(value);
-    debouncedSearch(value); // Pass the latest value directly
+    debouncedSearch(value);
   };
 
   const fetchMoreUsers = () => {

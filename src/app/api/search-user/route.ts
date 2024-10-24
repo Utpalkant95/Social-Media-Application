@@ -29,8 +29,8 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
     const users = await UserModel.find(query)
     .select("fullName userName profileImage followers")
-    .skip((page - 1) * limit) // Skip based on page number
-    .limit(limit) // Limit the number of results returned
+    .skip((page - 1) * limit)
+    .limit(limit)
     .lean();
 
     const totalUsers = await UserModel.countDocuments(query);

@@ -104,7 +104,6 @@ export const explorePosts = async () => {
     return res.data.data as Post[];
   } catch (error) {
     console.error("Error fetching posts:", error);
-    // Optionally, return a default value or rethrow the error
     throw error;
   }
 };
