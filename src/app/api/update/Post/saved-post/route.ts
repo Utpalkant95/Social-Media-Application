@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import PostModel from "@/model/Post"; // Assuming PostModel is the model for posts
 import UserModel, { User } from "@/model/User";
 import { decodeToken, getCookieValueInServerSide, IUserInfo } from "@/helpers/userInfo";
+import { Post } from "@/app/api/home-page-post/route";
 
 export const dynamic = 'force-dynamic';
 
@@ -47,11 +48,11 @@ export async function GET(request: NextRequest) {
     const savedPostIds = user.saved;
 
     // Fetch all posts in a single query using $in operator
-    const savedPosts = await PostModel.find({ _id: { $in: savedPostIds } });
+    const savedPosts = await PostModel.find({ _id: { $in: savedPostIds } }).populate("ownerId", "fullName userName profileImage");;
 
     return NextResponse.json({
       success: true,
-      data : savedPosts,
+      data : savedPosts as Post[],
     });
 
   } catch (error) {

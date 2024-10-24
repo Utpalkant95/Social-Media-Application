@@ -7,9 +7,12 @@ import { FaComment, FaHeart } from "react-icons/fa";
 import Image from "next/image";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import { Post } from "@/app/api/home-page-post/route";
+import { useWindowSize } from "@/hooks";
 
 const ProfileSavedAtom = ({ user }: { user: User }) => {
   const router = useRouter();
+  const {width} = useWindowSize();
   const { data, isLoading } = useQuery({
     queryKey: ["saved posts"],
     queryFn: getAllSavedPosts,
@@ -36,12 +39,12 @@ const ProfileSavedAtom = ({ user }: { user: User }) => {
         />
       )}
       <div className="grid grid-cols-3 gap-x-1 gap-y-1">
-        {data?.map((post, index) => {
+        {data?.map((post : Post) => {
           return (
             <div
               className="h-96 relative cursor-pointer"
-              key={post.id}
-              onClick={() => router.push(`/p/${post._id}`)}
+              key={post._id}
+              onClick={() => router.push(`/p/${post._id}?type=savedPost&screenType=${width > 768 ? "desktop" : "mobile"}&userName=${user.userName}`)}
             >
               <Image
                 src={post.file}
