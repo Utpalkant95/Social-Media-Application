@@ -27,6 +27,16 @@ const CarDetailPage = ({ params }: { params: { postId: string } }) => {
     }
   };
 
+  const changeRoute = () => {
+    if (type === "home") {
+      router.push("/");
+    } else if (type === "explore") {
+      router.push("/explore");
+    } else if (type === "profilePost"){
+      router.push(`/${userName}`)
+    }
+  }
+
   const { data } = useQuery({
     queryKey: ["posts", params.postId],
     queryFn: fetchPosts,
@@ -58,7 +68,8 @@ const CarDetailPage = ({ params }: { params: { postId: string } }) => {
           selectedIndex={selectedPostIndex}
           onClose={() => {
             setSelectedPostIndex(0);
-            router.back();
+            // router.back();
+            changeRoute();
           }}
           setSelectedPostIndex={setSelectedPostIndex}
         />
