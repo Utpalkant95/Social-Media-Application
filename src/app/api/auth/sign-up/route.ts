@@ -109,32 +109,6 @@ export async function POST(request: Request) {
     // hasging the password 
     const hashedPassword = await bcryptjs.hash(password, 10);
 
-    // making new user 
-    const newUser = new UserModel({
-      fullName,
-      userName,
-      email,
-      phone,
-      phoneOtp : phoneOtp,
-      emailOtp : emailOtp,
-      password: hashedPassword,
-      isVerified: false,
-      isFirstTimeLogin: true
-    });
-
-    const savedUser = await newUser.save();
-
-    if (!savedUser) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "Something went wrong. Please try again.",
-          route : "/account/sign-up"
-        }),
-        { status: 500 }
-      );
-    }
-
     // // send verification email
     const emailResponse = await sendVerificationEmail({
       email : email,
@@ -168,6 +142,34 @@ export async function POST(request: Request) {
       );
     }
 
+
+    
+    // making new user 
+    const newUser = new UserModel({
+      fullName,
+      userName,
+      email,
+      phone,
+      phoneOtp : phoneOtp,
+      emailOtp : emailOtp,
+      password: hashedPassword,
+      isVerified: false,
+      isFirstTimeLogin: true
+    });
+
+    const savedUser = await newUser.save();
+
+    if (!savedUser) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Something went wrong. Please try again.",
+          route : "/account/sign-up"
+        }),
+        { status: 500 }
+      );
+    }
+
     // response
     
     return new Response(
@@ -187,7 +189,6 @@ export async function POST(request: Request) {
         message: "Error in registering user",
         route : "/account/sign-up"
       }),
-      // d
       { status: 500 }
     );
   }

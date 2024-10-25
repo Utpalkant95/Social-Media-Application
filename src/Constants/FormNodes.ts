@@ -1,26 +1,32 @@
 export const signUpFormNodes: {
   name: string;
   placeholder: string;
+  type?: string;
 }[] = [
   {
     name: "email",
     placeholder: "Email",
+    type: "email",
   },
   {
     name: "fullName",
     placeholder: "Full Name",
+    type: "text",
   },
   {
     name: "userName",
     placeholder: "Username",
+    type: "text",
   },
   {
     name: "phone",
     placeholder: "Phone",
+    type: "text",
   },
   {
     name: "password",
     placeholder: "Password",
+    type: "password",
   },
 ];
 

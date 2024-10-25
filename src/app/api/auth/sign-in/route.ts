@@ -106,7 +106,7 @@ export async function POST(request: Request) {
       {
         success: true,
         message: "Login Successfully",
-        route: "/feed",
+        route: "/",
         accessToken,
       },
       {

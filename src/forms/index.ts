@@ -6,7 +6,6 @@ import { verifySchema } from "@/schemas/verifySchema";
 import { signInSchema } from "@/schemas/signInSchema";
 import { editProfileSchema } from "@/schemas/editProfileSchema";
 import { updatePasswordSchema } from "@/schemas/updatePasswordSchema";
-import { postSchema } from "@/schemas/PostSchema";
 import { stepTwoSchema } from "@/Atom/postCreateForm/PostCreateForm";
 
 // Define a custom hook to encapsulate the useForm logic

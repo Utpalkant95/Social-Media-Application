@@ -16,4 +16,3 @@ export async function sendPhoneOtp(phone: string, otp: string) {
     return { success: false, error };
   }
 }
-

@@ -21,6 +21,7 @@ function ProfileForm() {
           {signUpFormNodes.map((node) => (
             <InputField
               key={node.name}
+              type={node.type}
               name={node.name}
               placeholder={node.placeholder}
               control={form.control}
