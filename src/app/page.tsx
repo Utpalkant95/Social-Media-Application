@@ -1,13 +1,14 @@
 "use client";
 import Image from "next/image";
 import { decodeToken } from "@/helpers/userInfo";
-import React from "react";
+import React, { useEffect } from "react";
 import { StoryFrag } from "@/Fragments";
 import { PostCard, UserRecommendAtom } from "@/Atom";
 import { useQuery } from "@tanstack/react-query";
 import { getSignleUserData } from "@/ApiServices/UserServices";
 
 const Page = () => {
+
   const user = decodeToken();
   const { data } = useQuery({
     queryKey: ["user", user?.username],

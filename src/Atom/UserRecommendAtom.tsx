@@ -26,7 +26,7 @@ const UserRecommendAtom = ({ user }: { user: User | undefined }) => {
         <div className="flex items-center gap-x-2">
           <div className="w-11 h-11 overflow-hidden rounded-full">
             <Image
-              src={user?.profileImage as string}
+              src={user?.profileImage as string || "https://images.pexels.com/photos/28220699/pexels-photo-28220699/free-photo-of-nguoitamchuyenhouse-sai-gon-vi-t-nam-2020-saigon-vietnam-2020.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load"}
               alt="profile"
               width={44}
               height={44}
