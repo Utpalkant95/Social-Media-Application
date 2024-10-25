@@ -110,37 +110,37 @@ export async function POST(request: Request) {
     const hashedPassword = await bcryptjs.hash(password, 10);
 
     // // send verification email
-    const emailResponse = await sendVerificationEmail({
-      email : email,
-      firstName : fullName,
-      otp : String(emailOtp) 
-    })
+    // const emailResponse = await sendVerificationEmail({
+    //   email : email,
+    //   firstName : fullName,
+    //   otp : String(emailOtp) 
+    // })
+    // console.log("emailResponse", emailResponse)
 
-    if (!emailResponse) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "something went wrong while sending email. Please try again.",
-        }),
-        { status: 500 }
-      );
-    }
-    const phoneNo = "+91" + phone;
-    // console.log("phoneNo", phoneNo);
+    // if (!emailResponse) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       success: false,
+    //       message: "something went wrong while sending email. Please try again.",
+    //     }),
+    //     { status: 500 }
+    //   );
+    // }
+    // const phoneNo = "+91" + phone;
     
-    const smsResponse =  await sendPhoneOtp(phoneNo, String(phoneOtp))
+    // const smsResponse =  await sendPhoneOtp(phoneNo, String(phoneOtp))
 
     // console.log("smsResponse", smsResponse);
 
-    if (!smsResponse) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "something went wrong while sending sms. Please try again.",
-        }),
-        { status: 500 }
-      );
-    }
+    // if (!smsResponse) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       success: false,
+    //       message: "something went wrong while sending sms. Please try again.",
+    //     }),
+    //     { status: 500 }
+    //   );
+    // }
 
 
     
@@ -176,7 +176,7 @@ export async function POST(request: Request) {
       JSON.stringify({
         success: true,
         message: "User created successfully",
-        route : "/account/verify"
+        route : "/account/sign-in"
       }),
       { status: 200 }
     );
