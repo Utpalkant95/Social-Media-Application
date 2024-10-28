@@ -33,7 +33,7 @@ const StoryFrag = ({user} : {user  : User | undefined}) => {
                 alt={`User `}
                 className="rounded-full w-full h-full object-cover"
               />
-              <AvatarFallback>U 1</AvatarFallback>
+              <AvatarFallback>U</AvatarFallback>
             </Avatar>
             <span className="text-xs">{user?.userName}</span>
             <div className="absolute bottom-5 right-1 w-4 h-4 rounded-full overflow-hidden bg-blue-500">

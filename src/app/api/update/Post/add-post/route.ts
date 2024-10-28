@@ -2,12 +2,16 @@ import dbConnect from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import PostModel, { Post } from "@/model/Post";
 import { postSchema } from "@/schemas/PostSchema";
-import { decodeToken, getCookieValueInServerSide, IUserInfo} from "@/helpers/userInfo";
+import {
+  decodeToken,
+  getCookieValueInServerSide,
+  IUserInfo,
+} from "@/helpers/userInfo";
 import { UTApi } from "uploadthing/server";
 import UserModel from "@/model/User";
-import { handleFileInApiRoute } from "@/helpers/handleFileInApiRoute";    
+import { handleFileInApiRoute } from "@/helpers/handleFileInApiRoute";
 export async function POST(request: NextRequest) {
-  await dbConnect();                  
+  await dbConnect();
   try {
     const cookieString = request.headers.get("cookie");
     const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
@@ -17,8 +21,8 @@ export async function POST(request: NextRequest) {
     const { file, description, location, altText } = body;
     const hideLikeViewCount = formData.get("hideLikeViewCount") === "true";
     const hideComment = formData.get("hideComment") === "true";
-    const decodedFile = await handleFileInApiRoute(file as File);
-    const utapi = new UTApi();
+    // const decodedFile = await handleFileInApiRoute(file as File);
+    // const utapi = new UTApi();
 
     const validation = postSchema.safeParse({
       file,
@@ -60,40 +64,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!decodedFile) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "File not found",
-        },
-        {
-          status: 500,
-        }
-      );
-    }
+    // if (!decodedFile) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: "File not found",
+    //     },
+    //     {
+    //       status: 500,
+    //     }
+    //   );
+    // }
 
-    const uploadImage = await utapi.uploadFiles([decodedFile]);
+    // const uploadImage = await utapi.uploadFiles([decodedFile]);
 
-    if (!uploadImage) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "File not uploaded",
-        },
-        {
-          status: 500,
-        }
-      );
-    }
+    // if (!uploadImage) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: "File not uploaded",
+    //     },
+    //     {
+    //       status: 500,
+    //     }
+    //   );
+    // }
 
     const newPost: Post = await new PostModel({
-      ownerId : userByToken.userId,
-      file: uploadImage[0].data?.url,
+      ownerId: userByToken.userId,
+      file: file,
       description,
       location,
       altText,
       hideLikeViewCount,
-      hideComment
+      hideComment,
     });
 
     await newPost.save();
