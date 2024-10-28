@@ -9,8 +9,8 @@ import { User } from "@/model/User";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export const updateUserProfileImage = async (file: FormData) => {
-  const res = await axios.post(`${baseUrl}user/update-profile-image`, file);
+export const updateUserProfileImage = async (data : { file: string }) => {
+  const res = await axios.post(`${baseUrl}user/update-profile-image`, data);
   return res.data;
 };
 
