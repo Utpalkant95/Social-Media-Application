@@ -72,8 +72,8 @@ export const updatePassword = async (
   return res.data;
 };
 
-export const setStory = async (file: FormData) => {
-  const res = await axios.post(`${baseUrl}update/Story/add-story`, file);
+export const setStory = async (data: { file: string }) => {
+  const res = await axios.post(`${baseUrl}update/Story/add-story`, data);
   return res.data;
 };
 

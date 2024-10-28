@@ -29,6 +29,8 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { useUploadThing } from "@/lib/uploadthing";
+import { enqueueSnackbar } from "notistack";
 
 const stepOneSchema = z.object({
   file: z.instanceof(File).optional(),
@@ -39,7 +41,7 @@ export const stepTwoSchema = z.object({
   location: z.string().optional(),
   altText: z.string().optional(),
   hideLikeViewCount: z.boolean(),
-  hideComment: z.boolean()
+  hideComment: z.boolean(),
 });
 
 export const StepOne = ({
@@ -135,15 +137,29 @@ export const StepTwo = ({
 }) => {
   const [text, setText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const form = useCreatePostForm()
+  const form = useCreatePostForm();
+  const [uploadingImage, setUploadingImage] = useState<boolean>(false);
+  const { startUpload } = useUploadThing("imageUploader");
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     setText((prevText) => prevText + emojiData.emoji);
     setShowEmojiPicker(false);
   };
 
-  function onSubmit(values: z.infer<typeof stepTwoSchema>) {
+  async function onSubmit(values: z.infer<typeof stepTwoSchema>) {
+    setUploadingImage(true);
+    const uploadedImages = await startUpload([file] as File[]);
+
+    if (!uploadedImages) {
+      enqueueSnackbar("Please try again or file size is too large", {
+        variant: "error",
+      });
+      return;
+    }
+
+    setUploadingImage(false);
     const formData = new FormData();
+
     for (const [key, value] of Object.entries(values)) {
       if (typeof value === "boolean") {
         formData.append(key, value.toString());
@@ -155,12 +171,11 @@ export const StepTwo = ({
     }
 
     if (file) {
-      formData.append("file", file);
+      formData.append("file", uploadedImages[0].url);
     }
     mutate(formData);
     next();
   }
-  
 
   return (
     <DialogWrapper
@@ -169,7 +184,7 @@ export const StepTwo = ({
       backward={prev}
       className="max-w-5xl w-full"
     >
-      <div className="grid grid-cols-2 h-[calc(100%-40px)]">
+      <div className=" relative grid grid-cols-2 h-[calc(100%-40px)]">
         <div className="overflow-hidden">
           {file && (
             <Image
@@ -335,6 +350,9 @@ export const StepTwo = ({
               </Accordion>
             </form>
           </Form>
+        </div>
+        <div className={`w-full h-full absolute top-0 bg-black/50 flex items-center justify-center ${uploadingImage ? "" : "hidden"}`}>
+          <Loader />
         </div>
       </div>
     </DialogWrapper>

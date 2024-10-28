@@ -13,10 +13,11 @@ export async function POST(request: NextRequest, _: NextResponse) {
     const cookieString = request.headers.get("cookie");
     const accessToken = getCookieValueInServerSide(cookieString, "accessToken");
     const tokenUser = decodeToken(accessToken as string);
-    const utapi = new UTApi();
-    const formData = await request.formData();
-    const body = Object.fromEntries(formData);
-    const { file } = body;
+    const { file } = await request.json();
+    // const utapi = new UTApi();
+    // const formData = await request.formData();
+    // const body = Object.fromEntries(formData);
+    // const { file } = body;
 
     if (!tokenUser) {
       return NextResponse.json(
@@ -43,40 +44,40 @@ export async function POST(request: NextRequest, _: NextResponse) {
       );
     }
 
-    const decodedFile = await handleFileInApiRoute(file as File);
+    // const decodedFile = await handleFileInApiRoute(file as File);
 
-    if (!decodedFile) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Something went wrong while uploading profile picture",
-        },
-        {
-          status: 500,
-        }
-      );
-    }
+    // if (!decodedFile) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: "Something went wrong while uploading profile picture",
+    //     },
+    //     {
+    //       status: 500,
+    //     }
+    //   );
+    // }
 
-    const uploadImage = await utapi.uploadFiles([decodedFile]);
-    removeFile(decodedFile.name);
+    // const uploadImage = await utapi.uploadFiles([decodedFile]);
+    // removeFile(decodedFile.name);
 
-    if (!uploadImage) {
-      removeFile(decodedFile.name);
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            "Something went wrong while uploading profile picture on uploadthing",
-        },
-        {
-          status: 500,
-        }
-      );
-    }
+    // if (!uploadImage) {
+    //   removeFile(decodedFile.name);
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message:
+    //         "Something went wrong while uploading profile picture on uploadthing",
+    //     },
+    //     {
+    //       status: 500,
+    //     }
+    //   );
+    // }
 
     const newStory = new StoryModel({
       user_Id: user._id,
-      file: uploadImage[0].data?.url,
+      file: file,
     });
 
     await newStory.save();

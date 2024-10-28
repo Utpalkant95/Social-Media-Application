@@ -1,6 +1,9 @@
 "use client";
-import { DialogWrapper } from "@/components";
+import { DialogWrapper, Loader } from "@/components";
+import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
+import { enqueueSnackbar } from "notistack";
+import { useState } from "react";
 
 export const PreviewStoryFile = ({
   next,
@@ -11,17 +14,27 @@ export const PreviewStoryFile = ({
   next: () => void;
   prev: () => void;
   file: File | null;
-  mutate: (data: FormData) => void;
+  mutate: (data: { file: string }) => void;
 }) => {
+  const [uploadingImage, setUploadingImage] = useState<boolean>(false);
+  const { startUpload } = useUploadThing("imageUploader");
 
-  const handleSubmit = () => {
-    const formData = new FormData();
-    if (file) {
-      formData.append("file", file);
+  const handleSubmit = async () => {
+    setUploadingImage(true);
+    const uploadedImages = await startUpload([file] as File[]);
+
+    if (!uploadedImages) {
+      enqueueSnackbar("Please try again or file size is too large", {
+        variant: "error",
+      });
+      return;
     }
-    mutate(formData);
+
+    setUploadingImage(false);
+
+    mutate({ file: uploadedImages[0].url });
     next();
-  }
+  };
 
   return (
     <DialogWrapper
@@ -30,8 +43,11 @@ export const PreviewStoryFile = ({
       backward={prev}
       className="max-w-2xl w-full"
     >
-        <div className="h-[calc(100%-40px)] overflow-hidden rounded-xl">
-          {file && (
+      <div className=" relative h-[calc(100%-40px)] overflow-hidden rounded-xl">
+        <div className={`w-full h-full absolute top-0 bg-black/50 flex items-center justify-center ${uploadingImage ? "" : "hidden"}`}>
+          <Loader />
+        </div>
+        {file && (
             <Image
               src={URL.createObjectURL(file)}
               alt="Selected File"
@@ -40,7 +56,7 @@ export const PreviewStoryFile = ({
               className="w-full h-full object-cover"
             />
           )}
-        </div>
+      </div>
     </DialogWrapper>
   );
 };

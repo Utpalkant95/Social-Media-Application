@@ -24,9 +24,10 @@ const MySteps = () => {
   const { next, prev } = useSteps();
   const [file, setFile] = useState<any>();
 
-  const { data, mutate, isLoading, isSuccess } = useMutation({
+  const {  mutate, isLoading } = useMutation({
     mutationKey: ["createPost"],
     mutationFn: createPost,
+
     onSuccess: (data : IRESSignUpUser) => {
       enqueueSnackbar("Post Created Successfully", {
         variant: "success",
@@ -40,8 +41,6 @@ const MySteps = () => {
       })
     },
   });
-
-  console.log("data of post creating form", data);
 
   return (
     <Steps>

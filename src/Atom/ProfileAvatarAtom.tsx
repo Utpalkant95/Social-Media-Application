@@ -17,9 +17,9 @@ interface IProfileAvatarAtom {
 }
 
 const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
+  const [uploadingImage, setUploadingImage] = useState<boolean>(false);
   const { startUpload } = useUploadThing("imageUploader");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const { mutate, isLoading } = useMutation({
     mutationKey: ["user profile image"],
     mutationFn: updateUserProfileImage,
@@ -42,11 +42,9 @@ const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
   };
 
   const handleFileUpload = async ({ files }: { files: File[] }) => {
-    alert("starting");
+    setUploadingImage(true);
     const uploadedImages = await startUpload(files);
 
-    console.log("uploadedImages", uploadedImages);
-    
     if (!uploadedImages) {
       enqueueSnackbar("Please try again or file size is too large", {
         variant: "error",
@@ -54,14 +52,14 @@ const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
       return;
     }
 
+    setUploadingImage(false);
+
     mutate({ file: uploadedImages[0].url });
-    setPreviewImage(null); // Clear the preview after upload
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (file) {
-      setPreviewImage(URL.createObjectURL(file)); // Set the preview image URL
       handleFileUpload({ files: [file] });
     }
   };
@@ -83,7 +81,7 @@ const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
         )}
         <div
           className={`absolute w-full h-full bg-black/60 flex items-center justify-center ${
-            isLoading ? "" : "hidden"
+            isLoading || uploadingImage ? "" : "hidden"
           }`}
         >
           <Loader className="h-10 w-10" />

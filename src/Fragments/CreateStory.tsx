@@ -22,7 +22,7 @@ const MySteps = () => {
   const { next, prev } = useSteps();
   const [file, setFile] = useState<any>();
 
-  const { data, mutate, isLoading } = useMutation({
+  const {  mutate, isLoading } = useMutation({
     mutationKey: ["setStory"],
     mutationFn: setStory,
     onSuccess: (data: IRESSignUpUser) => {
