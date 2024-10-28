@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getSignleUserData } from "@/ApiServices/UserServices";
 
 const Page = () => {
-
   const user = decodeToken();
   const { data } = useQuery({
     queryKey: ["user", user?.username],

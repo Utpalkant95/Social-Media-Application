@@ -18,6 +18,7 @@ function LoginFrag() {
             <InputField
               key={node.name}
               name={node.name}
+              type={node.type}
               placeholder={node.placeholder}
               control={form.control}
             />

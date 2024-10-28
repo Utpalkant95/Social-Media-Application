@@ -29,7 +29,7 @@ const StoryFrag = ({user} : {user  : User | undefined}) => {
           >
             <Avatar className="w-16 h-16 border-2 border-pink-500">
               <AvatarImage
-                src={user?.profileImage}
+                src={user?.profileImage || "https://images.pexels.com/photos/28220699/pexels-photo-28220699/free-photo-of-nguoitamchuyenhouse-sai-gon-vi-t-nam-2020-saigon-vietnam-2020.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load"}
                 alt={`User `}
                 className="rounded-full w-full h-full object-cover"
               />

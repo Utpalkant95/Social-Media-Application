@@ -33,14 +33,17 @@ export const signUpFormNodes: {
 export const signInFormNodes: {
   name: string;
   placeholder: string;
+  type?: string;
 }[] = [
   {
     name: "email",
     placeholder: "Email",
+    type : "email",
   },
   {
     name: "password",
     placeholder: "Password",
+    type : "password",
   },
 ];
 
