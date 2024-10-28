@@ -6,8 +6,10 @@ import { User } from "@/model/User";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { enqueueSnackbar } from "notistack";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { FaCamera } from "react-icons/fa";
+
+import { useUploadThing } from "@/lib/uploadthing";
 
 interface IProfileAvatarAtom {
   ownViewer: boolean;
@@ -15,7 +17,9 @@ interface IProfileAvatarAtom {
 }
 
 const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
+  const { startUpload } = useUploadThing("imageUploader");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const { mutate, isLoading } = useMutation({
     mutationKey: ["user profile image"],
     mutationFn: updateUserProfileImage,
@@ -30,15 +34,42 @@ const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
       });
     },
   });
+
   const handleButtonClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
+
+  const handleFileUpload = async ({ files }: { files: File[] }) => {
+    alert("starting");
+    const uploadedImages = await startUpload(files);
+
+    console.log("uploadedImages", uploadedImages);
+    
+    if (!uploadedImages) {
+      enqueueSnackbar("Please try again or file size is too large", {
+        variant: "error",
+      });
+      return;
+    }
+
+    mutate({ file: uploadedImages[0].url });
+    setPreviewImage(null); // Clear the preview after upload
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file)); // Set the preview image URL
+      handleFileUpload({ files: [file] });
+    }
+  };
+
   return (
     <>
       <Avatar
-        className=" cursor-pointer bg-yellow-800 relative max-w-20 max-h-20 sm:max-w-36 sm:max-h-36 w-full h-full"
+        className="cursor-pointer bg-yellow-800 relative max-w-20 max-h-20 sm:max-w-36 sm:max-h-36 w-full h-full"
         onClick={handleButtonClick}
       >
         {ownViewer && (
@@ -80,13 +111,7 @@ const ProfileAvatarAtom = ({ ownViewer, user }: IProfileAvatarAtom) => {
           name="file"
           className="hidden"
           ref={fileInputRef}
-          onChange={async (e) => {
-            if (e.target.files) {
-              const formData = new FormData();
-              formData.append("file", e.target.files[0]);
-              mutate(formData);
-            }
-          }}
+          onChange={handleFileChange}
         />
       )}
     </>

@@ -1,6 +1,6 @@
 "use client";
 import { getSignleUserData } from "@/ApiServices/UserServices";
-import { ProfileDetailFrag, ProfileFrag, ProfilePostSectionFrag } from "@/Fragments";
+import { ProfileDetailFrag, ProfilePostSectionFrag } from "@/Fragments";
 import { decodeToken } from "@/helpers/userInfo";
 import { User } from "@/model/User";
 import { useQuery } from "@tanstack/react-query";
