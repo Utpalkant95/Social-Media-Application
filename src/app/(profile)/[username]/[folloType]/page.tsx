@@ -39,14 +39,12 @@ export default function Page({
               >
                 <ArrowLeftIcon className="h-5 w-5" />
               </Link>
-              <h1 className=" text-xl md:text-2xl font-bold capitalize">{folloType}</h1>
+              <h1 className=" text-xl md:text-2xl font-bold capitalize">
+                {folloType}
+              </h1>
             </div>
             <div className="">
-              <Input
-                type="text"
-                placeholder="Search followers"
-                className=""
-              />
+              <Input type="text" placeholder="Search followers" className="" />
             </div>
           </div>
         </header>
@@ -54,13 +52,16 @@ export default function Page({
           {isLoading && (
             <div className="grid grid-rows-3 gap-x-1 gap-y-4">
               {Array.from({ length: 8 }).map((_, index) => (
-                <Skeleton className=" py-3 md:px-6 md:py-4 h-16" key={index}/>
+                <Skeleton className=" py-3 md:px-6 md:py-4 h-16" key={index} />
               ))}
             </div>
           )}
           {data?.map((user) => {
             return (
-              <div className="px-4 py-2 mx-auto cursor-pointer" key={user.userName}>
+              <div
+                className="px-4 py-2 mx-auto cursor-pointer"
+                key={user.userName}
+              >
                 <div className="grid gap-6">
                   <div className="bg-background rounded-lg">
                     <div className="flex items-center justify-between">
