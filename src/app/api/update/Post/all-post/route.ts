@@ -20,7 +20,7 @@ export async function GET(request : NextRequest, response: NextResponse) {
       });
     }
 
-    const posts = await PostModel.find({ _id: { $in: user.posts } });
+    const posts = await PostModel.find({ _id: { $in: user.posts } }).populate("ownerId", "fullName userName profileImage");
 
     return NextResponse.json({
       success: true,
