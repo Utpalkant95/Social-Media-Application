@@ -138,18 +138,18 @@ export const StepTwo = ({
   file: File | null;
   mutate: (data: FormData) => void;
 }) => {
-  const userData : IUserInfo | null = decodeToken();
+  const userData: IUserInfo | null = decodeToken();
   const [text, setText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const form = useCreatePostForm();
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
   const { startUpload } = useUploadThing("imageUploader");
 
-  const {data} = useQuery({
-    queryKey : ["user"],
-    queryFn :()=> getSignleUserData(userData?.username as string),
-    enabled : !!userData
-  })
+  const { data } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => getSignleUserData(userData?.username as string),
+    enabled: !!userData,
+  });
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     setText((prevText) => prevText + emojiData.emoji);
@@ -161,7 +161,7 @@ export const StepTwo = ({
     const uploadedImages = await startUpload([file] as File[]);
 
     if (!uploadedImages) {
-      enqueueSnackbar("Please try again or file size is too large", {
+      enqueueSnackbar("Please try again or file must be under 2MB", {
         variant: "error",
       });
       setUploadingImage(false);
@@ -210,13 +210,13 @@ export const StepTwo = ({
         <div className="overflow-y-auto">
           <div className="flex items-center gap-x-2 px-2 py-3">
             <div className="w-8 h-8 rounded-full overflow-hidden">
-            <Image
-              src={data?.profileImage as string}
-              alt="logo"
-              width={30}
-              height={30}
-              className="overflow-hidden rounded-full w-full h-full"
-            />
+              <Image
+                src={data?.profileImage as string}
+                alt="logo"
+                width={30}
+                height={30}
+                className="overflow-hidden rounded-full w-full h-full"
+              />
             </div>
             <p className="font-medium text-sm">{data?.userName}</p>
           </div>
@@ -364,7 +364,11 @@ export const StepTwo = ({
             </form>
           </Form>
         </div>
-        <div className={`w-full h-full absolute top-0 bg-black/50 flex items-center justify-center ${uploadingImage ? "" : "hidden"}`}>
+        <div
+          className={`w-full h-full absolute top-0 bg-black/50 flex items-center justify-center ${
+            uploadingImage ? "" : "hidden"
+          }`}
+        >
           <Loader />
         </div>
       </div>
