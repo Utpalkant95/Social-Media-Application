@@ -75,6 +75,7 @@ const CarDetailPage = ({ params }: { params: { postId: string } }) => {
             // router.back();
             changeRoute();
           }}
+          userName={userName}
           setSelectedPostIndex={setSelectedPostIndex}
         />
       )}

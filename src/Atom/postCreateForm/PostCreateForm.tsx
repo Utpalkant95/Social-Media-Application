@@ -31,6 +31,9 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useUploadThing } from "@/lib/uploadthing";
 import { enqueueSnackbar } from "notistack";
+import { useQuery } from "@tanstack/react-query";
+import { getSignleUserData } from "@/ApiServices/UserServices";
+import { decodeToken, IUserInfo } from "@/helpers/userInfo";
 
 const stepOneSchema = z.object({
   file: z.instanceof(File).optional(),
@@ -135,11 +138,18 @@ export const StepTwo = ({
   file: File | null;
   mutate: (data: FormData) => void;
 }) => {
+  const userData : IUserInfo | null = decodeToken();
   const [text, setText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const form = useCreatePostForm();
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
   const { startUpload } = useUploadThing("imageUploader");
+
+  const {data} = useQuery({
+    queryKey : ["user"],
+    queryFn :()=> getSignleUserData(userData?.username as string),
+    enabled : !!userData
+  })
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     setText((prevText) => prevText + emojiData.emoji);
@@ -154,6 +164,7 @@ export const StepTwo = ({
       enqueueSnackbar("Please try again or file size is too large", {
         variant: "error",
       });
+      setUploadingImage(false);
       return;
     }
 
@@ -198,14 +209,16 @@ export const StepTwo = ({
         </div>
         <div className="overflow-y-auto">
           <div className="flex items-center gap-x-2 px-2 py-3">
+            <div className="w-8 h-8 rounded-full overflow-hidden">
             <Image
-              src="https://scontent-ams4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-ams4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=05qe_AeNbowQ7kNvgHD_c7I&edm=AAAAAAABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.2-ccb7-5&oh=00_AYASaeyU9jSGFck1ZKRnFVaMFapEUGaG7JXM_5xPDs-3MQ&oe=66C4344F&_nc_sid=328259"
+              src={data?.profileImage as string}
               alt="logo"
               width={30}
               height={30}
-              className="overflow-hidden rounded-full"
+              className="overflow-hidden rounded-full w-full h-full"
             />
-            <p className="font-medium text-sm">utpal_9540</p>
+            </div>
+            <p className="font-medium text-sm">{data?.userName}</p>
           </div>
 
           <Form {...form}>

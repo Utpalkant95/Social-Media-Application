@@ -23,12 +23,14 @@ const PostViewFrag = ({
   selectedIndex,
   onClose,
   setSelectedPostIndex,
+  userName
 }: {
   posts: Post[] | undefined;
   selectedIndex: number;
   type: string | null;
   onClose: () => void;
   setSelectedPostIndex: (index: number) => void;
+  userName : string | null;
 }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -63,7 +65,7 @@ const PostViewFrag = ({
                 const prevIndex = selectedIndex - 1;
                 const prevPost = posts?.[prevIndex];
                 setSelectedPostIndex(prevIndex);
-                router.push(`/p/${prevPost?._id}?type=${type}&screenType=${width > 768 ? "desktop" : "mobile"}`);
+                router.push(`/p/${prevPost?._id}?type=${type}&screenType=${width > 768 ? "desktop" : "mobile"}&userName=${userName}`);
               }
             }}
             disabled={selectedIndex === 0}
@@ -143,7 +145,7 @@ const PostViewFrag = ({
                 const nextIndex = selectedIndex + 1;
                 const nextPost = posts?.[nextIndex];
                 setSelectedPostIndex(nextIndex);
-                router.push(`/p/${nextPost?._id}?type=${type}&screenType=${width > 768 ? "desktop" : "mobile"}`); 
+                router.push(`/p/${nextPost?._id}?type=${type}&screenType=${width > 768 ? "desktop" : "mobile"}&userName=${userName}`); 
               }
             }}
             disabled={selectedIndex === (posts?.length as number) - 1}
