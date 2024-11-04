@@ -26,11 +26,11 @@ const UserRecommendAtom = ({ user }: { user: User | undefined }) => {
         <div className="flex items-center gap-x-2">
           <div className="w-11 h-11 overflow-hidden rounded-full">
             <Image
-              src={user?.profileImage ?? "https://images.pexels.com/photos/28220699/pexels-photo-28220699/free-photo-of-nguoitamchuyenhouse-sai-gon-vi-t-nam-2020-saigon-vietnam-2020.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load"}
+              src={user?.profileImage ? user?.profileImage : "https://images.pexels.com/photos/28220699/pexels-photo-28220699/free-photo-of-nguoitamchuyenhouse-sai-gon-vi-t-nam-2020-saigon-vietnam-2020.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load"}
               alt="profile"
               width={44}
               height={44}
-              className="rounded-full w-full h-full object-cover"
+              className="rounded-full w-full overflow-hidden h-full object-cover"
             />
           </div>
           <Link href={`/${user?.userName}`} prefetch={false}>
@@ -55,6 +55,7 @@ const UserRecommendAtom = ({ user }: { user: User | undefined }) => {
       {data?.map((user: IrecommendedUser, index: number) => (
         <div key={user._id} className="flex items-center justify-between mt-2">
           <div className="flex items-center gap-x-2">
+            <div className="w-11 h-11 overflow-hidden rounded-full">
             <Image
               src={
                 user.profileImage ??
@@ -63,8 +64,9 @@ const UserRecommendAtom = ({ user }: { user: User | undefined }) => {
               alt="profile"
               width={44}
               height={44}
-              className="rounded-full border"
+              className="rounded-full w-full overflow-hidden h-full object-cover"
             />
+            </div>
             <span className="text-sm font-medium">{user.userName}</span>
           </div>
           <Link href={`/${user.userName}`} prefetch={false}>
