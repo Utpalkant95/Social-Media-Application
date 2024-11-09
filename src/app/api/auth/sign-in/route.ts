@@ -99,7 +99,8 @@ export async function POST(request: Request) {
       username: existingUserByEmail.userName,
       isVerified: existingUserByEmail.isVerified,
       privateAccount : existingUserByEmail.privateAccount,
-      profileImage : existingUserByEmail.profileImage
+      profileImage : existingUserByEmail.profileImage,
+      isFirstTimeLogin : existingUserByEmail.isFirstTimeLogin
     });
 
     return Response.json(

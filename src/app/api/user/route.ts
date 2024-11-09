@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/model/User";
+import UserModel, { User } from "@/model/User";
 
 /**
  * @swagger
@@ -87,7 +87,7 @@ export async function GET() {
     return new Response(
       JSON.stringify({
         success: true,
-        data: users,
+        data: users as User[],
       }),
       {
         status: 200,

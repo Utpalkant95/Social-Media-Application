@@ -10,6 +10,7 @@ export interface IUserInfo {
   userId: string;
   privateAccount : boolean;
   profileImage : string;
+  isFirstTimeLogin : boolean;
 }
 
 export const decodeToken = (token ?: string) : IUserInfo | null => {

@@ -10,3 +10,4 @@ export {default as UserRecommendAtom} from "./UserRecommendAtom";
 export {default as PostCard} from "./PostCard";
 export {default as ProfileAvatarAtom} from "./ProfileAvatarAtom";
 export {default as ProfileHeaderAtom} from "./ProfileHeaderAtom";
+export {default as UserRecommentUserProfile} from "./UserRecommentUserProfile";
