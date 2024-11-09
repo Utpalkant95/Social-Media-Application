@@ -2,6 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import UserModel from "@/model/User";
 import PostModel from "@/model/Post";
+import { create } from "lodash";
 
 export const dynamic = 'force-dynamic';
 
@@ -20,7 +21,7 @@ export async function GET(request : NextRequest, response: NextResponse) {
       });
     }
 
-    const posts = await PostModel.find({ _id: { $in: user.posts } }).populate("ownerId", "fullName userName profileImage");
+    const posts = await PostModel.find({ _id: { $in: user.posts } }).populate("ownerId", "fullName userName profileImage").sort({createdAt : -1});
 
     return NextResponse.json({
       success: true,

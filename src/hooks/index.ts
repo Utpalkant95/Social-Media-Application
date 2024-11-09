@@ -6,3 +6,4 @@ export {default as useEditProfileCompFactory} from "./useEditProfileCompFactory"
 export {default as useUpdatePassword} from "./useUpdatePassword";
 export {default as usePostInteractions} from "./usePostInteractions";
 export {default as useWindowSize} from "./useWindowSize";
+export {default as useFollow} from "./useFollow";

@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     const savedPostIds = user.saved;
 
     // Fetch all posts in a single query using $in operator
-    const savedPosts = await PostModel.find({ _id: { $in: savedPostIds } }).populate("ownerId", "fullName userName profileImage");;
+    const savedPosts = await PostModel.find({ _id: { $in: savedPostIds } }).populate("ownerId", "fullName userName profileImage").sort({createdAt : -1});;
 
     return NextResponse.json({
       success: true,

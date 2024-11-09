@@ -9,6 +9,11 @@ import { User } from "@/model/User";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+export const getAllUsers = async () => {
+  const res = await axios.get(`${baseUrl}user`);
+  return res.data.data as User[];
+};
+
 export const updateUserProfileImage = async (data : { file: string }) => {
   const res = await axios.post(`${baseUrl}user/update-profile-image`, data);
   return res.data;
@@ -95,4 +100,9 @@ export const getHomePageContent = async () => {
 export const getNotifications = async (userId: string) => {
   const res = await axios.get(`${baseUrl}update/Notification?userId=${userId}`);
   return res.data.data;
+};
+
+export const changeFirstLoginOfUser = async () => {
+  const res = await axios.post(`${baseUrl}user/changeFirstLogin`);
+  return res;
 };

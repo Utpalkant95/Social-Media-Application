@@ -7,6 +7,7 @@ interface IgenerateTokens {
   isVerified: boolean;
   privateAccount: boolean;
   profileImage: string;
+  isFirstTimeLogin : boolean;
 }
 const generateTokens = ({
   email,
@@ -14,11 +15,11 @@ const generateTokens = ({
   userId,
   username,
   privateAccount,
-  profileImage
-
+  profileImage,
+  isFirstTimeLogin
 }: IgenerateTokens) => {
   const accessToken = jwt.sign(
-    { userId, email, username, isVerified, privateAccount, profileImage },
+    { userId, email, username, isVerified, privateAccount, profileImage, isFirstTimeLogin },
     process.env.JWT_SECRET!,
     { expiresIn: "7d" }
   );
