@@ -62,9 +62,13 @@ export async function GET(request: NextRequest) {
     }
 
     const followingUsers = user.following;
+
+    // Fetch posts and sort them by createdAt in descending order
     const posts = await PostModel.find({
       ownerId: { $in: followingUsers }
-    }).populate("ownerId", "fullName userName profileImage");
+    })
+      .populate("ownerId", "fullName userName profileImage")
+      .sort({ createdAt: -1 });
 
     if (!posts.length) {
       return NextResponse.json(

@@ -13,7 +13,6 @@ const Page = () => {
     queryKey: ["explore"],
     queryFn: explorePosts,
   });
-// lets check the code feuirrni
   return (
     <div className="max-w-6xl mx-auto w-full pt-2 sm:pt-8">
       {isLoading && (

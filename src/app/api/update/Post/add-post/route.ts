@@ -7,9 +7,7 @@ import {
   getCookieValueInServerSide,
   IUserInfo,
 } from "@/helpers/userInfo";
-import { UTApi } from "uploadthing/server";
-import UserModel from "@/model/User";
-import { handleFileInApiRoute } from "@/helpers/handleFileInApiRoute";
+import UserModel, { User } from "@/model/User";
 export async function POST(request: NextRequest) {
   await dbConnect();
   try {
@@ -21,8 +19,6 @@ export async function POST(request: NextRequest) {
     const { file, description, location, altText } = body;
     const hideLikeViewCount = formData.get("hideLikeViewCount") === "true";
     const hideComment = formData.get("hideComment") === "true";
-    // const decodedFile = await handleFileInApiRoute(file as File);
-    // const utapi = new UTApi();
 
     const validation = postSchema.safeParse({
       file,
@@ -53,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await UserModel.findById(userByToken.userId);
+    const user : User | null = await UserModel.findById(userByToken.userId);
     if (!user) {
       return NextResponse.json(
         {
@@ -63,32 +59,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    // if (!decodedFile) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       message: "File not found",
-    //     },
-    //     {
-    //       status: 500,
-    //     }
-    //   );
-    // }
-
-    // const uploadImage = await utapi.uploadFiles([decodedFile]);
-
-    // if (!uploadImage) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       message: "File not uploaded",
-    //     },
-    //     {
-    //       status: 500,
-    //     }
-    //   );
-    // }
 
     const newPost: Post = await new PostModel({
       ownerId: userByToken.userId,
@@ -114,7 +84,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    user.posts.push(newPost._id);
+    user.posts.unshift(newPost._id as string);
     await user.save();
     return NextResponse.json(
       {
